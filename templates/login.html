@@ -1,0 +1,15 @@
+{% extends "header.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+	<form action="/login" method="post">
+		<label for="uname">Username:</label><br>
+		<input type="text" id="uname" name="uname"><br>
+		<label for="password">Password:</label><br>
+		<input type="password" id="password" name="password"><br>
+		<input type="submit" value="Submit">
+	</form>
+	<p>
+		Don't have an account? <span><a href="/register">Register now</a></span>
+	</p>
+{% endblock %}
+{% block lessons %}{% endblock %}

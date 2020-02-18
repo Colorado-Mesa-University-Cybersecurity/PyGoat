@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title %}Test{% endblock %}</title>
+	</head>
+	<body>
+		<h1> PyGoat </h1>
+		{% block lessons %}
+		<ul>
+			{% for lesson in lessons %}
+  			  <li><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+			{% endfor %}
+			<li><a href="/logout">Log Out</a></li>
+		</ul>
+		{% endblock %}
+		<div id="content">{% block content %}{% endblock %}</div>
+	</body>
+</html>
