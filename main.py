@@ -6,7 +6,6 @@ class lesson:
         self.name = name
         self.url = url
         self.content = content
-        print(self.name)
 
 path = os.path.dirname(os.path.realpath(__file__))
 
@@ -55,7 +54,7 @@ def valid_login(username, password):
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('header.html', lessons=lessons)
+        return render_template('lesson.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
     else:
         return redirect(url_for('login'))
 
