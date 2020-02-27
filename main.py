@@ -20,7 +20,7 @@ conn.commit()
 conn.close()
 
 lessons = []
-for filename in os.listdir("lessons"):
+for filename in os.listdir("%s/lessons" % path):
     if filename.endswith('yaml'):
         with open("%s/lessons/%s" % (path, filename), "r") as config:
             config_list = yaml.safe_load(config)
