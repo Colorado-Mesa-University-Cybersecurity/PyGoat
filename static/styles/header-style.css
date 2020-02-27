@@ -26,6 +26,10 @@ a:focus {
     border: none;
 }
 
+.btn {
+    padding: 1px;
+}
+
 /* 
     Sidebar style
 */
