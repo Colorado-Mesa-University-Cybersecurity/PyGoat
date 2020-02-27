@@ -5,7 +5,7 @@ Team Members: Lucas Walgren (lawalgren@mavs.coloradomesa.edu), Sean Apsey (ssaps
 
 ## Installation
 
-* `pip install -r requirements.txt`
+* `pip3 install -r requirements.txt --user`
 
 ## Running
 
