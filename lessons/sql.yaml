@@ -1,7 +1,7 @@
 name: Test SQL Injection
 url: testsql
 content: sql.html
-success-condition: $custom.sqlValidator
+success-condition: $custom.sqlValidator(user_data)
 db-tables:
         - name: user_data
           columns:
