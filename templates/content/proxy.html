@@ -1,17 +1,16 @@
 <h1>Intercept and modify a request</h1>
 
-Set up the intercept as noted above and then submit the form/request below by clicking the submit button. When you request is intercepted (hits the breakpoint), modify it as follows.
+<p>Set up the intercept as noted above and then submit the form/request below by clicking the submit button. When you request is intercepted (hits the breakpoint), modify it as follows.</p>
 
-Change the Method to GET
+<p>Change the Method to GET</p>
 
-Add a header 'x-request-intercepted:true'
+<p>Add a header 'x-request-intercepted:true'</p>
 
-Remove the request body and instead send 'changeMe' as query string parameter and set the value to 'Requests are tampered easily' (without the single quotes)
+<p>Remove the request body and instead send 'changeMe' as query string parameter and set the value to 'Requests are tampered easily' (without the single quotes)</p>
 
-Then let the request continue through (by hitting the play button).
+<p>Then let the request continue through (by hitting the play button).</p>
 
-Note
-The two play buttons behave a little differently, but we’ll let you tinker and figure that out for yourself.
+<p>Note: The two play buttons behave a little differently, but we’ll let you tinker and figure that out for yourself.</p>
 
 <form action="/proxy" method="post">
 	<label for="data">Data</label>
