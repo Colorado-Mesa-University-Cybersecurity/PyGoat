@@ -1,29 +1,83 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+	<title>{% block title %}Test{% endblock %}</title>
+</head>
+
+<body>
+
 	<head>
-		<title>{% block title %}Test{% endblock %}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>PyGoat</title>
+
+		<link rel="stylesheet" href="../static/styles/bootstrap.min.css">
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="../static/styles/header-style.css">
+
 	</head>
+
 	<body>
-		<h1> PyGoat </h1>
-		{% block lessons %}
-		<ul>
-			{% for lesson in lessons %}
-  			  <li><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-			{% endfor %}
-			<li><a href="/logout">Log Out</a></li>
-		</ul>
-		{% endblock %}
+		<div class="wrapper">
+			<!-- Sidebar  -->
+			{% block lessons %}
+			<nav id="sidebar">
+				<div class="sidebar-header">
+					<h2>PyGoat</h2>
+					<img src = "../static/logo.svg" style="height:48px; width:48px; position: relative; left: 120px; top: -40px;">
+				</div>
+				<ul class="list-unstyled components">
+					<ul>
+						{% for lesson in lessons %}
+						<li><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+						{% endfor %}
+					</ul>
+					<ul>
+						<li style = "position: fixed; bottom:25px; font-size: 20px;"><a href="/logout">Log Out</a></li>
+					</ul>
+				</nav>
+			<div id ="collapse-button">
+				<nav class="navbar navbar-expand-lg navbar-light">
+					<div class="container-fluid">
+						<button type="button" id="sidebarCollapse" class="btn btn-info">
+							<img src="../static/justify.svg" height = "30px" width = "30px">
+						</button>
+					</div>
+				</nav>
+			</div>
+			{% endblock %}
 
-		<div id="content">{% block content %}{% endblock %}</div>
+				
+				<!-- jQuery local -->
+				<script src="../static/styles/jquery-3.4.1.js"></script>
+				<!-- Popper.JS -->
+				<script src="../static/styles/popper.js"></script>
+				<!-- Bootstrap JS local -->
+				<script src = "../static/styles/bootstrap.min.js"></script>
 
-		{% with messages = get_flashed_messages() %}
-		  {% if messages %}
-    		    <ul class=flashes>
-		      {% for message in messages %}
-      			<li>{{ message }}</li>
-    		      {% endfor %}
-   		    </ul>
-  		  {% endif %}
-		{% endwith %}
+				<script type="text/javascript">
+					$(document).ready(function () {
+						$('#sidebarCollapse').on('click', function () {
+							$('#sidebar').toggleClass('active');
+						});
+					});
+				</script>
+
+
+				<div id="content">{% block content %}{% endblock %}</div>
+
+				{% with messages = get_flashed_messages() %}
+				{% if messages %}
+				<ul class=flashes>
+					{% for message in messages %}
+					<li>{{ message }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+				{% endwith %}
 	</body>
+
 </html>
