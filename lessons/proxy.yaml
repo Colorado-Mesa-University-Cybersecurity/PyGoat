@@ -1,11 +1,12 @@
 name: Proxy Test
 url: proxytest
 content: proxy.html
-success-condition: $request.method = GET and $request.headers.x-request-intercepted = true and $request.querystring.changeMe = "Requests are tampered easily"
+success-condition: $custom.validate_proxy()
 routes:
         - path: /proxy
           action: send-webrequest
           webrequest:
+                  url: /proxy
                   method: POST
                   body: 
                         changeMe: $form.content

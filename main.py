@@ -1,11 +1,8 @@
 from flask import Flask, render_template, session, redirect, url_for, request, flash
-import os, sys, yaml, sqlite3, hashlib
+import os, sys, yaml, sqlite3, hashlib, custom, requests, logging
+from lesson_handler import lesson
 
-class lesson:
-    def __init__(self, name="Undef", url="nowhere", content=None):
-        self.name = name
-        self.url = url
-        self.content = content
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 path = os.path.dirname(os.path.realpath(__file__))
 
@@ -17,25 +14,32 @@ c = conn.cursor()
 c.execute('''CREATE TABLE if not exists users
                  (username text, password blob, salt blob)''')
 conn.commit()
-conn.close()
 
 lessons = []
 for filename in os.listdir("%s/lessons" % path):
     if filename.endswith('yaml'):
         with open("%s/lessons/%s" % (path, filename), "r") as config:
             config_list = yaml.safe_load(config)
-            name = config_list['name']
-            url = config_list['url']
-            content = config_list['content']
-            current_lesson = lesson(name, url, content)
+            current_lesson = lesson(config_list)
             lessons.append(current_lesson)
+
+print('Ignore the duplicate column errors below, I had to catch it as a workaround')
+for lesson in lessons:
+    colName = "%sCompleted" % lesson.name
+    try:
+        c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
+    except sqlite3.DatabaseError as e:
+        print(e)
+
+conn.close()
 
 def valid_login(username, password):
     conn = sqlite3.connect('pygoat.db')
     c1 = conn.cursor()
     c1.execute('''SELECT salt FROM users WHERE username = ?''', [username])
-    salt = c1.fetchone()[0]
-    if salt is not None:
+    saltarr = c1.fetchone()
+    if saltarr is not None:
+        salt = saltarr[0]
         m = hashlib.sha256()
         m.update(salt)
         m.update(password.encode('utf-8'))
@@ -44,12 +48,38 @@ def valid_login(username, password):
         test = c1.fetchone()
         conn.close()
         if test is None:
-            flash('Invalid credentials')
+            flash(('danger', 'Invalid credentials'))
         return test is not None
     else:
         conn.close()
-        flash('Invalid credentials')
+        flash(('danger', 'Invalid credentials'))
         return False
+
+def send_webrequest(webrequest, request):
+    url = "http://localhost:5000%s" % webrequest['url']
+    if webrequest['method'] == 'POST':
+        if 'headers' in webrequest:
+            requests.post(url, data=webrequest['body'], headers=webrequest['headers'])
+        else:
+            requests.post(url, data=webrequest['body'])
+    else:
+        if 'headers' in webrequest:
+            requests.get(url, headers=webrequest['headers'])
+        else:
+            requests.get(url)
+
+def make_sql_query(query, request):
+    pass
+
+def lesson_success(lesson):
+    colName = "%sCompleted" % lesson.name
+    conn = sqlite3.connect('pygoat.db')
+    c = conn.cursor()
+    c.execute('''UPDATE users SET "%s" = 1 WHERE username = ?''' % colName, [session['username']])
+    conn.commit()
+    conn.close()
+    return(redirect('/lessons/%s' % lesson.url))
+    print('lesson %s successful' % lesson.name)
 
 @app.route('/')
 def index():
@@ -76,6 +106,19 @@ def logout():
 def lessons_page(lesson):
     if 'username' in session:
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
+        if current_lesson.success_condition is not None:
+            results = custom.find_and_run(current_lesson.success_condition, request)
+            if results is not None and results == True:
+                lesson_success(current_lesson)
+
+        colName = "%sCompleted" % current_lesson.name
+        conn = sqlite3.connect('pygoat.db')
+        c = conn.cursor()
+        c.execute('''SELECT "%s" from users where username = ?''' % colName, [session['username']])
+        if c.fetchone()[0] == 1:
+            flash(('success', 'You have completed this lesson'))
+        conn.close()
+
         return render_template('lesson.html',
                 title=current_lesson.name,
                 contentFile="/content/%s" % current_lesson.content,
@@ -99,14 +142,43 @@ def register():
             m.update(salt)
             m.update(password.encode('utf-8'))
             pass_hash = m.digest()
-            print(username, pass_hash, salt)
 
-            c1.execute('''INSERT INTO users VALUES (?, ?, ?)''', (username, pass_hash, salt))
+            c1.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
             conn.commit()
             session['username'] = request.form['username']
             conn.close()
             return redirect(url_for('index'))
         else:
             conn.close()
-            flash('username already exists')
+            flash(('danger', 'username already exists'))
     return render_template('login.html', login=False)
+
+@app.route('/<routeName>', methods=['POST', 'GET'])
+def custom_routes(routeName):
+    if 'username' in session:
+        routename_with_slash = '/' + routeName
+
+        # determine which lesson this route is attached to. This might be slow with a lot of lessons
+        source_lesson = next(filter(lambda x: x.routes is not None and len(list(filter(lambda y: y['path'] == routename_with_slash,x.routes))) > 0, lessons))
+
+        # determine which route in said lesson got us here
+        source_route = next(filter(lambda x: x['path'] == routename_with_slash, source_lesson.routes))
+
+        if source_lesson.success_condition is not None:
+            results = custom.find_and_run(source_lesson.success_condition, request)
+            if results is not None and results == True:
+                lesson_success(source_lesson)
+
+        if source_route['action'] == 'send-webrequest':
+            send_webrequest(source_route['webrequest'], request)
+        elif source_route['action'] == 'sql-query':
+            make_sql_query(source_route['query'], request)
+        elif source_route['action'].startswith('$custom'):
+            result = custom.find_and_run(source_route['action'], request)
+            if 'success_if_true' in souce_route and source_route['success_if_true']:
+                if result is not None and result == True:
+                    lesson_success(source_lesson)
+
+        return redirect("/lessons/%s" % source_lesson.url)
+    else: 
+        return(redirect(url_for('login')))
