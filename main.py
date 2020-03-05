@@ -25,12 +25,33 @@ for filename in os.listdir("%s/lessons" % path):
 
 print('Ignore the duplicate column errors below, I had to catch it as a workaround')
 for lesson in lessons:
+    # add columns to users database tracking lesson completion
     colName = "%sCompleted" % lesson.name
     try:
         c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
     except sqlite3.DatabaseError as e:
         print(e)
-
+    # initialize database tables
+    if lesson.db_tables is not None:
+        for table in lesson.db_tables:
+            try: 
+                c.execute('''DROP TABLE %s''' % table['name'])
+                conn.commit()
+            except sqlite3.DatabaseError as e:
+                print(e)
+            sqlString = '''CREATE TABLE %s (''' % table['name']
+            conn.commit()
+            for column in table['columns']:
+                sqlString += column['name'] + ' ' + column['type'] + ','
+            sqlString = sqlString[:-1:] + ')'
+            c.execute(sqlString)
+            for row in table['rows']:
+                sqlString2 = '''INSERT INTO %s (''' % table['name']
+                for colum in row.keys():
+                    sqlString2 += "'" + str(colum) + "',"
+                sqlString2 = sqlString2[:-1:] + ') VALUES ('
+                c.execute(sqlString2 + ",".join("?"*len(row.values())) + ")", tuple(row.values()))
+conn.commit()
 conn.close()
 
 def valid_login(username, password):
@@ -69,7 +90,42 @@ def send_webrequest(webrequest, request):
             requests.get(url)
 
 def make_sql_query(query, request):
-    pass
+    conn = sqlite3.connect('pygoat.db')
+    c = conn.cursor()
+    parameters = []
+    qstring = query['qstring']
+    qstringArr = qstring.split[' ']
+
+    if query['injectable'] == "true":
+        for index, dat in enumerate(qstringArr.copy()):
+            if dat.startswith('$'):
+               parameters.append(dat)
+               qstringArr = qstringArr[0:index:] + "%s" + qstringArr[index+1::]
+
+        for index, dat in enumerate(parameters.copy()):
+            if dat.startswith('$form'):
+                dat2 = request.form[data[6::]]
+                parameters = parameters[0:index:] + dat2 + parameters[index + 1::]
+
+        qstring = " ".join(qstringArr)
+        c.execute(qstring % tuple(parameters))
+
+    else:
+        for index, dat in enumerate(qstringArr.copy()):
+            if dat.startswith('$'):
+               parameters.append(dat)
+               qstringArr = qstringArr[0:index:] + "?" + qstringArr[index+1::]
+
+        for index, dat in enumerate(parameters.copy()):
+            if dat.startswith('$form'):
+                dat2 = request.form[data[6::]]
+                parameters = parameters[0:index:] + dat2 + parameters[index + 1::]
+
+        qstring = " ".join(qstringArr)
+        c.execute(qstring, tuple(parameters))
+
+    conn.commit()
+    conn.close()
 
 def lesson_success(lesson):
     colName = "%sCompleted" % lesson.name

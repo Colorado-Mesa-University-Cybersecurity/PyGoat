@@ -17,6 +17,7 @@ db-tables:
                     comment: This one is safe too.
                   - username: guest
                     comment: Can you post a comment, calling webgoat.customjs.phoneHome() ?
+routes:
         - path: /xss/comment
           action: sql-query
           query: 
