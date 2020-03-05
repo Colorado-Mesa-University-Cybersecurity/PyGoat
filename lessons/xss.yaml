@@ -1,0 +1,27 @@
+name: Test XSS
+url: testxss
+content: xss.html
+db-tables:
+        - name: comments
+          columns:
+                  - name: username
+                    type: text
+                  - name: comment
+                    type: text
+          rows:
+                  - username: secUrIty
+                    comment: Comment for Unit Testing
+                  - username: webgoat
+                    comment: This comment is safe
+                  - username: guest
+                    comment: This one is safe too.
+                  - username: guest
+                    comment: Can you post a comment, calling webgoat.customjs.phoneHome() ?
+        - path: /xss/comment
+          action: sql-query
+          query: 
+                injectable: false
+                qstring: INSERT INTO comments VALUES ($session.username, $form.xsscomment);
+        - path: /xss/commentresponse
+          action: $custom.phoneHomeValidate($form.xsscommentresponse)
+          successiftrue: true

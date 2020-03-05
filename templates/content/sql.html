@@ -1,0 +1,17 @@
+<h1>Try It! Numeric SQL injection</h1>
+
+<p>The query in the code builds a dynamic query as seen in the previous example. The query in the code builds a dynamic query by concatenating a number making it susceptible to Numeric SQL injection:</p>
+
+<p>"select * from user_data where Login_Count = " + Login_Count + " and USERID = "  + User_ID;</p>
+
+<p>Using the two Input Fields below, try to retrieve all the date from the users table.</p>
+
+<p>Warning: Only one of these fields is susceptible to SQL Injection. You need to find out which, to successfully retrieve all the data.</p>
+
+<form action="/sql" method="POST">
+	<label for="login">Login_Count</label>
+	<input type="text" name="login" id="login"><br>
+	<label for="uid">User_Id</label>
+	<input type="text" name="uid" id="uid"><br>
+	<input type="submit" value="Get Account Info">
+</form>

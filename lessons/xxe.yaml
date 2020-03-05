@@ -1,0 +1,15 @@
+name: XXE
+url: xxe
+content: xxe.html
+success-condition: $custom.xxeValidator
+routes:
+        - path: /xxe
+          action: send-webrequest
+          webrequest:
+                  method: POST
+                  content-type: xml
+                  body: 
+                        '<?xml version="1.0"?>\n
+                                <comment>\n
+                                  <text>$form.xxecontent</text>\n
+                                </comment>'
