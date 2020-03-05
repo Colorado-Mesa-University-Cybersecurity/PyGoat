@@ -135,7 +135,6 @@ def make_sql_query(query, request):
         rows = c.fetchall()
         rows.append(qstring)
         rows.append(tuple(parameters))
-    print(rows)
     flash(("warning", rows))
 
     conn.commit()
