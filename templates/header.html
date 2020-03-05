@@ -31,8 +31,8 @@
 				</div>
 				<ul class="list-unstyled components">
 					<ul>
-						{% for lesson in lessons %}
-						<li><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+						{% for lesson in lessons |sort(attribute('difficulty')) %}
+							<li><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
 						{% endfor %}
 					</ul>
 					<ul>
