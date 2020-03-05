@@ -20,4 +20,4 @@ def validate_proxy(request):
     return request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily'
 
 def sqlValidator(user_data, request):
-    print(user_data, request)
+    print(user_data)

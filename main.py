@@ -94,35 +94,49 @@ def make_sql_query(query, request):
     c = conn.cursor()
     parameters = []
     qstring = query['qstring']
-    qstringArr = qstring.split[' ']
+    qstringArr = qstring.split(' ')
 
-    if query['injectable'] == "true":
+    if query['injectable']:
         for index, dat in enumerate(qstringArr.copy()):
-            if dat.startswith('$'):
+            if dat.startswith("'$"):
                parameters.append(dat)
-               qstringArr = qstringArr[0:index:] + "%s" + qstringArr[index+1::]
+               qstringArr = qstringArr[0:index:] + ["'%s'"] + qstringArr[index+1::]
+            elif dat.startswith("$"):
+               parameters.append(dat)
+               qstringArr = qstringArr[0:index:] + ["%s"] + qstringArr[index+1::]
 
         for index, dat in enumerate(parameters.copy()):
             if dat.startswith('$form'):
-                dat2 = request.form[data[6::]]
-                parameters = parameters[0:index:] + dat2 + parameters[index + 1::]
+                if dat.endswith(';'):
+                    dat2 = request.form[dat[6:-1:]]
+                    dat2 += ';'
+                else:
+                    dat2 = request.form[dat[6::]]
+                parameters = parameters[0:index:] + [dat2] + parameters[index + 1::]
 
         qstring = " ".join(qstringArr)
         c.execute(qstring % tuple(parameters))
+        rows = c.fetchall()
+        rows.append(qstring % tuple(parameters))
 
     else:
         for index, dat in enumerate(qstringArr.copy()):
             if dat.startswith('$'):
                parameters.append(dat)
-               qstringArr = qstringArr[0:index:] + "?" + qstringArr[index+1::]
+               qstringArr = qstringArr[0:index:] + ["?"] + qstringArr[index+1::]
 
         for index, dat in enumerate(parameters.copy()):
             if dat.startswith('$form'):
-                dat2 = request.form[data[6::]]
-                parameters = parameters[0:index:] + dat2 + parameters[index + 1::]
+                dat2 = request.form[dat[6::]]
+                parameters = parameters[0:index:] + [dat2] + parameters[index + 1::]
 
         qstring = " ".join(qstringArr)
-        c.execute(qstring, tuple(parameters))
+        c.executescript(qstring, tuple(parameters))
+        rows = c.fetchall()
+        rows.append(qstring)
+        rows.append(tuple(parameters))
+    print(rows)
+    flash(("warning", rows))
 
     conn.commit()
     conn.close()
@@ -220,6 +234,8 @@ def custom_routes(routeName):
         # determine which route in said lesson got us here
         source_route = next(filter(lambda x: x['path'] == routename_with_slash, source_lesson.routes))
 
+        print(source_lesson.name)
+
         if source_lesson.success_condition is not None:
             results = custom.find_and_run(source_lesson.success_condition, request)
             if results is not None and results == True:
@@ -235,6 +251,9 @@ def custom_routes(routeName):
                 if result is not None and result == True:
                     lesson_success(source_lesson)
 
-        return redirect("/lessons/%s" % source_lesson.url)
+        return render_template('lesson.html',
+            title=source_lesson.name,
+            contentFile="/content/%s" % source_lesson.content,
+            lessons=lessons)
     else: 
         return(redirect(url_for('login')))
