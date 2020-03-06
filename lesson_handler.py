@@ -9,8 +9,11 @@ class lesson:
             self.content = yaml_config['content']
 
             self.success_condition = None
+            self.load_script = None
+            self.load_return = None
             self.db_tables = None
             self.routes = None
+
 
             if 'success-condition' in yaml_config:
                 self.success_condition = yaml_config['success-condition']
@@ -18,3 +21,7 @@ class lesson:
                 self.db_tables = yaml_config['db-tables']
             if 'routes' in yaml_config:
                 self.routes = yaml_config['routes']
+            if 'load-script' in yaml_config:
+                self.load_script = yaml_config['load-script']
+            if 'load-return' in yaml_config:
+                self.load_return = yaml_config['load-return']

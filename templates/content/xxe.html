@@ -2,7 +2,26 @@
 
 <p>In this assignment you will add a comment to the photo, when submitting the form try to execute an XXE injection with the comments field. Try listing the root directory of the filesystem.</p>
 
+
+<div class="border border-primary rounded">
+
+<img src="{{url_for('static',filename='ts_cat.jpg')}}">
+
 <form action="/xxe" method="post">
 	<input type="text" name="xxecontent" id="xxecontent">
 	<input type="submit" value="Submit">
 </form>
+
+{% if comments %}
+<div id="comments">
+	{% for username, comment in comments %}
+	<div id="comment">
+	{{ username }}
+	<hr>
+	{{ comment }}
+	</div>
+	{% endfor %}
+</div>
+{% endif %}
+
+</div>

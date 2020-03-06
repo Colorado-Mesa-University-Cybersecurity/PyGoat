@@ -37,4 +37,4 @@ routes:
           action: sql-query
           query: 
                 injectable: true
-                qstring: SELECT * FROM user_data WHERE Login_Count = $form.login AND USERID = $form.uid;
+                qstring: SELECT * FROM user_data WHERE Login_Count = $form.login AND USERID = $form.uid ;

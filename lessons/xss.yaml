@@ -1,6 +1,8 @@
 name: Test XSS
 url: testxss
 content: xss.html
+load-script: $custom.render_comments()
+load-return: comments
 db-tables:
         - name: comments
           columns:
@@ -18,11 +20,14 @@ db-tables:
                   - username: guest
                     comment: Can you post a comment, calling webgoat.customjs.phoneHome() ?
 routes:
-        - path: /xss/comment
+        - path: /xsscomment
           action: sql-query
           query: 
                 injectable: false
-                qstring: INSERT INTO comments VALUES ($session.username, $form.xsscomment);
-        - path: /xss/commentresponse
-          action: $custom.phoneHomeValidate($form.xsscommentresponse)
-          successiftrue: true
+                qstring: INSERT INTO comments VALUES ( $session.username , $form.xsscomment );
+        - path: /xsscommentresponse
+          action: $custom.phoneHomeValidate()
+          success_if_true: true
+
+        - path: /phoneHome
+          action: $custom.phoneHome()

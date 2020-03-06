@@ -107,12 +107,12 @@ def make_sql_query(query, request):
 
         for index, dat in enumerate(parameters.copy()):
             if dat.startswith('$form'):
-                if dat.endswith(';'):
-                    dat2 = request.form[dat[6:-1:]]
-                    dat2 += ';'
-                else:
-                    dat2 = request.form[dat[6::]]
-                parameters = parameters[0:index:] + [dat2] + parameters[index + 1::]
+                dat2 = request.form[dat[6::]]
+            elif dat.startswith('$session'):
+                dat2 = session[dat[9::]]
+            else: dat2 = dat
+            parameters = parameters[0:index:] + [dat2] + parameters[index + 1::]
+
 
         qstring = " ".join(qstringArr)
         c.execute(qstring % tuple(parameters))
@@ -128,10 +128,14 @@ def make_sql_query(query, request):
         for index, dat in enumerate(parameters.copy()):
             if dat.startswith('$form'):
                 dat2 = request.form[dat[6::]]
-                parameters = parameters[0:index:] + [dat2] + parameters[index + 1::]
+            elif dat.startswith('$session'):
+                dat2 = session[dat[9::]]
+            else: dat2 = dat
+            parameters = parameters[0:index:] + [dat2] + parameters[index + 1::]
 
         qstring = " ".join(qstringArr)
-        c.executescript(qstring, tuple(parameters))
+        print(qstring)
+        c.execute(qstring, tuple(parameters))
         rows = c.fetchall()
         rows.append(qstring)
         rows.append(tuple(parameters))
@@ -175,6 +179,8 @@ def logout():
 def lessons_page(lesson):
     if 'username' in session:
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
+
+
         if current_lesson.success_condition is not None:
             results = custom.find_and_run(current_lesson.success_condition, request)
             if results is not None and results == True:
@@ -188,6 +194,16 @@ def lessons_page(lesson):
             flash(('success', 'You have completed this lesson'))
         conn.close()
 
+        if current_lesson.load_script is not None:
+            result = custom.find_and_run(current_lesson.load_script, request)
+            param_dict = {
+                    'template_name_or_list':'lesson.html',
+                    'title':current_lesson.name,
+                    'contentFile':"/content/%s" % current_lesson.content,
+                    'lessons':lessons,
+                    current_lesson.load_return: result}
+
+            return render_template(**param_dict) 
         return render_template('lesson.html',
                 title=current_lesson.name,
                 contentFile="/content/%s" % current_lesson.content,
@@ -246,8 +262,10 @@ def custom_routes(routeName):
             make_sql_query(source_route['query'], request)
         elif source_route['action'].startswith('$custom'):
             result = custom.find_and_run(source_route['action'], request)
-            if 'success_if_true' in souce_route and source_route['success_if_true']:
-                if result is not None and result == True:
+            print(result)
+            if 'success_if_true' in source_route and source_route['success_if_true']:
+                print(result)
+                if result:
                     lesson_success(source_lesson)
 
         return render_template('lesson.html',
