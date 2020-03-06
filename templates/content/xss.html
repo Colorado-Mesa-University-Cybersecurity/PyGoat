@@ -5,14 +5,14 @@
 		Http.open("POST", url, true);
 		Http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		var val=Math.random() * 9999; 
-		console.log("Phone home value is : " + val);
+		console.log("phoneHome Response is " + val);
 		Http.send("phVal=" + val);
 	}
 </script>
 
 <p>See the comments below.</p>
 
-<p>Add a comment with a JavaScript payload. Again … you want to call the webgoat.customjs.phoneHome function.</p>
+<p>Add a comment with a JavaScript payload. Again … you want to call the phoneHome function.</p>
 
 <p>As an attacker (offensive security), keep in mind that most apps are not going to have such a straight-forwardly named compromise. Also, you may have to find a way to load your own JavaScript dynamically to fully achieve goals of extracting data.</p>
 
