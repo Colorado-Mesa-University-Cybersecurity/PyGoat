@@ -15,6 +15,7 @@ c.execute('''CREATE TABLE if not exists users
                  (username text, password blob, salt blob)''')
 conn.commit()
 
+# load in the lessons from the yaml config files
 lessons = []
 for filename in os.listdir("%s/lessons" % path):
     if filename.endswith('yaml'):
@@ -25,13 +26,16 @@ for filename in os.listdir("%s/lessons" % path):
 
 print('Ignore the duplicate column errors below, I had to catch it as a workaround')
 for lesson in lessons:
-    # add columns to users database tracking lesson completion
+    # add columns to users database tracking lesson completion. 
+    # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now
     colName = "%sCompleted" % lesson.name
     try:
         c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
     except sqlite3.DatabaseError as e:
         print(e)
-    # initialize database tables
+    # initialize database tables using the 'db-tables' value from the yaml configs
+    # there is some insecure SQL going on here, but SQLite doesn't let you parameterize table or column names,
+    # so it couldn't be avoided
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
@@ -76,6 +80,7 @@ def valid_login(username, password):
         flash(('danger', 'Invalid credentials'))
         return False
 
+# send an arbitrary web request using route actions in the config files
 def send_webrequest(webrequest, request):
     url = "http://localhost:5000%s" % webrequest['url']
     if webrequest['method'] == 'POST':
@@ -83,17 +88,23 @@ def send_webrequest(webrequest, request):
             requests.post(url, data=webrequest['body'], headers=webrequest['headers'])
         else:
             requests.post(url, data=webrequest['body'])
-    else:
+    elif webrequest['method'] == 'GET':
         if 'headers' in webrequest:
             requests.get(url, headers=webrequest['headers'])
         else:
             requests.get(url)
 
+# make arbitrary sql queries using route actions in the config files
+# replace $form and $session primitives with their counterparts in the request
+# if designated injectable, pass the parameters into the query as strings, otherwise pass in a prepared statement
+# will probably break if you want non-injectable sql and variable tables or column names
 def make_sql_query(query, request):
     conn = sqlite3.connect('pygoat.db')
     c = conn.cursor()
     parameters = []
     qstring = query['qstring']
+    # the below line is why each $form and $session primitive need to be surrounded by spaces, 
+    # otherwise it will try to read bad form values and throw 400 errors
     qstringArr = qstring.split(' ')
 
     if query['injectable']:
@@ -175,25 +186,33 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+
+# route for every lesson with a yaml config
 @app.route('/lessons/<lesson>')
 def lessons_page(lesson):
     if 'username' in session:
+        # get lesson with url passed into the route
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
 
 
+        # check to see if the lesson has been completed
         if current_lesson.success_condition is not None:
             results = custom.find_and_run(current_lesson.success_condition, request)
             if results is not None and results == True:
                 lesson_success(current_lesson)
 
+        # if the lesson has been completed at some point in the past, let the user know
         colName = "%sCompleted" % current_lesson.name
         conn = sqlite3.connect('pygoat.db')
         c = conn.cursor()
+        # once again using the string passing because SQLite won't parameterize column names
         c.execute('''SELECT "%s" from users where username = ?''' % colName, [session['username']])
         if c.fetchone()[0] == 1:
             flash(('success', 'You have completed this lesson'))
         conn.close()
 
+        # some lessons will define custom scripts to pass information to the html files
+        # run those scripts and pass the information to the html here
         if current_lesson.load_script is not None:
             result = custom.find_and_run(current_lesson.load_script, request)
             param_dict = {
@@ -204,6 +223,8 @@ def lessons_page(lesson):
                     current_lesson.load_return: result}
 
             return render_template(**param_dict) 
+        
+        # for lessons with no custom initialization scripts
         return render_template('lesson.html',
                 title=current_lesson.name,
                 contentFile="/content/%s" % current_lesson.content,
@@ -238,6 +259,7 @@ def register():
             flash(('danger', 'username already exists'))
     return render_template('login.html', login=False)
 
+# addtional routes defined in the yaml configs
 @app.route('/<routeName>', methods=['POST', 'GET'])
 def custom_routes(routeName):
     if 'username' in session:
@@ -249,13 +271,17 @@ def custom_routes(routeName):
         # determine which route in said lesson got us here
         source_route = next(filter(lambda x: x['path'] == routename_with_slash, source_lesson.routes))
 
-        print(source_lesson.name)
-
+        # check to see if actions here complete the lesson where this route is defined
         if source_lesson.success_condition is not None:
             results = custom.find_and_run(source_lesson.success_condition, request)
             if results is not None and results == True:
                 lesson_success(source_lesson)
 
+        # handle route actions: there are 3 types
+        # 1: send request to some other part of the site
+        # 2: query the sql database
+        # 3: run a custom script
+        # 3a: the script might have complete the lesson if it returns True. Handle that case
         if source_route['action'] == 'send-webrequest':
             send_webrequest(source_route['webrequest'], request)
         elif source_route['action'] == 'sql-query':
@@ -268,6 +294,7 @@ def custom_routes(routeName):
                 if result:
                     lesson_success(source_lesson)
 
+        # display results on the html page for the lesson that defines the route
         return render_template('lesson.html',
             title=source_lesson.name,
             contentFile="/content/%s" % source_lesson.content,
