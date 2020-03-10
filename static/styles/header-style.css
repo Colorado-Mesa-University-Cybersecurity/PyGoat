@@ -1,11 +1,11 @@
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+/* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"; */
 body {
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
     background: #fafafa;
 }
 
 p {
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Arial', sans-serif; */
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
@@ -13,7 +13,7 @@ p {
 }
 
 h1 {
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
     text-align: center;
     color: #376f9e;
 }
@@ -33,6 +33,7 @@ a:focus {
 }
 
 .btn {
+    background-color: #ffd343;
     padding: 1px;
 }
 
@@ -59,24 +60,27 @@ a:focus {
 }
 
 #sidebar .sidebar-header {
-    padding: 20px;
+    padding: 10px;
     background: #376f9e;
 }
 
 #sidebar ul.components {
     padding: 20px 0;
-    border-bottom: 1px solid #376f9e;
+    border-bottom: 0px solid #376f9e;
+    list-style-type: none;
 }
 
 #sidebar ul p {
     color: #fff;
     padding: 10px;
+    list-style-type: none;
 }
 
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
     display: block;
+    list-style-type: none;
 }
 
 #sidebar ul li a:hover {
@@ -88,6 +92,7 @@ a:focus {
 a[aria-expanded="true"] {
     color: #fff;
     background: #376f9e;
+    list-style-type: none;
 }
 
 a[data-toggle="collapse"] {
@@ -110,19 +115,22 @@ ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
     background: #376f9e;
+    list-style-type: none;
 }
 
-ul.CTAs {
+/* ul.CTAs {
     padding: 20px;
-}
+    list-style-type: none;
+} */
 
-ul.CTAs a {
+/* ul.CTAs a {
     text-align: center;
     font-size: 0.9em !important;
     display: block;
     border-radius: 5px;
     margin-bottom: 5px;
-}
+    list-style-type: none;
+} */
 
 /*
     Content style
