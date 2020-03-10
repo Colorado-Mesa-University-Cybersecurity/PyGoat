@@ -1,6 +1,7 @@
 name: Proxy Test
 url: proxytest
 content: proxy.html
+difficulty: 3
 success-condition: $custom.validate_proxy()
 routes:
         - path: /proxy

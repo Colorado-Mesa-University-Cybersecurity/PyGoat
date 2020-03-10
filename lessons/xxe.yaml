@@ -1,6 +1,7 @@
 name: XXE
 url: xxe
 content: xxe.html
+difficulty: 6
 success-condition: $custom.xxeValidator()
 routes:
         - path: /xxe
