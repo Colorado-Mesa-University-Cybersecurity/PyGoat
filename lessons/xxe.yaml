@@ -1,16 +1,19 @@
 name: XXE
 url: xxe
 content: xxe.html
-success-condition: $custom.xxeValidator()
 routes:
         - path: /xxe
           action: send-webrequest
           webrequest:
-                  url: /xxe
+                  url: /xmltest
                   method: POST
-                  content-type: xml
+                  headers:
+                        content-type: xml
                   body: 
                         '<?xml version="1.0"?>\n
                                 <comment>\n
                                   <text>$form.xxecontent</text>\n
                                 </comment>'
+        - path: /xmltest
+          action: $custom.xxeValidator()
+          success_if_true: true

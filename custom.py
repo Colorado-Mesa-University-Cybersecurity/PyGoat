@@ -42,7 +42,7 @@ def sqlValidator(user_data, request):
             return len(rows) >= length
 
 def xxeValidator(request):
-    pass
+    print(request)
 
 # setup function for the xss lesson. Loads all comments from the database and stores them in a tuple
 def render_comments(request):
