@@ -1,11 +1,13 @@
 name: XXE
 url: xxe
 content: xxe.html
-success-condition: $custom.xxeValidator
+difficulty: 6
+success-condition: $custom.xxeValidator()
 routes:
         - path: /xxe
           action: send-webrequest
           webrequest:
+                  url: /xxe
                   method: POST
                   content-type: xml
                   body: 

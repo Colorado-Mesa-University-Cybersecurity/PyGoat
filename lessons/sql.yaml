@@ -1,6 +1,7 @@
 name: Test SQL Injection
 url: testsql
 content: sql.html
+difficulty: 4
 success-condition: $custom.sqlValidator(user_data)
 db-tables:
         - name: user_data
@@ -37,4 +38,4 @@ routes:
           action: sql-query
           query: 
                 injectable: true
-                qstring: SELECT * FROM user_data WHERE Login_Count = $form.login AND USERID = $form.uid;
+                qstring: SELECT * FROM user_data WHERE Login_Count = $form.login AND USERID = $form.uid ;
