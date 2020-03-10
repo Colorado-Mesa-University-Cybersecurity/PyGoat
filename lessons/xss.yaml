@@ -1,6 +1,7 @@
 name: Test XSS
 url: testxss
 content: xss.html
+difficulty: 5
 load-script: $custom.render_comments()
 load-return: comments
 db-tables:

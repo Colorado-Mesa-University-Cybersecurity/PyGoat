@@ -7,7 +7,8 @@ class lesson:
             self.name = yaml_config['name']
             self.url = yaml_config['url']
             self.content = yaml_config['content']
-
+            self.difficulty = yaml_config['difficulty']
+            
             self.success_condition = None
             self.load_script = None
             self.load_return = None

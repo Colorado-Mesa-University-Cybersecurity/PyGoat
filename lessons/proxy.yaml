@@ -1,6 +1,7 @@
 name: Proxy Test
 url: proxytest
 content: proxy.html
+difficulty: 3
 routes:
         - path: /proxy
           action: send-webrequest
