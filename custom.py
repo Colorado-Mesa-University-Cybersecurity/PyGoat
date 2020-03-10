@@ -24,7 +24,10 @@ def find_and_run(action, request):
 
 # Validator for the Test Proxy lesson
 def validate_proxy(request):
-    return request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily'
+    print(request)
+    response = (request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily')
+    print(response)
+    return response
 
 # Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
 def sqlValidator(user_data, request):

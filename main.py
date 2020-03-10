@@ -83,16 +83,49 @@ def valid_login(username, password):
 # send an arbitrary web request using route actions in the config files
 def send_webrequest(webrequest, request):
     url = "http://localhost:5000%s" % webrequest['url']
+    headers = {}
+    body = {}
+    if 'headers' in webrequest:
+        for header,value in webrequest['headers'].items():
+            tempheader = ""
+            tempbody = ""
+            if header.startswith('$form'):
+                tempheader = request.form[header[6::]]
+            elif header.startswith('$session'):
+                tempheader = request.session[header[9::]]
+            else:
+                tempheader = header
+            if value.startswith('$form'):
+                tempbody = request.form[value[6::]]
+            elif value.startswith('$session'):
+                tempbody = request.session[value[9::]]
+            else:
+                tempbody = value
+            headers[tempheader] = tempbody
+               
+    if 'body' in webrequest:
+        for key,value in webrequest['body'].items():
+            tempkey = ""
+            tempvalue = ""
+            if key.startswith('$form'):
+                tempkey = request.form[key[6::]]
+            elif key.startswith('$session'):
+                tempkey = request.session[key[9::]]
+            else:
+                tempkey = key
+            if value.startswith('$form'):
+                tempvalue = request.form[value[6::]]
+            elif value.startswith('$session'):
+                tempvalue = request.session[value[9::]]
+            else:
+                tempvalue = value
+            body[tempkey] = tempvalue
+
+
     if webrequest['method'] == 'POST':
-        if 'headers' in webrequest:
-            requests.post(url, data=webrequest['body'], headers=webrequest['headers'])
-        else:
-            requests.post(url, data=webrequest['body'])
+            requests.post(url, data=body, headers=headers)
     elif webrequest['method'] == 'GET':
-        if 'headers' in webrequest:
-            requests.get(url, headers=webrequest['headers'])
-        else:
-            requests.get(url)
+            requests.get(url, headers=headers, params=body)
 
 # make arbitrary sql queries using route actions in the config files
 # replace $form and $session primitives with their counterparts in the request
