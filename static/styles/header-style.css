@@ -26,12 +26,6 @@ a:focus {
     transition: all 0.3s;
 }
 
-.navbar-btn {
-    box-shadow: none;
-    outline: none !important;
-    border: none;
-}
-
 .btn {
     background-color: #ffd343;
     padding: 1px;
@@ -64,11 +58,11 @@ a:focus {
     background: #376f9e;
 }
 
-#sidebar ul.components {
+/* #sidebar ul.components {
     padding: 20px 0;
     border-bottom: 0px solid #376f9e;
     list-style-type: none;
-}
+} */
 
 #sidebar ul p {
     color: #fff;
@@ -80,19 +74,10 @@ a:focus {
     padding: 10px;
     font-size: 1.1em;
     display: block;
-    list-style-type: none;
 }
 
 #sidebar ul li a:hover {
-    color: rgb(0, 0, 0);
     background: #fff;
-}
-
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
-    color: #fff;
-    background: #376f9e;
-    list-style-type: none;
 }
 
 a[data-toggle="collapse"] {
@@ -103,34 +88,33 @@ a[data-toggle="collapse"] {
 	text-align: center;
 }
 
-.dropdown-toggle::after {
+
+.lesson-list {
+    list-style-type: none; 
+    margin: 10px; 
+    padding: 0px;
+}
+
+.logout-button {
+    position: fixed; 
+    bottom:15px; 
+    left: 10px; 
+    font-size: 20px; 
+    list-style-type: none; 
+    margin:0px; 
+    padding:0px;
+}
+
+
+/* for dropdown lists within lessons */
+/* .dropdown-toggle::after {
     display: block;
     position: absolute;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
-}
-
-ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
-    background: #376f9e;
-    list-style-type: none;
-}
-
-/* ul.CTAs {
-    padding: 20px;
-    list-style-type: none;
 } */
 
-/* ul.CTAs a {
-    text-align: center;
-    font-size: 0.9em !important;
-    display: block;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    list-style-type: none;
-} */
 
 /*
     Content style

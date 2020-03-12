@@ -27,14 +27,12 @@
 					<h2>PyGoat</h2>
 					<img src = "../static/logo.svg" style="height:48px; width:48px; position: relative; left: 120px; top: -40px;">
 				</div>
-				<ul class="lessons-list">
-					<ul style="list-style-type: none; margin: 0px; padding: 0px;"> 
+					<ul class="lesson-list"> 
 						{% for lesson in lessons | sort(attribute='difficulty') %}
 							<li><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
 						{% endfor %}
-					</ul>
 					<ul>
-						<li style = "position: fixed; bottom:25px; font-size: 20px; list-style-type: none; margin:0px; padding:0px;"><a href="/logout">Log Out</a></li> <!-- needs css -->
+						<li class="logout-button"><a href="/logout">Log Out</a></li> <!-- needs css -->
 					</ul>
 				</nav>
 			<div id ="collapse-button">
