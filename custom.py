@@ -31,9 +31,7 @@ def find_and_run(action, request):
 
 # Validator for the Test Proxy lesson
 def validate_proxy(request):
-    print(request)
     response = (request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily')
-    print(response)
     return response
 
 # Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
@@ -47,7 +45,6 @@ def sqlValidator(user_data, request):
             rows = c.fetchall()
             c.execute('''SELECT COUNT() from user_data''')
             length = c.fetchone()[0]
-            print(length, rows)
             conn.close()
             return len(rows) >= length
 
@@ -70,7 +67,6 @@ def xxecomment(username, request):
 def xxeValidator(request):
     with open('/etc/passwd', 'r') as passwd:
         passwdtxt = ''.join(passwd.readlines()).replace(' ','').replace('\n','')
-        print(passwdtxt)
         conn = sqlite3.connect('pygoat.db')
         c = conn.cursor()
         c.execute('''SELECT comment FROM xxe_comments''')
@@ -92,10 +88,8 @@ def render_comments(tablename, request):
 # custom action defined in a route for the xss lesson. Receives and stores the last value received from the phoneHome javascript function
 def phoneHome(request):
     global phVal
-    print(request.form['phVal'])
     phVal = request.form['phVal']
 
 # validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
 def phoneHomeValidate(request):
-    print(phVal, request.form['xsscommentresponse'])
     return request.form['xsscommentresponse'] == phVal
