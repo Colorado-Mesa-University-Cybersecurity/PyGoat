@@ -1,6 +1,6 @@
 <h1>Let’s try</h1>
 
-<p>In this assignment you will add a comment to the photo, when submitting the form try to execute an XXE injection with the comments field. Try listing the root directory of the filesystem.</p>
+<p>In this assignment you will add a comment to the photo, when submitting the form try to execute an XXE injection with the comments field. Try printing out the contents of /etc/passwd</p>
 
 
 <div class="border border-primary rounded">
@@ -16,10 +16,10 @@
 <div id="comments">
 	{% for username, comment in comments %}
 	<div id="comment">
-	{{ username }}
-	<hr>
+		{{ username }}<br>
 	{{ comment }}
 	</div>
+	<hr>
 	{% endfor %}
 </div>
 {% endif %}

@@ -1,8 +1,14 @@
 from flask import Flask, render_template, session, redirect, url_for, request, flash
+from xml.dom.pulldom import START_ELEMENT, parseString
+from xml.sax import make_parser
+from xml.sax.handler import feature_external_ges
 import os, sys, yaml, sqlite3, hashlib, custom, requests, logging
 from lesson_handler import lesson
 
 logging.getLogger("requests").setLevel(logging.WARNING)
+
+parser = make_parser()
+parser.setFeature(feature_external_ges, True)
 
 path = os.path.dirname(os.path.realpath(__file__))
 
@@ -84,7 +90,6 @@ def valid_login(username, password):
 def send_webrequest(webrequest, request):
     url = "http://localhost:5000%s" % webrequest['url']
     headers = {}
-    body = {}
     if 'headers' in webrequest:
         for header,value in webrequest['headers'].items():
             tempheader = ""
@@ -103,23 +108,39 @@ def send_webrequest(webrequest, request):
                 tempbody = value
             headers[tempheader] = tempbody
                
+    headers['cookie'] = 'session=' + request.cookies['session']
     if 'body' in webrequest:
-        for key,value in webrequest['body'].items():
-            tempkey = ""
-            tempvalue = ""
-            if key.startswith('$form'):
-                tempkey = request.form[key[6::]]
-            elif key.startswith('$session'):
-                tempkey = request.session[key[9::]]
-            else:
-                tempkey = key
-            if value.startswith('$form'):
-                tempvalue = request.form[value[6::]]
-            elif value.startswith('$session'):
-                tempvalue = request.session[value[9::]]
-            else:
-                tempvalue = value
-            body[tempkey] = tempvalue
+        if isinstance(webrequest['body'], str):
+            bodyArr = webrequest['body'].split(' ')
+            for index, val in enumerate(bodyArr.copy()):
+                tempval = ""
+                if val.startswith('$form'):
+                    tempval = request.form[val[6::]]
+                elif val.startswith('$session'):
+                    tempval = request.form[val[9::]]
+                else:
+                    tempval = val
+                bodyArr = bodyArr[0:index:] + [tempval] + bodyArr[index+1::]
+            body = ' '.join(bodyArr)
+                    
+        else:
+            body = {}
+            for key,value in webrequest['body'].items():
+                tempkey = ""
+                tempvalue = ""
+                if key.startswith('$form'):
+                    tempkey = request.form[key[6::]]
+                elif key.startswith('$session'):
+                    tempkey = request.session[key[9::]]
+                else:
+                    tempkey = key
+                if value.startswith('$form'):
+                    tempvalue = request.form[value[6::]]
+                elif value.startswith('$session'):
+                    tempvalue = request.session[value[9::]]
+                else:
+                    tempvalue = value
+                body[tempkey] = tempvalue
 
 
     if webrequest['method'] == 'POST':
@@ -197,6 +218,10 @@ def lesson_success(lesson):
     conn.close()
     return(redirect('/lessons/%s' % lesson.url))
     print('lesson %s successful' % lesson.name)
+
+@app.route('/favicon.ico')
+def favicon():
+    return(redirect(url_for('static', filename='favicon.ico')))
 
 @app.route('/')
 def index():
@@ -320,10 +345,19 @@ def custom_routes(routeName):
         elif source_route['action'] == 'sql-query':
             make_sql_query(source_route['query'], request)
         elif source_route['action'].startswith('$custom'):
-            result = custom.find_and_run(source_route['action'], request)
-            print(result)
+            actionArr = source_route['action'].split(' ')
+            for index, act in enumerate(actionArr.copy()):
+                temp = act
+                if act.startswith('$form'):
+                    temp = request.form[act[6::]]
+                elif act.startswith('$session'):
+                    temp = session[act[9::]]
+                actionArr = actionArr[0:index:] + [temp] + actionArr[index+1::]
+            action = ' '.join(actionArr)
+            print(action)
+            print(routename_with_slash)
+            result = custom.find_and_run(action, request)
             if 'success_if_true' in source_route and source_route['success_if_true']:
-                print(result)
                 if result:
                     lesson_success(source_lesson)
 

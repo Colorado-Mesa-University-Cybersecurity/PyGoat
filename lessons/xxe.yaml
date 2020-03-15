@@ -2,19 +2,37 @@ name: XXE
 url: xxe
 content: xxe.html
 difficulty: 6
+success-condition: $custom.xxeValidator()
+load-script: $custom.render_comments(xxe_comments)
+load-return: comments
+db-tables:
+        - name: xxe_comments
+          columns:
+                  - name: username
+                    type: text
+                  - name: comment
+                    type: text
+          rows:
+                  - username: webgoat
+                    comment: Silly cat...
+                  - username: guest
+                    comment: I think I will use this picture in one of my projects.
+                  - username: guest
+                    comment: lol!!!:-).
 routes:
         - path: /xxe
           action: send-webrequest
           webrequest:
-                  url: /xmltest
+                  url: /xxecomment
                   method: POST
                   headers:
                         content-type: xml
                   body: 
-                        '<?xml version="1.0"?>\n
-                                <comment>\n
-                                  <text>$form.xxecontent</text>\n
-                                </comment>'
-        - path: /xmltest
-          action: $custom.xxeValidator()
-          success_if_true: true
+                        '<?xml version="1.0"?>
+                        <!--This is the request you want-->
+                                <comm>
+                                  <text> $form.xxecontent </text>
+                                </comm>'
+        
+        - path: /xxecomment
+          action: $custom.xxecomment( $session.username )
