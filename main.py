@@ -7,9 +7,6 @@ from lesson_handler import lesson
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 
-parser = make_parser()
-parser.setFeature(feature_external_ges, True)
-
 path = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__)
@@ -31,17 +28,21 @@ for filename in os.listdir("%s/lessons" % path):
             lessons.append(current_lesson)
 
 print('Ignore the duplicate column errors below, I had to catch it as a workaround')
-for lesson in lessons:
+for lesson in lessons.copy():
     # add columns to users database tracking lesson completion. 
-    # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now
-    colName = "%sCompleted" % lesson.name
-    try:
-        c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
-    except sqlite3.DatabaseError as e:
-        print(e)
-    # initialize database tables using the 'db-tables' value from the yaml configs
-    # there is some insecure SQL going on here, but SQLite doesn't let you parameterize table or column names,
-    # so it couldn't be avoided
+    # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now 
+    if lesson.completable:
+        colName = "%sCompleted" % lesson.name
+        try:
+            c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
+        except sqlite3.DatabaseError as e:
+            print(e)
+conn.commit()
+conn.close()
+
+def initialize_db(lesson):
+    conn = sqlite3.connect('pygoat.db')
+    c = conn.cursor()
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
@@ -61,8 +62,8 @@ for lesson in lessons:
                     sqlString2 += "'" + str(colum) + "',"
                 sqlString2 = sqlString2[:-1:] + ') VALUES ('
                 c.execute(sqlString2 + ",".join("?"*len(row.values())) + ")", tuple(row.values()))
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
 
 def valid_login(username, password):
     conn = sqlite3.connect('pygoat.db')
@@ -219,6 +220,19 @@ def lesson_success(lesson):
     return(redirect('/lessons/%s' % lesson.url))
     print('lesson %s successful' % lesson.name)
 
+def check_success():
+    conn = sqlite3.connect('pygoat.db')
+    c = conn.cursor()
+    for lesson in lessons:
+        if lesson.completable:
+            colName = "%sCompleted" % lesson.name
+            c.execute('''SELECT "%s" FROM users WHERE username = ?''' % colName, [session['username']])
+            if c.fetchone()[0] == 1:
+                lesson.completed = True
+            else:
+                lesson.completed = False
+    conn.close()
+
 @app.route('/favicon.ico')
 def favicon():
     return(redirect(url_for('static', filename='favicon.ico')))
@@ -226,6 +240,7 @@ def favicon():
 @app.route('/')
 def index():
     if 'username' in session:
+        check_success()
         return render_template('lesson.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
     else:
         return redirect(url_for('login'))
@@ -236,6 +251,7 @@ def login():
     if request.method == 'POST':
         if valid_login(request.form['username'], request.form['password']):
             session['username'] = request.form['username']
+            check_success()
             return redirect(url_for('index'))
     return render_template('login.html', login=True)
 
@@ -244,11 +260,11 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
-
 # route for every lesson with a yaml config
 @app.route('/lessons/<lesson>')
 def lessons_page(lesson):
     if 'username' in session:
+        check_success()
         # get lesson with url passed into the route
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
 
@@ -260,14 +276,8 @@ def lessons_page(lesson):
                 lesson_success(current_lesson)
 
         # if the lesson has been completed at some point in the past, let the user know
-        colName = "%sCompleted" % current_lesson.name
-        conn = sqlite3.connect('pygoat.db')
-        c = conn.cursor()
-        # once again using the string passing because SQLite won't parameterize column names
-        c.execute('''SELECT "%s" from users where username = ?''' % colName, [session['username']])
-        if c.fetchone()[0] == 1:
+        if current_lesson.completed:
             flash(('success', 'You have completed this lesson'))
-        conn.close()
 
         # some lessons will define custom scripts to pass information to the html files
         # run those scripts and pass the information to the html here
@@ -317,10 +327,23 @@ def register():
             flash(('danger', 'username already exists'))
     return render_template('login.html', login=False)
 
+@app.route('/reset/<lessonTitle>')
+def reset_lesson(lessonTitle):
+    lesson = next(filter(lambda x:x.url == lessonTitle, lessons))
+    colName = "%sCompleted" % lesson.name
+    conn = sqlite3.connect('pygoat.db')
+    c = conn.cursor()
+    c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
+    conn.commit()
+    conn.close()
+    initialize_db(lesson)
+    return redirect(url_for('lessons_page', lesson=lesson.url))
+
 # addtional routes defined in the yaml configs
 @app.route('/<routeName>', methods=['POST', 'GET'])
 def custom_routes(routeName):
     if 'username' in session:
+        check_success()
         routename_with_slash = '/' + routeName
 
         # determine which lesson this route is attached to. This might be slow with a lot of lessons
@@ -334,6 +357,9 @@ def custom_routes(routeName):
             results = custom.find_and_run(source_lesson.success_condition, request)
             if results is not None and results == True:
                 lesson_success(source_lesson)
+
+        if source_lesson.completed:
+            flash(('success', 'You have completed this lesson'))
 
         # handle route actions: there are 3 types
         # 1: send request to some other part of the site
@@ -362,9 +388,27 @@ def custom_routes(routeName):
                     lesson_success(source_lesson)
 
         # display results on the html page for the lesson that defines the route
+        if source_lesson.load_script is not None:
+            result = custom.find_and_run(source_lesson.load_script, request)
+            param_dict = {
+                    'template_name_or_list':'lesson.html',
+                    'title':source_lesson.name,
+                    'contentFile':"/content/%s" % source_lesson.content,
+                    'lessons':lessons,
+                    source_lesson.load_return: result}
+
+            return render_template(**param_dict) 
+
         return render_template('lesson.html',
-            title=source_lesson.name,
-            contentFile="/content/%s" % source_lesson.content,
-            lessons=lessons)
+           title=source_lesson.name,
+           contentFile="/content/%s" % source_lesson.content,
+           lessons=lessons)
     else: 
         return(redirect(url_for('login')))
+
+if __name__ == '__main__':
+        # initialize database tables using the 'db-tables' value from the yaml configs
+        # there is some insecure SQL going on here, but SQLite doesn't let you parameterize table or column names,
+        # so it couldn't be avoided
+        initialize_db(lesson)
+

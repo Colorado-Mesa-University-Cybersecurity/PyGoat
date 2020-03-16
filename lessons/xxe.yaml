@@ -5,6 +5,7 @@ difficulty: 6
 success-condition: $custom.xxeValidator()
 load-script: $custom.render_comments(xxe_comments)
 load-return: comments
+completable: true
 db-tables:
         - name: xxe_comments
           columns:

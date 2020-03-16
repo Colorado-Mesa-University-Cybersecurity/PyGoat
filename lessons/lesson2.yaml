@@ -2,3 +2,4 @@ name: Test Lesson 2
 url: testlesson2
 content: lesson2.html
 difficulty: 2
+completable: false

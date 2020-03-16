@@ -4,6 +4,7 @@ content: xss.html
 difficulty: 5
 load-script: $custom.render_comments(comments)
 load-return: comments
+completable: true
 db-tables:
         - name: comments
           columns:

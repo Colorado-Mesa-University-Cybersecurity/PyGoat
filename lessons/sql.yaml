@@ -3,6 +3,7 @@ url: testsql
 content: sql.html
 difficulty: 4
 success-condition: $custom.sqlValidator(user_data)
+completable: true
 db-tables:
         - name: user_data
           columns:

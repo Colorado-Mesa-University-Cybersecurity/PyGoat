@@ -8,6 +8,8 @@ class lesson:
             self.url = yaml_config['url']
             self.content = yaml_config['content']
             self.difficulty = yaml_config['difficulty']
+            self.completable = yaml_config['completable']
+            self.completed = False
             
             self.success_condition = None
             self.load_script = None
