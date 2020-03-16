@@ -5,6 +5,7 @@ They will always receive a request object. It can receive other things, just put
 """
 
 import sqlite3, os
+from flask import flash
 from xml.dom.pulldom import parseString, START_ELEMENT
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
@@ -93,3 +94,16 @@ def phoneHome(request):
 # validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
 def phoneHomeValidate(request):
     return request.form['xsscommentresponse'] == phVal
+
+def csrf_validate_and_comment(username, request):
+    if request.method == "POST":
+        if  'Referer' in request.headers and 'localhost:5000' in request.headers['Referer']:
+            flash(('danger', 'It appears your request is coming from the same host you are submitting to.'))
+            return False
+        elif 'validateReq' in request.form and request.form['validateReq'] == '2aa14227b9a13d0bede0388a7fba9aa9':
+            conn = sqlite3.connect('pygoat.db')
+            c = conn.cursor()
+            c.execute('''INSERT INTO csrf_comments VALUES (?,?,?)''', (username, request.form['csrfcontent'], request.form['stars']))
+            conn.commit()
+            conn.close()
+            return True
