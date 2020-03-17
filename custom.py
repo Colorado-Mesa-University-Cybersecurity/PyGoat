@@ -13,10 +13,6 @@ from xml.sax.handler import feature_external_ges
 # used to store the phoneHome value from the xss lesson
 phVal = None
 
-# xml parser for xxe lesson
-parser = make_parser()
-parser.setFeature(feature_external_ges, True)
-
 # Locate the function string passed here and call the function with any parameters
 def find_and_run(action, request):
     end_index = action.find('(')
@@ -51,6 +47,8 @@ def sqlValidator(user_data, request):
 
 # parse xml unsafely (allowing external entities) and add comment to database
 def xxecomment(username, request):
+    parser = make_parser()
+    parser.setFeature(feature_external_ges, True)
     doc = parseString(request.data.decode('utf-8'), parser=parser)
     for event, node in doc:
         if event == START_ELEMENT and node.tagName == 'text':
