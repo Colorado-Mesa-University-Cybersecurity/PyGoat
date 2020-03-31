@@ -43,6 +43,7 @@ conn.close()
 def initialize_db(lesson):
     conn = sqlite3.connect('pygoat.db')
     c = conn.cursor()
+    print('initializing db')
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
@@ -227,7 +228,8 @@ def check_success():
         if lesson.completable:
             colName = "%sCompleted" % lesson.name
             c.execute('''SELECT "%s" FROM users WHERE username = ?''' % colName, [session['username']])
-            if c.fetchone()[0] == 1:
+            result = c.fetchone()
+            if result is not None and result[0] == 1:
                 lesson.completed = True
             else:
                 lesson.completed = False
@@ -406,9 +408,5 @@ def custom_routes(routeName):
     else: 
         return(redirect(url_for('login')))
 
-if __name__ == '__main__':
-        # initialize database tables using the 'db-tables' value from the yaml configs
-        # there is some insecure SQL going on here, but SQLite doesn't let you parameterize table or column names,
-        # so it couldn't be avoided
-        initialize_db(lesson)
-
+for lesson in lessons:
+    initialize_db(lesson)
