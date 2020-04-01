@@ -1,0 +1,1 @@
+run idor_solution.py and type the username that shows up into the form on the site

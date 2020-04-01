@@ -1,0 +1,1 @@
+open up csrf.txt in a web browser, type text in the first form, a number in the second, and click submit.
