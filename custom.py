@@ -4,7 +4,7 @@ You can access them in the lesson configs using $custom.functionName(params).
 They will always receive a request object. It can receive other things, just put that as a parameter before the request.
 """
 
-import sqlite3, os
+import sqlite3, os, pickle, filecmp, urllib, time
 from flask import flash
 from xml.dom.pulldom import parseString, START_ELEMENT
 from xml.sax import make_parser
@@ -12,6 +12,8 @@ from xml.sax.handler import feature_external_ges
 
 # used to store the phoneHome value from the xss lesson
 phVal = None
+
+path = os.path.dirname(os.path.realpath(__file__))
 
 # Locate the function string passed here and call the function with any parameters
 def find_and_run(action, request):
@@ -105,3 +107,22 @@ def csrf_validate_and_comment(username, request):
             conn.commit()
             conn.close()
             return True
+
+def insecure_deserialization_validate(request):
+    if request.method == "POST":
+        try:
+            os.remove('%s/passwdclone' % path)
+        except OSError as error:
+            print(error)
+        # had to remove url encoding and unescape backslashes. See https://stackoverflow.com/questions/1885181/how-to-un-escape-a-backslash-escaped-string
+        og_result = request.get_data()[7::]
+        result = urllib.parse.unquote_to_bytes(og_result).decode('unicode_escape')
+        # nbspaces were added by parsing unicode escape, remove them
+        result = result.encode('utf-8').replace(b'\xc2', b'')
+        obj = pickle.loads(result)
+        time.sleep(0.5) 
+        if 'passwdclone' in os.listdir(path) and filecmp.cmp('/etc/passwd', '%s/passwdclone' % path):
+            print('done')
+            flash(('success','lesson completed'))
+            return True
+    return False
