@@ -126,3 +126,9 @@ def insecure_deserialization_validate(request):
             flash(('success','lesson completed'))
             return True
     return False
+
+def validate_idor(request):
+    if request.method == "POST" and 'username' in request.form and request.form['username'] == 'Blackbeard':
+        flash(('success', 'Lesson completed'))
+        return True
+    return False
