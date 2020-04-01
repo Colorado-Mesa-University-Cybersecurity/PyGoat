@@ -5,12 +5,5 @@ difficulty: 3
 completable: true
 routes:
         - path: /proxy
-          action: send-webrequest
-          webrequest:
-                  url: /proxytest
-                  method: POST
-                  body: 
-                        changeMe: $form.changeMe
-        - path: /proxytest
           action: $custom.validate_proxy()
           success_if_true: true
