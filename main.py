@@ -270,7 +270,6 @@ def lessons_page(lesson):
         # get lesson with url passed into the route
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
 
-
         # check to see if the lesson has been completed
         if current_lesson.success_condition is not None:
             results = custom.find_and_run(current_lesson.success_condition, request)
