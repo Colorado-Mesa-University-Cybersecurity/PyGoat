@@ -40,3 +40,7 @@ Team Members: Lucas Walgren (lawalgren@mavs.coloradomesa.edu), Sean Apsey (ssaps
 		* set "certificate_path" to the absolute path of your newly converted certificate
 
 		* set "http_proxy" to the address and port for your proxy
+		
+## Creating Custom Lessons
+
+* PyGoat uses yaml files to define its lessons. See [this wiki page](https://github.com/lawalgren/PyGoat/wiki/How-to-create-new-lessons) for more details.
