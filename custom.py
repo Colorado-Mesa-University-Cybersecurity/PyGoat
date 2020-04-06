@@ -10,10 +10,11 @@ from xml.dom.pulldom import parseString, START_ELEMENT
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
 
-# used to store the phoneHome value from the xss lesson
-phVal = None
 
 path = os.path.dirname(os.path.realpath(__file__))
+
+# used to store the phoneHome value from the xss lesson
+phVal = None
 
 # Locate the function string passed here and call the function with any parameters
 def find_and_run(action, request):
@@ -31,6 +32,8 @@ def find_and_run(action, request):
 # Validator for the Test Proxy lesson
 def validate_proxy(request):
     response = (request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily')
+    if response:
+        flash(('success', 'lesson completed'))
     return response
 
 # Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
@@ -45,7 +48,10 @@ def sqlValidator(user_data, request):
             c.execute('''SELECT COUNT() from user_data''')
             length = c.fetchone()[0]
             conn.close()
-            return len(rows) >= length
+            response = (len(rows) >= length)
+            if response:
+                flash(('success', 'lesson completed'))
+            return response
 
 # parse xml unsafely (allowing external entities) and add comment to database
 def xxecomment(username, request):
@@ -74,6 +80,7 @@ def xxeValidator(request):
         for row in c.fetchall():
             if row[0].replace(' ', '').replace('\n','') == passwdtxt:
                 conn.close()
+                flash(('success', 'lesson completed'))
                 return True
         conn.close()
         return(False)
@@ -93,7 +100,10 @@ def phoneHome(request):
 
 # validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
 def phoneHomeValidate(request):
-    return request.form['xsscommentresponse'] == phVal
+    response = request.form['xsscommentresponse'] == phVal
+    if response:
+        flash(('success', 'lesson completed'))
+    return response
 
 def csrf_validate_and_comment(username, request):
     if request.method == "POST":
@@ -106,6 +116,7 @@ def csrf_validate_and_comment(username, request):
             c.execute('''INSERT INTO csrf_comments VALUES (?,?,?)''', (username, request.form['csrfcontent'], request.form['stars']))
             conn.commit()
             conn.close()
+            flash(('success', 'lesson completed'))
             return True
 
 def insecure_deserialization_validate(request):
