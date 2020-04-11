@@ -107,7 +107,7 @@ def phoneHomeValidate(request):
 
 def csrf_validate_and_comment(username, request):
     if request.method == "POST":
-        if  'Referer' in request.headers and 'localhost:5000' in request.headers['Referer']:
+        if  'Referer' in request.headers and ('localhost:5000' in request.headers['Referer'] or '127.0.0.1:5000' in request.headers['Referer']):
             flash(('danger', 'It appears your request is coming from the same host you are submitting to.'))
             return False
         elif 'validateReq' in request.form and request.form['validateReq'] == '2aa14227b9a13d0bede0388a7fba9aa9':
