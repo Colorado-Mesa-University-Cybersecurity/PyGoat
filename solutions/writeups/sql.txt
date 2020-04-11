@@ -1,0 +1,7 @@
+in the first field type any number.
+
+in the second field type 
+
+2 or 1=1
+
+the 2 can be replaced by any other number and the 1=1 can be replaced by any other statement that evaluated to true

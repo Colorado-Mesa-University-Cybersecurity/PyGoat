@@ -4,11 +4,14 @@ You can access them in the lesson configs using $custom.functionName(params).
 They will always receive a request object. It can receive other things, just put that as a parameter before the request.
 """
 
-import sqlite3, os
+import sqlite3, os, pickle, filecmp, urllib, time
 from flask import flash
 from xml.dom.pulldom import parseString, START_ELEMENT
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
+
+
+path = os.path.dirname(os.path.realpath(__file__))
 
 # used to store the phoneHome value from the xss lesson
 phVal = None
@@ -29,6 +32,8 @@ def find_and_run(action, request):
 # Validator for the Test Proxy lesson
 def validate_proxy(request):
     response = (request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily')
+    if response:
+        flash(('success', 'lesson completed'))
     return response
 
 # Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
@@ -43,7 +48,10 @@ def sqlValidator(user_data, request):
             c.execute('''SELECT COUNT() from user_data''')
             length = c.fetchone()[0]
             conn.close()
-            return len(rows) >= length
+            response = (len(rows) >= length)
+            if response:
+                flash(('success', 'lesson completed'))
+            return response
 
 # parse xml unsafely (allowing external entities) and add comment to database
 def xxecomment(username, request):
@@ -72,6 +80,7 @@ def xxeValidator(request):
         for row in c.fetchall():
             if row[0].replace(' ', '').replace('\n','') == passwdtxt:
                 conn.close()
+                flash(('success', 'lesson completed'))
                 return True
         conn.close()
         return(False)
@@ -91,11 +100,14 @@ def phoneHome(request):
 
 # validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
 def phoneHomeValidate(request):
-    return request.form['xsscommentresponse'] == phVal
+    response = request.form['xsscommentresponse'] == phVal
+    if response:
+        flash(('success', 'lesson completed'))
+    return response
 
 def csrf_validate_and_comment(username, request):
     if request.method == "POST":
-        if  'Referer' in request.headers and 'localhost:5000' in request.headers['Referer']:
+        if  'Referer' in request.headers and ('localhost:5000' in request.headers['Referer'] or '127.0.0.1:5000' in request.headers['Referer']):
             flash(('danger', 'It appears your request is coming from the same host you are submitting to.'))
             return False
         elif 'validateReq' in request.form and request.form['validateReq'] == '2aa14227b9a13d0bede0388a7fba9aa9':
@@ -104,4 +116,30 @@ def csrf_validate_and_comment(username, request):
             c.execute('''INSERT INTO csrf_comments VALUES (?,?,?)''', (username, request.form['csrfcontent'], request.form['stars']))
             conn.commit()
             conn.close()
+            flash(('success', 'lesson completed'))
             return True
+
+def insecure_deserialization_validate(request):
+    if request.method == "POST":
+        try:
+            os.remove('%s/passwdclone' % path)
+        except OSError as error:
+            print(error)
+        # had to remove url encoding and unescape backslashes. See https://stackoverflow.com/questions/1885181/how-to-un-escape-a-backslash-escaped-string
+        og_result = request.get_data()[7::]
+        result = urllib.parse.unquote_to_bytes(og_result).decode('unicode_escape')
+        # nbspaces were added by parsing unicode escape, remove them
+        result = result.encode('utf-8').replace(b'\xc2', b'')
+        obj = pickle.loads(result)
+        time.sleep(0.5) 
+        if 'passwdclone' in os.listdir(path) and filecmp.cmp('/etc/passwd', '%s/passwdclone' % path):
+            print('done')
+            flash(('success','lesson completed'))
+            return True
+    return False
+
+def validate_idor(request):
+    if request.method == "POST" and 'username' in request.form and request.form['username'] == 'Blackbeard':
+        flash(('success', 'Lesson completed'))
+        return True
+    return False

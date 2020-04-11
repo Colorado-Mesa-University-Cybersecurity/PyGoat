@@ -1,0 +1,7 @@
+Write the following as a comment
+
+<script>phoneHome();</script>
+
+Then, refresh the page, and open the developer console. A message will appear say "phoneHome value is <some number>"
+
+Type that number into the form at the bottom of the page

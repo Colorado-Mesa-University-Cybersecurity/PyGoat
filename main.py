@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, request, flash
+from flask import Flask, render_template, session, redirect, url_for, request, flash, Response
 from xml.dom.pulldom import START_ELEMENT, parseString
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
@@ -43,6 +43,7 @@ conn.close()
 def initialize_db(lesson):
     conn = sqlite3.connect('pygoat.db')
     c = conn.cursor()
+    print('initializing db')
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
@@ -91,6 +92,7 @@ def valid_login(username, password):
 def send_webrequest(webrequest, request):
     url = "http://localhost:5000%s" % webrequest['url']
     headers = {}
+    body = {}
     if 'headers' in webrequest:
         for header,value in webrequest['headers'].items():
             tempheader = ""
@@ -98,13 +100,13 @@ def send_webrequest(webrequest, request):
             if header.startswith('$form'):
                 tempheader = request.form[header[6::]]
             elif header.startswith('$session'):
-                tempheader = request.session[header[9::]]
+                tempheader = session[header[9::]]
             else:
                 tempheader = header
             if value.startswith('$form'):
                 tempbody = request.form[value[6::]]
             elif value.startswith('$session'):
-                tempbody = request.session[value[9::]]
+                tempbody = session[value[9::]]
             else:
                 tempbody = value
             headers[tempheader] = tempbody
@@ -118,7 +120,7 @@ def send_webrequest(webrequest, request):
                 if val.startswith('$form'):
                     tempval = request.form[val[6::]]
                 elif val.startswith('$session'):
-                    tempval = request.form[val[9::]]
+                    tempval = session[val[9::]]
                 else:
                     tempval = val
                 bodyArr = bodyArr[0:index:] + [tempval] + bodyArr[index+1::]
@@ -132,13 +134,13 @@ def send_webrequest(webrequest, request):
                 if key.startswith('$form'):
                     tempkey = request.form[key[6::]]
                 elif key.startswith('$session'):
-                    tempkey = request.session[key[9::]]
+                    tempkey = session[key[9::]]
                 else:
                     tempkey = key
                 if value.startswith('$form'):
                     tempvalue = request.form[value[6::]]
                 elif value.startswith('$session'):
-                    tempvalue = request.session[value[9::]]
+                    tempvalue = session[value[9::]]
                 else:
                     tempvalue = value
                 body[tempkey] = tempvalue
@@ -210,6 +212,66 @@ def make_sql_query(query, request):
     conn.commit()
     conn.close()
 
+def make_custom_response(request, response):
+    headers = {}
+    body = {}
+
+    if 'headers' in response:
+        for header,value in response['headers'].items():
+            tempheader = ""
+            tempbody = ""
+            if header.startswith('$form'):
+                tempheader = request.form[header[6::]]
+            elif header.startswith('$session'):
+                tempheader = session[header[9::]]
+            else:
+                tempheader = header
+            if value.startswith('$form'):
+                tempbody = request.form[value[6::]]
+            elif value.startswith('$session'):
+                tempbody = session[value[9::]]
+            else:
+                tempbody = value
+            headers[tempheader] = tempbody
+               
+    headers['cookie'] = 'session=' + request.cookies['session']
+
+    if 'body' in response:
+        if isinstance(response['body'], str):
+            bodyArr = response['body'].split(' ')
+            for index, val in enumerate(bodyArr.copy()):
+                tempval = ""
+                if val.startswith('$form'):
+                    tempval = request.form[val[6::]]
+                elif val.startswith('$session'):
+                    tempval = session[val[9::]]
+                else:
+                    tempval = val
+                bodyArr = bodyArr[0:index:] + [tempval] + bodyArr[index+1::]
+            body = ' '.join(bodyArr)
+                    
+        else:
+            body = {}
+            for key,value in response['body'].items():
+                tempkey = ""
+                tempvalue = ""
+                if key.startswith('$form'):
+                    tempkey = request.form[key[6::]]
+                elif key.startswith('$session'):
+                    tempkey = session[key[9::]]
+                else:
+                    tempkey = key
+                if value.startswith('$form'):
+                    tempvalue = request.form[value[6::]]
+                elif value.startswith('$session'):
+                    tempvalue = session[value[9::]]
+                else:
+                    tempvalue = value
+                body[tempkey] = tempvalue
+
+        return Response(response=body, headers=headers)
+
+
 def lesson_success(lesson):
     colName = "%sCompleted" % lesson.name
     conn = sqlite3.connect('pygoat.db')
@@ -227,7 +289,8 @@ def check_success():
         if lesson.completable:
             colName = "%sCompleted" % lesson.name
             c.execute('''SELECT "%s" FROM users WHERE username = ?''' % colName, [session['username']])
-            if c.fetchone()[0] == 1:
+            result = c.fetchone()
+            if result is not None and result[0] == 1:
                 lesson.completed = True
             else:
                 lesson.completed = False
@@ -267,7 +330,6 @@ def lessons_page(lesson):
         check_success()
         # get lesson with url passed into the route
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
-
 
         # check to see if the lesson has been completed
         if current_lesson.success_condition is not None:
@@ -340,7 +402,7 @@ def reset_lesson(lessonTitle):
     return redirect(url_for('lessons_page', lesson=lesson.url))
 
 # addtional routes defined in the yaml configs
-@app.route('/<routeName>', methods=['POST', 'GET'])
+@app.route('/<path:routeName>', methods=['POST', 'GET'])
 def custom_routes(routeName):
     if 'username' in session:
         check_success()
@@ -386,6 +448,11 @@ def custom_routes(routeName):
             if 'success_if_true' in source_route and source_route['success_if_true']:
                 if result:
                     lesson_success(source_lesson)
+        elif source_route['action'] == 'response':
+            print('response')
+            response = source_route['response']
+            flask_response = make_custom_response(request, response)
+            return flask_response
 
         # display results on the html page for the lesson that defines the route
         if source_lesson.load_script is not None:
@@ -406,9 +473,5 @@ def custom_routes(routeName):
     else: 
         return(redirect(url_for('login')))
 
-if __name__ == '__main__':
-        # initialize database tables using the 'db-tables' value from the yaml configs
-        # there is some insecure SQL going on here, but SQLite doesn't let you parameterize table or column names,
-        # so it couldn't be avoided
-        initialize_db(lesson)
-
+for lesson in lessons:
+    initialize_db(lesson)
