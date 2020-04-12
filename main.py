@@ -323,6 +323,11 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+# @app.route('/home')
+# def home():
+#     return render_template('home.html')
+
+
 # route for every lesson with a yaml config
 @app.route('/lessons/<lesson>')
 def lessons_page(lesson):

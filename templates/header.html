@@ -25,22 +25,57 @@
 			<nav id="sidebar">
 				<div class="sidebar-header">
 					<h2>PyGoat</h2>
-					<img src = "../static/logo.svg" style="height:110px; width:110px; position: relative; left: 120px; top: -70px;">
+					<img id = "logo-img" src = "../static/logo.svg">
 				</div>
-					<ul class="lesson-list"> 
-						{% for lesson in lessons | sort(attribute='difficulty') %}
-							{% if lesson.completable %}
-								{% if lesson.completed %}
-									<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-								{% else %}
-									<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+				<!-- Dropdown lists for lessons -->
+				<nav class="navbar navbar-inverse">
+					<div class="container-fluid">
+					  <ul class="nav navbar-nav">
+						<!-- <li class="active"><a href="/home">Home</a></li> in case we want to add a homepage --> 
+						<li class="dropdown">
+						  <a class="dropdown-toggle" data-toggle="dropdown" href="#" >Injection Attacks
+						  <span class="caret"></span></a>
+						  <ul class="dropdown-menu">
+							{% for lesson in lessons | sort(attribute='difficulty') %}
+								{% if lesson.type == 'injection' %} <!-- Change to the appropriate type -->
+									{% if lesson.completable %}
+										{% if lesson.completed %}
+											<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+										{% else %}
+											<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+										{% endif %}
+									{% else %}
+										<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+									{% endif %}
 								{% endif %}
-							{% else %}
-								<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-							{% endif %}
-						{% endfor %}
-					<ul>
-						<li class="logout-button"><a href="/logout">Log Out</a></li> 
+							{% endfor %}
+						  </ul>	
+					  </ul>
+						<ul class="nav navbar-nav">
+						  <li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Unknown types
+							<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+							{% for lesson in lessons | sort(attribute='difficulty') %}
+								{% if lesson.type == 'unknown' %}
+									{% if lesson.completable %}
+										{% if lesson.completed %}
+											<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+										{% else %}
+											<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+										{% endif %}
+									{% else %}
+										<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+							</ul>	
+						</ul>
+					</div>
+				  </nav>
+				  <!-- End dropdown lists -->
+				  
+				<li class="logout-button"><a href="/logout">Log Out</a></li> 
 					</ul>
 				</nav>
 			<div id ="collapse-button">

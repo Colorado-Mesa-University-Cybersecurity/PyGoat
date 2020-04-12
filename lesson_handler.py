@@ -8,6 +8,7 @@ class lesson:
             self.url = yaml_config['url']
             self.content = yaml_config['content']
             self.difficulty = yaml_config['difficulty']
+            self.type = yaml_config['type']
             self.completable = yaml_config['completable']
             self.completed = False
             

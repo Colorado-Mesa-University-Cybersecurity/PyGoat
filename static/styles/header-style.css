@@ -21,11 +21,10 @@ h1 {
 a,
 a:hover,
 a:focus {
-    color: inherit;
+    color: black;
     text-decoration: none;
     transition: all 0.3s;
 }
-
 
 .btn {
     background-color: #376f9e;
@@ -39,6 +38,14 @@ a:focus {
     top: 20px;
     left: 145px;
     color: #ffffff;
+}
+
+#logo-img {
+    height:110px; 
+    width:110px; 
+    position: relative; 
+    left: 120px; 
+    top: -70px;
 }
 
 /* 
@@ -69,14 +76,8 @@ a:focus {
     background: #376f9e;
 }
 
-/* #sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 0px solid #376f9e;
-    list-style-type: none;
-}  */
-
 #sidebar ul p {
-    color: #fff;
+    color: #000000;
     padding: 10px;
     list-style-type: none;
 }
@@ -99,31 +100,23 @@ a[data-toggle="collapse"] {
 	text-align: center;
 }
 
-.lesson-list {
-    list-style-type: none; 
-    margin: 10px; 
-    padding: 0px;
-}
-
 .logout-button {
     position: fixed; 
     bottom:15px; 
-    left: 10px; 
+    left: 35px; 
     font-size: 20px; 
     list-style-type: none; 
     margin:0px; 
     padding:0px;
 }
 
+.logout-button:hover {
+    background: #fff;
+}
 
-/* for dropdown lists within lessons */
-/* .dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-} */
+.dropdown-menu {
+    padding: 0px;
+}
 
 
 /*

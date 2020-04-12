@@ -2,5 +2,5 @@ name: Test Lesson
 url: testlesson
 content: lesson1.html
 difficulty: 1
-numPages: 3
+type: unknown
 completable: false
