@@ -1,0 +1,7 @@
+<!-- <nav>
+ <ul>
+  {% for i in range(1) %} 
+    <li style="display: inline"><a href="#">{{ i+1 }}</a></li> 
+  {% endfor %}
+  </ul>  -->
+<!-- </nav> -->

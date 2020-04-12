@@ -1,0 +1,43 @@
+name: Test SQL Injection
+url: testsql
+content: sql.html
+difficulty: 4
+numPages: 3
+success-condition: $custom.sqlValidator(user_data)
+completable: true
+db-tables:
+        - name: user_data
+          columns:
+                  - name: USERID
+                    type: integer
+                  - name: FIRST_NAME
+                    type: text
+                  - name: LAST_NAME
+                    type: text
+                  - name: CC_NUMBER
+                    type: integer
+                  - name: CC_TYPE
+                    type: text
+                  - name: COOKIE
+                    type: blob
+                  - name: Login_Count
+                    type: integer
+          rows:
+                  - USERID: 101
+                    FIRST_NAME: Joe
+                    LAST_NAME: Snow
+                    CC_NUMBER: 987654321
+                    CC_TYPE: VISA
+                    Login_Count: 0
+                  - USERID: 102
+                    FIRST_NAME: John
+                    LAST_NAME: Smith
+                    CC_NUMBER: 4352209902222
+                    CC_TYPE: AMEX
+                    Login_Count: 0
+routes:
+        - path: /sql
+          action: sql-query
+          query: 
+                injectable: true
+                qstring: SELECT * FROM user_data WHERE Login_Count = $form.login AND USERID = $form.uid ;
