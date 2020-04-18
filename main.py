@@ -68,8 +68,8 @@ def initialize_db(lesson):
     conn.commit()
     conn.close()
 
-def valid_login(username, password):
-    conn = sqlite3.connect('pygoat.db')
+def valid_login(username, password, dbname='pygoat.db', testing=False):
+    conn = sqlite3.connect(dbname)
     c1 = conn.cursor()
     c1.execute('''SELECT salt FROM users WHERE username = ?''', [username])
     saltarr = c1.fetchone()
@@ -82,17 +82,19 @@ def valid_login(username, password):
         c1.execute('''SELECT * from users where username=? and password =?''', (username, pass_hash))
         test = c1.fetchone()
         conn.close()
-        if test is None:
-            flash(('danger', 'Invalid credentials'))
+        if not testing:
+            if test is None:
+                flash(('danger', 'Invalid credentials'))
         return test is not None
     else:
         conn.close()
-        flash(('danger', 'Invalid credentials'))
+        if not testing:
+            flash(('danger', 'Invalid credentials'))
         return False
 
 # send an arbitrary web request using route actions in the config files
-def send_webrequest(webrequest, request):
-    url = "http://localhost:5000%s" % webrequest['url']
+def send_webrequest(webrequest, request, url="http://localhost:5000"):
+    url = "%s%s" % (url, webrequest['url'])
     headers = {}
     body = {}
     if 'headers' in webrequest:
@@ -157,8 +159,8 @@ def send_webrequest(webrequest, request):
 # replace $form and $session primitives with their counterparts in the request
 # if designated injectable, pass the parameters into the query as strings, otherwise pass in a prepared statement
 # will probably break if you want non-injectable sql and variable tables or column names
-def make_sql_query(query, request):
-    conn = sqlite3.connect('pygoat.db')
+def make_sql_query(query, request, dbname='pygoat.db'):
+    conn = sqlite3.connect(dbname)
     c = conn.cursor()
     parameters = []
     qstring = query['qstring']
