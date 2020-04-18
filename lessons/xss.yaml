@@ -1,36 +1,35 @@
 name: Test XSS
 url: testxss
-difficulty: 5
 content: xss.html
-pages:
-        - num: 1
-          load-script: $custom.render_comments(comments)
-          load-return: comments
-          completable: true
-          db-tables:
-                  - name: comments
-                    columns:
-                            - name: username
-                              type: text
-                            - name: comment
-                              type: text
-                    rows:
-                            - username: secUrIty
-                              comment: Comment for Unit Testing
-                            - username: webgoat
-                              comment: This comment is safe
-                            - username: guest
-                              comment: This one is safe too.
-                            - username: guest
-                              comment: Can you post a comment, calling phoneHome() ?
-          routes:
-                  - path: /xsscomment
-                    action: sql-query
-                    query: 
-                          injectable: false
-                          qstring: INSERT INTO comments VALUES ( $session.username , $form.xsscomment );
-                  - path: /xsscommentresponse
-                    action: $custom.phoneHomeValidate()
-                    success_if_true: true
-                  - path: /phoneHome
-                    action: $custom.phoneHome()
+difficulty: 5
+load-script: $custom.render_comments(comments)
+load-return: comments
+completable: true
+db-tables:
+        - name: comments
+          columns:
+                  - name: username
+                    type: text
+                  - name: comment
+                    type: text
+          rows:
+                  - username: secUrIty
+                    comment: Comment for Unit Testing
+                  - username: webgoat
+                    comment: This comment is safe
+                  - username: guest
+                    comment: This one is safe too.
+                  - username: guest
+                    comment: Can you post a comment, calling phoneHome() ?
+routes:
+        - path: /xsscomment
+          action: sql-query
+          query: 
+                injectable: false
+                qstring: INSERT INTO comments VALUES ( $session.username , $form.xsscomment );
+        - path: /xsscommentresponse
+          action: $custom.phoneHomeValidate()
+          success_if_true: true
+
+        - path: /phoneHome
+          action: $custom.phoneHome()

@@ -1,11 +1,9 @@
 name: Insecure Deserialization
 url: pickle
+content: pickle.html
 difficulty: 8
-pages:
-        - num: 1
-          content: pickle.html
-          completable: true
-          routes:
-                  - path: /pickleValidate
-                    action: $custom.insecure_deserialization_validate()
-                    success_if_true: true
+completable: true
+routes:
+        - path: /pickleValidate
+          action: $custom.insecure_deserialization_validate()
+          success_if_true: true

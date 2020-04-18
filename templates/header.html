@@ -31,12 +31,12 @@
 						{% for lesson in lessons | sort(attribute='difficulty') %}
 							{% if lesson.completable %}
 								{% if lesson.completed %}
-									<li class="bg-success"><a href="/lessons/{{ lesson.url }}/1">{{ lesson.name }}</a></li>
+									<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
 								{% else %}
-									<li class="bg-danger"><a href="/lessons/{{ lesson.url }}/1">{{ lesson.name }}</a></li>
+									<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
 								{% endif %}
 							{% else %}
-								<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}/1">{{ lesson.name }}</a></li>
+								<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
 							{% endif %}
 						{% endfor %}
 					<ul>
@@ -51,7 +51,7 @@
 						</button>
 						{% for lesson in lessons %}
 							{% if lesson.name == title %}
-							<form action="/reset/{{ lesson.url }}/{{ page }}">
+							<form action="/reset/{{ lesson.url }}">
 							{% endif %}
 						{% endfor %}
 							<button type="submit" id="resetLesson" class="btn btn-secondary" >Reset Lesson</button>

@@ -1,12 +1,9 @@
 name: Proxy Test
 url: proxytest
+content: proxy.html
 difficulty: 3
-pages:
-
-        - num: 1
-          content: proxy.html
-          completable: true
-          routes:
-                  - path: /proxy
-                    action: $custom.validate_proxy()
-                    success_if_true: true
+completable: true
+routes:
+        - path: /proxy
+          action: $custom.validate_proxy()
+          success_if_true: true
