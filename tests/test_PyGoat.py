@@ -1,7 +1,7 @@
 import os, sys
 import tempfile
 
-import pytest
+import pytest, sqlite3
 
 sys.path.append('../')
 import main
@@ -26,11 +26,11 @@ try:
 except FileNotFoundError:
     pass # already removed, do nothing
 
-# conn = sqlite3.connect('pygoat.db')
-# c = conn.cursor()
-# c.execute('''CREATE TABLE if not exists users
-#                  (username text, password blob, salt blob)''')
-# conn.commit()
+conn = sqlite3.connect('pygoat.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE if not exists users
+                 (username text, password blob, salt blob)''')
+conn.commit()
 
 def test_init_database():
     #create and initialize empty database in test directory
@@ -47,8 +47,6 @@ def test_init_database():
 
     #remove database from test directory
     os.remove('pygoat.db')
-
-    
 
 # def test_make_sql_query():
 #     query
