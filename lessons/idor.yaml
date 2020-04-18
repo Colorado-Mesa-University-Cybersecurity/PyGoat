@@ -1,32 +1,34 @@
 name: Insecure Direct Object Reference
 url: idor
-content: idor.html
 difficulty: 9
-completable: true
-routes:
-        - path: /idor
-          action: send-webrequest
-          webrequest:
-                url: /idor/profiles/23988
-                method: GET
-        - path: /idor/profiles/23988
-          action: response
-          response:
-                headers:
-                        content-type: json
-                body:
-                        '{
-                                "success":"False",
-                                "username":" $session.username ",
-                                "response":"Now try to find another profile",
-                         }'
-        - path: /idor/profiles/23982
-          action: response
-          response:
-                  headers:
-                          content-type: json
-                  body:
-                          '{ "success":"True", "username":"Blackbeard", "response":"Nice! You found another profile.", }'
-        - path: /idorvalidate
-          action: $custom.validate_idor()
-          success_if_true: true
+pages:
+        - num: 1
+          content: idor.html
+          completable: true
+          routes:
+                  - path: /idor
+                    action: send-webrequest
+                    webrequest:
+                          url: /idor/profiles/23988
+                          method: GET
+                  - path: /idor/profiles/23988
+                    action: response
+                    response:
+                          headers:
+                                  content-type: json
+                          body:
+                                  '{
+                                          "success":"False",
+                                          "username":" $session.username ",
+                                          "response":"Now try to find another profile",
+                                   }'
+                  - path: /idor/profiles/23982
+                    action: response
+                    response:
+                            headers:
+                                    content-type: json
+                            body:
+                                    '{ "success":"True", "username":"Blackbeard", "response":"Nice! You found another profile.", }'
+                  - path: /idorvalidate
+                    action: $custom.validate_idor()
+                    success_if_true: true
