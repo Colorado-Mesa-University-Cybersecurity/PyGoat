@@ -7,20 +7,6 @@ import pytest, sqlite3, hashlib
 sys.path.append('../')
 import main
 
-
-# @pytest.fixture
-# def client():
-#     db_fd, flaskr.app.config['DATABASE'] = tempfile.mkstemp()
-#     flaskr.app.config['TESTING'] = True
-
-#     with flaskr.app.test_client() as client:
-#         with flaskr.app.app_context():
-#             flaskr.init_db()
-#         yield client
-
-#     os.close(db_fd)
-#     os.unlink(flaskr.app.config['DATABASE'])
-
 #test database name (must be different from actual database name)
 dbname='testing_pygoat.db'
 
@@ -64,23 +50,25 @@ def test_init_database():
     conn.commit()
     conn.close()
     
-    #assert that the test user starts with no lesson completions
+    #assert that the test user exists and starts with no lesson completions
     assert(main.valid_login(username, password, dbname=dbname, testing=True) == True)
-
-    #remove database from test directory
-    #os.remove(dbname)
+    for lesson in main.lessons:
+        if lesson.completable == True:
+            assert(lesson.completed == False)
 
 #test curl script solutions in ../solutions/curl_scripts/
 #(Move to bash?)
 def test_solutions():
     #collect all avaialble solution scripts
     dir = '../solutions/curl_scripts/'
-    anlist = os.listdir(dir)
+    scriptlist = os.listdir(dir)
     
     #launch test server and login
+    
 
+    for solution in scriptlist:
+        #navigate to the correct subdirectory
 
-    for solution in anlist:
         rc = call(dir + solution, shell=True)
     
 
