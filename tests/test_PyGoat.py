@@ -101,8 +101,10 @@ def test_solutions():
 
         rc = call(dir + solution, shell=True)
         newNum = numCompleted()
+        print(solution) # prints the solution that failed trigger a success condition
         assert(newNum == oldNum + 1)
         oldNum = newNum
 
-test_init_database()
-test_solutions()
+
+# test_init_database()
+# test_solutions()
