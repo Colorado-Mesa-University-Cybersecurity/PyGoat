@@ -14,6 +14,10 @@ dbname='testing_pygoat.db'
 username = 'testBlankUser'
 password = '12345'
 
+#############################################################################################
+####################      |          Unit Testing          |     ############################
+#######################   ▼   ##########################   ▼   ##############################
+
 #Start new database
 def newDatabase():
     assert(not(dbname == 'pygoat.db'))
@@ -56,6 +60,16 @@ def test_init_database():
         if lesson.completable == True:
             assert(lesson.completed == False)
 
+# def test_make_sql_query():
+#     query
+#     request
+#     main.make_sql_query(query, request)
+
+
+#############################################################################################
+####################      |      Integration Testing       |     ############################
+#######################   ▼   ##########################   ▼   ##############################
+
 #returns number of completed lessons
 def numCompleted():
     num = 0
@@ -89,13 +103,6 @@ def test_solutions():
         newNum = numCompleted()
         assert(newNum == oldNum + 1)
         oldNum = newNum
-        
-    
-
-# def test_make_sql_query():
-#     query
-#     request
-#     main.make_sql_query(query, request)
 
 test_init_database()
 test_solutions()
