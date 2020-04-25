@@ -1,5 +1,5 @@
 import os, sys
-from subprocess import call
+import subprocess
 import tempfile
 
 import pytest, sqlite3, hashlib
@@ -32,15 +32,7 @@ def newDatabase():
                     (username text, password blob, salt blob)''')
     conn.commit()
 
-def test_init_database():
-    #create and initialize empty database in test directory
-    newDatabase()
-    for lesson in main.lessons:
-        main.initialize_db(lesson)
-
-    #assert that username doesn't exist in table
-    assert(main.valid_login(username, password, dbname=dbname, testing=True) == False)
-
+def newUser():
     salt = os.urandom(32)
 
     m = hashlib.sha256()
@@ -53,6 +45,17 @@ def test_init_database():
     c.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
     conn.commit()
     conn.close()
+
+def test_init_database():
+    #create and initialize empty database in test directory
+    newDatabase()
+    for lesson in main.lessons:
+        main.initialize_db(lesson)
+
+    #assert that username doesn't exist in table
+    assert(main.valid_login(username, password, dbname=dbname, testing=True) == False)
+
+    newUser()
     
     #assert that the test user exists and starts with no lesson completions
     assert(main.valid_login(username, password, dbname=dbname, testing=True) == True)
@@ -80,18 +83,25 @@ def numCompleted():
 
 #test curl script solutions in ../solutions/curl_scripts/
 #(Move to bash?)
+#use actual server?
 def test_solutions():
-    #collect all avaialble solution scripts
-    try:
-        dir = '../solutions/curl_scripts/'
-        scriptlist = os.listdir(dir)
-    except FileNotFoundError:
-        dir = './solutions/curl_scripts/'
-        scriptlist = os.listdir(dir)
+    #collect all available solution scripts
+    subdir = os.getcwd().split('PyGoat',1)[-1]
+    if len(subdir) == 0:
+        path = './'
+    else:
+        path = '../'
 
+    dir = path+'/solutions/curl_scripts/'
+    scriptlist = os.listdir(dir)
 
     #launch test server and login?
     #TODO
+    actualDir = path + 'run_no_proxy.sh'
+    rc = subprocess.Popen(actualDir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    if main.valid_login(username, password, dbname=dbname, testing=True) == False:
+
 
     #tests that each solution script adds a new (unique) completed lesson
     oldNum = numCompleted()
@@ -99,7 +109,7 @@ def test_solutions():
         #navigate to the correct subdirectory
         #TODO
 
-        rc = call(dir + solution, shell=True)
+        rc = subprocess.call(dir + solution, shell=True)
         newNum = numCompleted()
         print(solution) # prints the solution that failed trigger a success condition
         assert(newNum == oldNum + 1)
