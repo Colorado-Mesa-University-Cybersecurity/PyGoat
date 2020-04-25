@@ -56,20 +56,40 @@ def test_init_database():
         if lesson.completable == True:
             assert(lesson.completed == False)
 
+#returns number of completed lessons
+def numCompleted():
+    num = 0
+    for lesson in main.lessons:
+        if lesson.completable == True and numCompleted == True:
+            num += 1
+    return num
+
 #test curl script solutions in ../solutions/curl_scripts/
 #(Move to bash?)
 def test_solutions():
     #collect all avaialble solution scripts
-    dir = '../solutions/curl_scripts/'
-    scriptlist = os.listdir(dir)
-    
-    #launch test server and login
-    
+    try:
+        dir = '../solutions/curl_scripts/'
+        scriptlist = os.listdir(dir)
+    except FileNotFoundError:
+        dir = './solutions/curl_scripts/'
+        scriptlist = os.listdir(dir)
 
+
+    #launch test server and login?
+    #TODO
+
+    #tests that each solution script adds a new (unique) completed lesson
+    oldNum = numCompleted()
     for solution in scriptlist:
         #navigate to the correct subdirectory
+        #TODO
 
         rc = call(dir + solution, shell=True)
+        newNum = numCompleted()
+        assert(newNum == oldNum + 1)
+        oldNum = newNum
+        
     
 
 # def test_make_sql_query():
