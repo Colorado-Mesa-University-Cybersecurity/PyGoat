@@ -119,13 +119,21 @@ def test_solutions():
 
     #tests that each solution script adds a new (unique) completed lesson
     oldNum = numCompleted()
+    fails = []
 
     for solution in scriptlist:
         rc = subprocess.call(dir + solution, shell=True)
         newNum = numCompleted()
-        print(solution) # prints the solution that failed trigger a success condition
-        assert(newNum == oldNum + 1)
+        try:
+            assert(newNum == oldNum + 1)
+        except AssertionError:
+            fails.append(solution)
         oldNum = newNum
+        
+    if len(fails) > 0:
+        print('Failed tests: ')
+        print(fails)
+        assert(False)
 
 
 # test_init_database()
