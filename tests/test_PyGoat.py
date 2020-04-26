@@ -32,19 +32,26 @@ def newDatabase():
                     (username text, password blob, salt blob)''')
     conn.commit()
 
-def newUser():
-    salt = os.urandom(32)
+def newUser(dbname = dbname):
 
-    m = hashlib.sha256()
-    m.update(salt)
-    m.update(password.encode('utf-8'))
-    pass_hash = m.digest()
+    #only try to add new user to database if user doesn't already exist
+    if main.valid_login(username, password, dbname=dbname, testing=True) == False:
+        salt = os.urandom(32)
 
-    conn = sqlite3.connect(dbname)
-    c = conn.cursor()
-    c.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
-    conn.commit()
-    conn.close()
+        m = hashlib.sha256()
+        m.update(salt)
+        m.update(password.encode('utf-8'))
+        pass_hash = m.digest()
+
+        conn = sqlite3.connect(dbname)
+        c = conn.cursor()
+        c.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
+        conn.commit()
+        conn.close()
+
+    else:
+        #user already exists in database,
+        pass
 
 def test_init_database():
     #create and initialize empty database in test directory
@@ -55,10 +62,12 @@ def test_init_database():
     #assert that username doesn't exist in table
     assert(main.valid_login(username, password, dbname=dbname, testing=True) == False)
 
+    #add username to table
     newUser()
     
-    #assert that the test user exists and starts with no lesson completions
+    #assert that the test user exists in table
     assert(main.valid_login(username, password, dbname=dbname, testing=True) == True)
+    #assert that test user has not completed any lessons
     for lesson in main.lessons:
         if lesson.completable == True:
             assert(lesson.completed == False)
@@ -92,23 +101,26 @@ def test_solutions():
     else:
         path = '../'
 
-    dir = path+'/solutions/curl_scripts/'
+    dir = path+'solutions/curl_scripts/'
+    loginScript = 'login.sh'
+    
     scriptlist = os.listdir(dir)
+    scriptlist.remove(loginScript)
 
-    #launch test server and login?
-    #TODO
+    #launch server
     actualDir = path + 'run_no_proxy.sh'
     rc = subprocess.Popen(actualDir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-    if main.valid_login(username, password, dbname=dbname, testing=True) == False:
-
+    #add test account to actual database
+    newUser(path+'pygoat.db')
+        
+    #login to test account
+    rc = subprocess.call(dir+loginScript, shell=True)
 
     #tests that each solution script adds a new (unique) completed lesson
     oldNum = numCompleted()
-    for solution in scriptlist:
-        #navigate to the correct subdirectory
-        #TODO
 
+    for solution in scriptlist:
         rc = subprocess.call(dir + solution, shell=True)
         newNum = numCompleted()
         print(solution) # prints the solution that failed trigger a success condition
