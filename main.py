@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, redirect, url_for, request, f
 from xml.dom.pulldom import START_ELEMENT, parseString
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
-import os, sys, yaml, sqlite3, hashlib, custom, requests, logging
+import os, sys, yaml, sqlite3, hashlib, custom, requests, logging, json
 from lesson_handler import lesson
 
 logging.getLogger("requests").setLevel(logging.WARNING)
@@ -324,6 +324,17 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
+
+@app.route('/lessonstatus')
+def lessonstatus():
+    check_success()
+    finalDict = {}
+    for lesson in lessons:
+        finalDict[lesson.name] = {}
+        finalDict[lesson.name]['completable'] = lesson.completable
+        if lesson.completable:
+            finalDict[lesson.name]['completed'] = lesson.completed
+    return (json.dumps(finalDict))
 
 # route for every lesson with a yaml config
 @app.route('/lessons/<lesson>')
