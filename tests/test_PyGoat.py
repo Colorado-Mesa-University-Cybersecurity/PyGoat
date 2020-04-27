@@ -43,10 +43,10 @@ def newUser(_dbname = dbname):
         pass
 
 def test_init_database():
-    #create and initialize empty database in test directorydbname
+    #create and initialize empty database in test directory
     newDatabase()
     for lesson in main.lessons:
-        main.initialize_db(lesson)
+        main.initialize_db(lesson, dbname=dbname)
 
     #assert that username doesn't exist in table
     assert(main.valid_login(username, password, dbname=dbname, testing=True) == False)
