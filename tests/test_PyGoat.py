@@ -34,23 +34,8 @@ def newDatabase():
     conn.commit()
 
 def newUser(_dbname = dbname):
-
     #only try to add new user to database if user doesn't already exist
     if main.valid_login(username, password, _dbname, testing=True) == False:
-
-        # salt = os.urandom(32)
-
-        # m = hashlib.sha256()
-        # m.update(salt)
-        # m.update(password.encode('utf-8'))
-        # pass_hash = m.digest()
-
-        # conn = sqlite3.connect(dbname)
-        # c = conn.cursor()
-        # c.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
-        # conn.commit()
-        # conn.close()
-
         requests.post('http://localhost:5000/register', data={'username':username, 'password':password})
 
     else:
