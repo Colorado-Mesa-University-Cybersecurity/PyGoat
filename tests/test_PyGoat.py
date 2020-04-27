@@ -108,8 +108,8 @@ def test_solutions():
     scriptlist.remove(loginScript)
 
     #launch server
-    actualDir = path + 'run_no_proxy.sh'
-    subprocess.Popen([actualDir], shell=True)
+    #actualDir = path + 'run_no_proxy.sh'
+    #subprocess.Popen([actualDir], shell=True)
     
     #add test account to actual database
     newUser(path+'pygoat.db')
@@ -135,7 +135,7 @@ def test_solutions():
     if len(fails) > 0:
         print('Failed tests: ')
         print(fails)
-        assert(False)
+        assert(len(fails) == 0)
 
 
 # test_init_database()
