@@ -7,6 +7,8 @@ import requests
 
 sys.path.append('../')
 import main
+#import main creates new instance of pygoat.db in tests directory, delete
+os.remove('pygoat.db')
 
 #test database name (must be different from actual database name)
 dbname='testing_pygoat.db'
@@ -21,7 +23,6 @@ password = '12345'
 
 #Start new database
 def newDatabase():
-    assert(not(dbname == 'pygoat.db'))
     try:
         os.remove(dbname)
     except FileNotFoundError:
