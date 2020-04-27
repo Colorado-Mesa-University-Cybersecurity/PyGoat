@@ -3,6 +3,7 @@ import subprocess
 import tempfile
 
 import pytest, sqlite3, hashlib
+import requests
 
 sys.path.append('../')
 import main
@@ -11,7 +12,7 @@ import main
 dbname='testing_pygoat.db'
 
 #sample test user for test database
-username = 'testBlankUser'
+username = 'test'
 password = '12345'
 
 #############################################################################################
@@ -32,29 +33,32 @@ def newDatabase():
                     (username text, password blob, salt blob)''')
     conn.commit()
 
-def newUser(dbname = dbname):
+def newUser(_dbname = dbname):
 
     #only try to add new user to database if user doesn't already exist
-    if main.valid_login(username, password, dbname=dbname, testing=True) == False:
-        salt = os.urandom(32)
+    if main.valid_login(username, password, _dbname, testing=True) == False:
 
-        m = hashlib.sha256()
-        m.update(salt)
-        m.update(password.encode('utf-8'))
-        pass_hash = m.digest()
+        # salt = os.urandom(32)
 
-        conn = sqlite3.connect(dbname)
-        c = conn.cursor()
-        c.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
-        conn.commit()
-        conn.close()
+        # m = hashlib.sha256()
+        # m.update(salt)
+        # m.update(password.encode('utf-8'))
+        # pass_hash = m.digest()
+
+        # conn = sqlite3.connect(dbname)
+        # c = conn.cursor()
+        # c.execute('''INSERT INTO users (username, password, salt) VALUES (?, ?, ?)''', (username, pass_hash, salt))
+        # conn.commit()
+        # conn.close()
+
+        requests.post('http://localhost:5000/register', data={'username':username, 'password':password})
 
     else:
         #user already exists in database,
         pass
 
 def test_init_database():
-    #create and initialize empty database in test directory
+    #create and initialize empty database in test directorydbname
     newDatabase()
     for lesson in main.lessons:
         main.initialize_db(lesson)
@@ -82,6 +86,7 @@ def test_init_database():
 ####################      |      Integration Testing       |     ############################
 #######################   ▼   ##########################   ▼   ##############################
 
+#TODO: actually get correct number of completed lessons by interfacing with running flask server
 #returns number of completed lessons
 def numCompleted():
     num = 0
