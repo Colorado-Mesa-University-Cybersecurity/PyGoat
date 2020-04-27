@@ -40,8 +40,8 @@ for lesson in lessons.copy():
 conn.commit()
 conn.close()
 
-def initialize_db(lesson):
-    conn = sqlite3.connect('pygoat.db')
+def initialize_db(lesson, dbname='pygoat.db'):
+    conn = sqlite3.connect(dbname)
     c = conn.cursor()
     print('initializing db')
     if lesson.db_tables is not None:
