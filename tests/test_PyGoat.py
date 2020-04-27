@@ -86,7 +86,7 @@ def test_init_database():
 def numCompleted():
     num = 0
     for lesson in main.lessons:
-        if lesson.completable == True and numCompleted == True:
+        if lesson.completable == True and lesson.completed == True:
             num += 1
     return num
 
@@ -109,27 +109,29 @@ def test_solutions():
 
     #launch server
     actualDir = path + 'run_no_proxy.sh'
-    rc = subprocess.Popen(actualDir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
+    subprocess.Popen([actualDir], shell=True)
+    
     #add test account to actual database
     newUser(path+'pygoat.db')
         
     #login to test account
     rc = subprocess.call(dir+loginScript, shell=True)
+    assert(rc == 0)
 
     #tests that each solution script adds a new (unique) completed lesson
     oldNum = numCompleted()
     fails = []
 
+    oldNum = 0
     for solution in scriptlist:
-        rc = subprocess.call(dir + solution, shell=True)
+        rc = subprocess.call(dir + solution, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         newNum = numCompleted()
         try:
             assert(newNum == oldNum + 1)
         except AssertionError:
             fails.append(solution)
         oldNum = newNum
-        
+
     if len(fails) > 0:
         print('Failed tests: ')
         print(fails)
