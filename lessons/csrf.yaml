@@ -2,7 +2,7 @@ name: CSRF
 url: csrf
 content: csrf.html
 difficulty: 7
-type: unknown
+type: Request Forging
 load-script: $custom.render_comments(csrf_comments)
 load-return: comments
 completable: true

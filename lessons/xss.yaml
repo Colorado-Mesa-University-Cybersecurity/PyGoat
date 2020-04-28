@@ -2,7 +2,7 @@ name: Test XSS
 url: testxss
 content: xss.html
 difficulty: 5
-type: injection
+type: Cross Site Scripting
 load-script: $custom.render_comments(comments)
 load-return: comments
 completable: true

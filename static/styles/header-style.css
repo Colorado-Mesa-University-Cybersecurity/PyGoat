@@ -58,6 +58,12 @@ a:focus {
     align-items: stretch;
 }
 
+.lesson-list {
+    list-style-type: none; 
+    margin: 10px; 
+    padding: 0px;
+}
+
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -103,7 +109,7 @@ a[data-toggle="collapse"] {
 .logout-button {
     position: fixed; 
     bottom:15px; 
-    left: 35px; 
+    left: 10px; 
     font-size: 20px; 
     list-style-type: none; 
     margin:0px; 
@@ -112,10 +118,6 @@ a[data-toggle="collapse"] {
 
 .logout-button:hover {
     background: #fff;
-}
-
-.dropdown-menu {
-    padding: 0px;
 }
 
 

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html> <head>
+<html>
+
+<head>
 	<title>{% block title %}Test{% endblock %}</title>
 </head>
 
@@ -25,105 +27,70 @@
 			<nav id="sidebar">
 				<div class="sidebar-header">
 					<h2>PyGoat</h2>
-					<img id = "logo-img" src = "../static/logo.svg">
+					<img id="logo-img" src="../static/logo.svg">
 				</div>
-				<!-- Dropdown lists for lessons -->
-				<nav class="navbar navbar-inverse">
-					<div class="container-fluid">
-					  <ul class="nav navbar-nav">
-						<!-- <li class="active"><a href="/home">Home</a></li> in case we want to add a homepage --> 
-						<li class="dropdown">
-						  <a class="dropdown-toggle" data-toggle="dropdown" href="#" >Injection Attacks
-						  <span class="caret"></span></a>
-						  <ul class="dropdown-menu">
-							{% for lesson in lessons | sort(attribute='difficulty') %}
-								{% if lesson.type == 'injection' %} <!-- Change to the appropriate type -->
-									{% if lesson.completable %}
-										{% if lesson.completed %}
-											<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-										{% else %}
-											<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-										{% endif %}
-									{% else %}
-										<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-									{% endif %}
-								{% endif %}
-							{% endfor %}
-						  </ul>	
-					  </ul>
-						<ul class="nav navbar-nav">
-						  <li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Unknown types
-							<span class="caret"></span></a>
-							<ul class="dropdown-menu">
-							{% for lesson in lessons | sort(attribute='difficulty') %}
-								{% if lesson.type == 'unknown' %}
-									{% if lesson.completable %}
-										{% if lesson.completed %}
-											<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-										{% else %}
-											<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-										{% endif %}
-									{% else %}
-										<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
-									{% endif %}
-								{% endif %}
-							{% endfor %}
-							</ul>	
-						</ul>
-					</div>
-				  </nav>
-				  <!-- End dropdown lists -->
-				  
-				<li class="logout-button"><a href="/logout">Log Out</a></li> 
+				<ul class="lesson-list">
+					{% for lesson in lessons | sort(attribute='difficulty') %}
+						{% if lesson.completable %}
+							{% if lesson.completed %}
+								<li class="bg-success"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+							{% else %}
+								<li class="bg-danger"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+							{% endif %}
+						{% else %}
+							<li class="bg-secondary"><a href="/lessons/{{ lesson.url }}">{{ lesson.name }}</a></li>
+						{% endif %}
+					{% endfor %}
+					<ul>
+						<li class="logout-button"><a href="/logout">Log Out</a></li>
 					</ul>
-				</nav>
-			<div id ="collapse-button">
+			</nav>
+			</ul>
+			</nav>
+			<div id="collapse-button">
 				<nav class="navbar navbar-expand-lg navbar-light">
 					<div class="container-fluid">
 						<button type="button" id="sidebarCollapse" class="btn btn-info">
-							<img src="../static/justify.svg" height = "30px" width = "34px">
+							<img src="../static/justify.svg" height="30px" width="34px">
 						</button>
 						{% for lesson in lessons %}
 							{% if lesson.name == title %}
-							<form action="/reset/{{ lesson.url }}">
+								<form action="/reset/{{ lesson.url }}">
 							{% endif %}
 						{% endfor %}
-							<button type="submit" id="resetLesson" class="btn btn-secondary" >Reset Lesson</button>
+							<button type="submit" id="resetLesson" class="btn btn-secondary">Reset Lesson</button>
 						</form>
 					</div>
 				</nav>
 			</div>
 			{% endblock %}
-				
-				<!-- jQuery local -->
-				<script src="../static/styles/jquery-3.4.1.js"></script>
-				<!-- Popper.JS -->
-				<script src="../static/styles/popper.js"></script>
-				<!-- Bootstrap JS local -->
-				<script src = "../static/styles/bootstrap.min.js"></script>
 
-				<script type="text/javascript">
-					$(document).ready(function () {
-						$('#sidebarCollapse').on('click', function () {
-							$('#sidebar').toggleClass('active');
-						});
+			<!-- jQuery local -->
+			<script src="../static/styles/jquery-3.4.1.js"></script>
+			<!-- Popper.JS -->
+			<script src="../static/styles/popper.js"></script>
+			<!-- Bootstrap JS local -->
+			<script src="../static/styles/bootstrap.min.js"></script>
+
+			<script type="text/javascript">
+				$(document).ready(function () {
+					$('#sidebarCollapse').on('click', function () {
+						$('#sidebar').toggleClass('active');
 					});
-				</script>
-
-
-				<div id="content">{% block content %}{% endblock %}</div>
-				{% with messages = get_flashed_messages() %}
-					{% if messages %}
-						{% for category, message in messages %}
-							<div class="fixed-bottom alert alert-{{ category }} alert-dismissible text-center" role="alert">
-								{{ message }}
-								 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							</div>
-						{% endfor %}
-					{% endif %}
-					{% endwith %}
+				});
+			</script>
+			<div id="content">{% block content %}{% endblock %}</div>
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for category, message in messages %}
+						<div class="fixed-bottom alert alert-{{ category }} alert-dismissible text-center" role="alert">
+					{{ message }}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+			</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
 		</div>
 	</body>
-
 </html>
