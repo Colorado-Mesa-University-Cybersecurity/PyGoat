@@ -327,14 +327,17 @@ def logout():
 
 @app.route('/lessonstatus')
 def lessonstatus():
-    check_success()
-    finalDict = {}
-    for lesson in lessons:
-        finalDict[lesson.name] = {}
-        finalDict[lesson.name]['completable'] = lesson.completable
-        if lesson.completable:
-            finalDict[lesson.name]['completed'] = lesson.completed
-    return (json.dumps(finalDict))
+    if 'username' in session:
+        check_success()
+        finalDict = {}
+        for lesson in lessons:
+            finalDict[lesson.name] = {}
+            finalDict[lesson.name]['completable'] = lesson.completable
+            if lesson.completable:
+                finalDict[lesson.name]['completed'] = lesson.completed
+        return (json.dumps(finalDict))
+    else:
+        return redirect(url_for('login'))
 
 # route for every lesson with a yaml config
 @app.route('/lessons/<lesson>')
@@ -404,15 +407,33 @@ def register():
 
 @app.route('/reset/<lessonTitle>')
 def reset_lesson(lessonTitle):
-    lesson = next(filter(lambda x:x.url == lessonTitle, lessons))
-    colName = "%sCompleted" % lesson.name
-    conn = sqlite3.connect('pygoat.db')
-    c = conn.cursor()
-    c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
-    conn.commit()
-    conn.close()
-    initialize_db(lesson)
-    return redirect(url_for('lessons_page', lesson=lesson.url))
+    if 'username' in session:
+        lesson = next(filter(lambda x:x.url == lessonTitle, lessons))
+        colName = "%sCompleted" % lesson.name
+        conn = sqlite3.connect('pygoat.db')
+        c = conn.cursor()
+        c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
+        conn.commit()
+        conn.close()
+        initialize_db(lesson)
+        return redirect(url_for('lessons_page', lesson=lesson.url))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/resetall')
+def reset_all():
+    if 'username' in session:
+        for lesson in lessons:
+            colName = "%sCompleted" % lesson.name
+            conn = sqlite3.connect('pygoat.db')
+            c = conn.cursor()
+            c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
+            conn.commit()
+            conn.close()
+            initialize_db(lesson)
+        return("Lessons reset")
+    else:
+        return redirect(url_for('login'))
 
 # addtional routes defined in the yaml configs
 @app.route('/<path:routeName>', methods=['POST', 'GET'])
