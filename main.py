@@ -12,38 +12,43 @@ path = os.path.dirname(os.path.realpath(__file__))
 app = Flask(__name__)
 app.secret_key = b'(\xe4S$\xce\xa81\x80\x8e\x83\xfa"b%\x9fr'
 
-conn = sqlite3.connect('pygoat.db')
-c = conn.cursor()
-c.execute('''CREATE TABLE if not exists users
-                 (username text, password blob, salt blob)''')
-conn.commit()
+lessons = []
 
 # load in the lessons from the yaml config files
-lessons = []
-for filename in os.listdir("%s/lessons" % path):
-    if filename.endswith('yaml'):
-        with open("%s/lessons/%s" % (path, filename), "r") as config:
-            config_list = yaml.safe_load(config)
-            current_lesson = lesson(config_list)
-            lessons.append(current_lesson)
 
-print('Ignore the duplicate column errors below, I had to catch it as a workaround')
-for lesson in lessons.copy():
-    # add columns to users database tracking lesson completion. 
-    # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now 
-    if lesson.completable:
-        colName = "%sCompleted" % lesson.name
-        try:
-            c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
-        except sqlite3.DatabaseError as e:
-            print(e)
-conn.commit()
-conn.close()
+def load_lessons(lessondir="%s/lessons" % path):
+    for filename in os.listdir(lessondir):
+        if filename.endswith('yaml'):
+            with open("%s/%s" % (lessondir, filename), "r") as config:
+                config_list = yaml.safe_load(config)
+                current_lesson = lesson(config_list)
+                lessons.append(current_lesson)
 
-def initialize_db(lesson, dbname='pygoat.db'):
+def initialize_db(dbname='pygoat.db'):
+    print('Ignore the duplicate column errors below, I had to catch it as a workaround')
+
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    print('initializing db')
+    c.execute('''CREATE TABLE if not exists users
+                     (username text, password blob, salt blob)''')
+    conn.commit()
+
+    for lesson in lessons.copy():
+        # add columns to users database tracking lesson completion. 
+        # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now 
+        if lesson.completable:
+            colName = "%sCompleted" % lesson.name
+            try:
+                c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
+            except sqlite3.DatabaseError as e:
+                print(e)
+    conn.commit()
+    conn.close()
+
+def initialize_lesson_db(lesson, dbname='pygoat.db'):
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    print('initializing %s' % lesson.name)
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
@@ -91,7 +96,7 @@ def valid_login(username, password, dbname='pygoat.db', testing=False):
         return False
 
 # send an arbitrary web request using route actions in the config files
-def send_webrequest(webrequest, request, url="http://localhost:5000"):
+def send_webrequest(webrequest, request=None, url="http://localhost:5000", testing=False):
     url = "%s%s" % (url, webrequest['url'])
     headers = {}
     body = {}
@@ -113,7 +118,9 @@ def send_webrequest(webrequest, request, url="http://localhost:5000"):
                 tempbody = value
             headers[tempheader] = tempbody
                
-    headers['cookie'] = 'session=' + request.cookies['session']
+    if not testing:
+        headers['cookie'] = 'session=' + request.cookies['session']
+
     if 'body' in webrequest:
         if isinstance(webrequest['body'], str):
             bodyArr = webrequest['body'].split(' ')
@@ -147,17 +154,19 @@ def send_webrequest(webrequest, request, url="http://localhost:5000"):
                     tempvalue = value
                 body[tempkey] = tempvalue
 
-
-    if webrequest['method'] == 'POST':
-            requests.post(url, data=body, headers=headers)
-    elif webrequest['method'] == 'GET':
-            requests.get(url, headers=headers, params=body)
+    if testing:
+        return url,headers,body
+    else:
+        if webrequest['method'] == 'POST':
+                requests.post(url, data=body, headers=headers)
+        elif webrequest['method'] == 'GET':
+                requests.get(url, headers=headers, params=body)
 
 # make arbitrary sql queries using route actions in the config files
 # replace $form and $session primitives with their counterparts in the request
 # if designated injectable, pass the parameters into the query as strings, otherwise pass in a prepared statement
 # will probably break if you want non-injectable sql and variable tables or column names
-def make_sql_query(query, request, dbname='pygoat.db'):
+def make_sql_query(query, request=None, dbname='pygoat.db', testing=False):
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
     parameters = []
@@ -209,12 +218,14 @@ def make_sql_query(query, request, dbname='pygoat.db'):
         rows = c.fetchall()
         rows.append(qstring)
         rows.append(tuple(parameters))
-    flash(("warning", rows))
+
+    if not testing:
+        flash(("warning", rows))
 
     conn.commit()
     conn.close()
 
-def make_custom_response(request, response):
+def make_custom_response(response, request=None, testing=False):
     headers = {}
     body = {}
 
@@ -236,7 +247,8 @@ def make_custom_response(request, response):
                 tempbody = value
             headers[tempheader] = tempbody
                
-    headers['cookie'] = 'session=' + request.cookies['session']
+    if not testing:
+        headers['cookie'] = 'session=' + request.cookies['session']
 
     if 'body' in response:
         if isinstance(response['body'], str):
@@ -271,21 +283,23 @@ def make_custom_response(request, response):
                     tempvalue = value
                 body[tempkey] = tempvalue
 
+    if not testing:
         return Response(response=body, headers=headers)
+    else:
+        return body, headers
 
-
-def lesson_success(lesson):
+def lesson_success(lesson, dbname='pygoat.db', testing=False):
     colName = "%sCompleted" % lesson.name
-    conn = sqlite3.connect('pygoat.db')
+    conn = sqlite3.connect(dbname)
     c = conn.cursor()
     c.execute('''UPDATE users SET "%s" = 1 WHERE username = ?''' % colName, [session['username']])
     conn.commit()
     conn.close()
-    return(redirect('/lessons/%s' % lesson.url))
-    print('lesson %s successful' % lesson.name)
+    if not testing:
+        return(redirect('/lessons/%s' % lesson.url))
 
-def check_success():
-    conn = sqlite3.connect('pygoat.db')
+def check_success(dbname='pygoat.db'):
+    conn = sqlite3.connect(dbname)
     c = conn.cursor()
     for lesson in lessons:
         if lesson.completable:
@@ -430,7 +444,7 @@ def reset_all():
             c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
             conn.commit()
             conn.close()
-            initialize_db(lesson)
+            initialize_lesson_db(lesson)
         return("Lessons reset")
     else:
         return redirect(url_for('login'))
@@ -485,7 +499,7 @@ def custom_routes(routeName):
         elif source_route['action'] == 'response':
             print('response')
             response = source_route['response']
-            flask_response = make_custom_response(request, response)
+            flask_response = make_custom_response(response, request)
             return flask_response
 
         # display results on the html page for the lesson that defines the route
@@ -507,5 +521,7 @@ def custom_routes(routeName):
     else: 
         return(redirect(url_for('login')))
 
+load_lessons()
+initialize_db()
 for lesson in lessons:
-    initialize_db(lesson)
+    initialize_lesson_db(lesson)
