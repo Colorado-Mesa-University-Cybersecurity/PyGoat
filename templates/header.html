@@ -40,6 +40,7 @@
 							{% endif %}
 						{% endfor %}
 					<ul>
+						<li class="report-button"><a href="/report">Report</a></li>
 						<li class="logout-button"><a href="/logout">Log Out</a></li> 
 					</ul>
 				</nav>
@@ -49,13 +50,15 @@
 						<button type="button" id="sidebarCollapse" class="btn btn-info">
 							<img src="../static/justify.svg" height = "30px" width = "34px">
 						</button>
-						{% for lesson in lessons %}
-							{% if lesson.name == title %}
-							<form action="/reset/{{ lesson.url }}">
-							{% endif %}
-						{% endfor %}
-							<button type="submit" id="resetLesson" class="btn btn-secondary" >Reset Lesson</button>
+						{% if title != "Reporting" %}
+							{% for lesson in lessons %}
+								{% if lesson.name == title %}
+								<form action="/reset/{{ lesson.url }}">
+								{% endif %}
+							{% endfor %}
+								<button type="submit" id="resetLesson" class="btn btn-secondary" >Reset Lesson</button>
 						</form>
+						{% endif %}
 					</div>
 				</nav>
 			</div>

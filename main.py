@@ -521,6 +521,10 @@ def custom_routes(routeName):
     else: 
         return(redirect(url_for('login')))
 
+@app.route('/report', methods=['GET'])
+def report():
+    return render_template('report.html', title="Reporting", lessons=lessons)
+
 load_lessons()
 initialize_db()
 for lesson in lessons:

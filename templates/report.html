@@ -1,0 +1,26 @@
+{% extends "header.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Completed</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for lesson in lessons | sort(attribute='difficulty') %}
+    <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{ lesson.name }}</td>
+      {% if lesson.completable %}
+      <td>{{ lesson.completed }}</td>
+      {% else %}
+      <td>N/A</td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
