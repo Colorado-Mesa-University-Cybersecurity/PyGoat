@@ -115,6 +115,15 @@ a[data-toggle="collapse"] {
     padding:0px;
 }
 
+.report-button {
+    position: fixed; 
+    bottom:50px; 
+    left: 10px; 
+    font-size: 20px; 
+    list-style-type: none; 
+    margin:0px; 
+    padding:0px;
+}
 
 /* for dropdown lists within lessons */
 /* .dropdown-toggle::after {
