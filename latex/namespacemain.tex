@@ -1,0 +1,297 @@
+\hypertarget{namespacemain}{}\doxysection{main Namespace Reference}
+\label{namespacemain}\index{main@{main}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacemain_a911f3322b3a208d5b8070a040e240f4b}{load\+\_\+lessons}} (lessondir=\char`\"{}\%s/lessons\char`\"{} \% path)
+\item 
+def \mbox{\hyperlink{namespacemain_af53fd32d5542219bcfa55f24d3bfada9}{initialize\+\_\+db}} (dbname=\textquotesingle{}pygoat.\+db\textquotesingle{})
+\item 
+def \mbox{\hyperlink{namespacemain_a0bb7ae101e53bebceef1989617171af7}{initialize\+\_\+lesson\+\_\+db}} (\mbox{\hyperlink{classlesson__handler_1_1lesson}{lesson}}, dbname=\textquotesingle{}pygoat.\+db\textquotesingle{})
+\item 
+def \mbox{\hyperlink{namespacemain_a366591f7dc8f6648760d531aa2ca61e7}{valid\+\_\+login}} (username, password, dbname=\textquotesingle{}pygoat.\+db\textquotesingle{}, testing=False)
+\item 
+def \mbox{\hyperlink{namespacemain_a3133b407dd4d47b897662d8c9feca1a5}{send\+\_\+webrequest}} (webrequest, request=None, url=\char`\"{}http\+://localhost\+:5000\char`\"{}, testing=False)
+\item 
+def \mbox{\hyperlink{namespacemain_a47c9160b0235c5fd747bc6b95326f401}{make\+\_\+sql\+\_\+query}} (query, request=None, dbname=\textquotesingle{}pygoat.\+db\textquotesingle{}, testing=False)
+\item 
+def \mbox{\hyperlink{namespacemain_a0e50ff9529565b7e5bcab764ab42c20d}{make\+\_\+custom\+\_\+response}} (response, request=None, testing=False)
+\item 
+def \mbox{\hyperlink{namespacemain_a5313887103db0e546998aac35c044ea0}{lesson\+\_\+success}} (\mbox{\hyperlink{classlesson__handler_1_1lesson}{lesson}}, dbname=\textquotesingle{}pygoat.\+db\textquotesingle{}, testing=False)
+\item 
+def \mbox{\hyperlink{namespacemain_a656a205b51400c58a45f60585938c9d8}{check\+\_\+success}} (dbname=\textquotesingle{}pygoat.\+db\textquotesingle{})
+\item 
+def \mbox{\hyperlink{namespacemain_a4a263eedbd7723dd4c0b6da79a5c26e0}{favicon}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_ad90e5ef1705ba60a05867d8955e6a502}{index}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_a325d966924c7c2622fcc50c3626bc8ed}{login}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_a27e72161a2060436a23b0a8955b890e4}{logout}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_abe4d1487ce410b749bae68722f7bdd6d}{lessonstatus}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_a9baebc0ff1f4e8160c65d8760347943d}{lessons\+\_\+page}} (\mbox{\hyperlink{classlesson__handler_1_1lesson}{lesson}})
+\item 
+def \mbox{\hyperlink{namespacemain_a625fe99fcec3e3fce833aa42f9aeb6b7}{register}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_a69d730acb611e941b00cc07651e8c6f6}{reset\+\_\+lesson}} (lesson\+Title)
+\item 
+def \mbox{\hyperlink{namespacemain_ab684a628ec37df43574a9ebddd8c4af6}{reset\+\_\+all}} ()
+\item 
+def \mbox{\hyperlink{namespacemain_af7c982a56ee4269872f4bcab4a44e9ee}{custom\+\_\+routes}} (route\+Name)
+\item 
+def \mbox{\hyperlink{namespacemain_ad26ae8979746c2f38a30b2b415e13114}{report}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemain_a2a2f58348e4a36c9b004f7eacab52fa2}\label{namespacemain_a2a2f58348e4a36c9b004f7eacab52fa2}} 
+{\bfseries path} = os.\+path.\+dirname(os.\+path.\+realpath(\+\_\+\+\_\+file\+\_\+\+\_\+))
+\item 
+\mbox{\Hypertarget{namespacemain_a5fa94f0581009434c7a63791944d6ff4}\label{namespacemain_a5fa94f0581009434c7a63791944d6ff4}} 
+{\bfseries app} = Flask(\+\_\+\+\_\+name\+\_\+\+\_\+)
+\item 
+\mbox{\Hypertarget{namespacemain_a6f3bdfce14905aae9f2bb69b88a50eec}\label{namespacemain_a6f3bdfce14905aae9f2bb69b88a50eec}} 
+{\bfseries secret\+\_\+key}
+\item 
+\mbox{\Hypertarget{namespacemain_af7a0200dd1941c6e0ff38ac3400199e3}\label{namespacemain_af7a0200dd1941c6e0ff38ac3400199e3}} 
+list {\bfseries lessons} = \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}    All the routes and the lesson helper functions are stored here
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacemain_a656a205b51400c58a45f60585938c9d8}\label{namespacemain_a656a205b51400c58a45f60585938c9d8}} 
+\index{main@{main}!check\_success@{check\_success}}
+\index{check\_success@{check\_success}!main@{main}}
+\doxysubsubsection{\texorpdfstring{check\_success()}{check\_success()}}
+{\footnotesize\ttfamily def main.\+check\+\_\+success (\begin{DoxyParamCaption}\item[{}]{dbname = {\ttfamily \textquotesingle{}pygoat.db\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}loops through the lessons and checks to see if any of them are completed,
+if so, sets the completed variable in said lesson to true, otherwise, sets it to false
+
+dbname = string - the name of the database to use
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_af7c982a56ee4269872f4bcab4a44e9ee}\label{namespacemain_af7c982a56ee4269872f4bcab4a44e9ee}} 
+\index{main@{main}!custom\_routes@{custom\_routes}}
+\index{custom\_routes@{custom\_routes}!main@{main}}
+\doxysubsubsection{\texorpdfstring{custom\_routes()}{custom\_routes()}}
+{\footnotesize\ttfamily def main.\+custom\+\_\+routes (\begin{DoxyParamCaption}\item[{}]{route\+Name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /<path:routeName>
+parameters:
+routeName - the path for the custom route
+
+Checks if a route with the path routeName is defined in a lesson yaml and performs the actions associated with it
+
+1. send-webrequest - sends a request to the target url with a specified body and headers
+2. sql-query - query the sql database
+3. $custom.funcName(args) - runs the function in custom.py with the name funcName and any listed arguments
+4. response - returns a response defined in the lesson yaml
+
+It then checks if the lesson is completed.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a4a263eedbd7723dd4c0b6da79a5c26e0}\label{namespacemain_a4a263eedbd7723dd4c0b6da79a5c26e0}} 
+\index{main@{main}!favicon@{favicon}}
+\index{favicon@{favicon}!main@{main}}
+\doxysubsubsection{\texorpdfstring{favicon()}{favicon()}}
+{\footnotesize\ttfamily def main.\+favicon (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /favicon.ico
+returns the icon 
+\end{DoxyVerb}
+ ~\newline
+ \mbox{\Hypertarget{namespacemain_ad90e5ef1705ba60a05867d8955e6a502}\label{namespacemain_ad90e5ef1705ba60a05867d8955e6a502}} 
+\index{main@{main}!index@{index}}
+\index{index@{index}!main@{main}}
+\doxysubsubsection{\texorpdfstring{index()}{index()}}
+{\footnotesize\ttfamily def main.\+index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /
+if user is logged in, return home page, otherwise, return login page 
+\end{DoxyVerb}
+ ~\newline
+ \mbox{\Hypertarget{namespacemain_af53fd32d5542219bcfa55f24d3bfada9}\label{namespacemain_af53fd32d5542219bcfa55f24d3bfada9}} 
+\index{main@{main}!initialize\_db@{initialize\_db}}
+\index{initialize\_db@{initialize\_db}!main@{main}}
+\doxysubsubsection{\texorpdfstring{initialize\_db()}{initialize\_db()}}
+{\footnotesize\ttfamily def main.\+initialize\+\_\+db (\begin{DoxyParamCaption}\item[{}]{dbname = {\ttfamily \textquotesingle{}pygoat.db\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}initialize the 'users' table
+    dbname = string - the name of the database to use 
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a0bb7ae101e53bebceef1989617171af7}\label{namespacemain_a0bb7ae101e53bebceef1989617171af7}} 
+\index{main@{main}!initialize\_lesson\_db@{initialize\_lesson\_db}}
+\index{initialize\_lesson\_db@{initialize\_lesson\_db}!main@{main}}
+\doxysubsubsection{\texorpdfstring{initialize\_lesson\_db()}{initialize\_lesson\_db()}}
+{\footnotesize\ttfamily def main.\+initialize\+\_\+lesson\+\_\+db (\begin{DoxyParamCaption}\item[{}]{lesson,  }\item[{}]{dbname = {\ttfamily \textquotesingle{}pygoat.db\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}initialize the custom database tables defined in the lesson yamls
+    lesson = lesson object - a lesson object obtained from reading in a lesson
+      yaml file
+    dbname = string - the name of the database to use
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a5313887103db0e546998aac35c044ea0}\label{namespacemain_a5313887103db0e546998aac35c044ea0}} 
+\index{main@{main}!lesson\_success@{lesson\_success}}
+\index{lesson\_success@{lesson\_success}!main@{main}}
+\doxysubsubsection{\texorpdfstring{lesson\_success()}{lesson\_success()}}
+{\footnotesize\ttfamily def main.\+lesson\+\_\+success (\begin{DoxyParamCaption}\item[{}]{lesson,  }\item[{}]{dbname = {\ttfamily \textquotesingle{}pygoat.db\textquotesingle{}},  }\item[{}]{testing = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}sets the target lesson as successful in the database
+lesson - a lesson object, obtained by reading in the lesson yamls
+dbname = string - the name of the database to use
+testing = boolean - if False, redirects the user to the lesson page
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a9baebc0ff1f4e8160c65d8760347943d}\label{namespacemain_a9baebc0ff1f4e8160c65d8760347943d}} 
+\index{main@{main}!lessons\_page@{lessons\_page}}
+\index{lessons\_page@{lessons\_page}!main@{main}}
+\doxysubsubsection{\texorpdfstring{lessons\_page()}{lessons\_page()}}
+{\footnotesize\ttfamily def main.\+lessons\+\_\+page (\begin{DoxyParamCaption}\item[{}]{lesson }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /lessons/<lesson>
+
+parameters:
+lesson - the url field of the lesson to load
+
+finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
+\end{DoxyVerb}
+ ~\newline
+ \mbox{\Hypertarget{namespacemain_abe4d1487ce410b749bae68722f7bdd6d}\label{namespacemain_abe4d1487ce410b749bae68722f7bdd6d}} 
+\index{main@{main}!lessonstatus@{lessonstatus}}
+\index{lessonstatus@{lessonstatus}!main@{main}}
+\doxysubsubsection{\texorpdfstring{lessonstatus()}{lessonstatus()}}
+{\footnotesize\ttfamily def main.\+lessonstatus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /lessonstatus
+for testing api, returns a list of lessons and whether they are completable and have been completed
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a911f3322b3a208d5b8070a040e240f4b}\label{namespacemain_a911f3322b3a208d5b8070a040e240f4b}} 
+\index{main@{main}!load\_lessons@{load\_lessons}}
+\index{load\_lessons@{load\_lessons}!main@{main}}
+\doxysubsubsection{\texorpdfstring{load\_lessons()}{load\_lessons()}}
+{\footnotesize\ttfamily def main.\+load\+\_\+lessons (\begin{DoxyParamCaption}\item[{}]{lessondir = {\ttfamily \char`\"{}\%s/lessons\char`\"{}~\%~path} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}load in the lessons from the yaml config files
+    lessondir = string - the absolute path of the directory where the lesson 
+    yaml configs are stored
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a325d966924c7c2622fcc50c3626bc8ed}\label{namespacemain_a325d966924c7c2622fcc50c3626bc8ed}} 
+\index{main@{main}!login@{login}}
+\index{login@{login}!main@{main}}
+\doxysubsubsection{\texorpdfstring{login()}{login()}}
+{\footnotesize\ttfamily def main.\+login (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /login
+if user sends GET to this page, returns login html
+if user POSTs this page, checks provided credentials against database, if they login successfully, add their username to the session cookie and redirect to home page
+\end{DoxyVerb}
+ ~\newline
+ \mbox{\Hypertarget{namespacemain_a27e72161a2060436a23b0a8955b890e4}\label{namespacemain_a27e72161a2060436a23b0a8955b890e4}} 
+\index{main@{main}!logout@{logout}}
+\index{logout@{logout}!main@{main}}
+\doxysubsubsection{\texorpdfstring{logout()}{logout()}}
+{\footnotesize\ttfamily def main.\+logout (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /logout
+logs out the user
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a0e50ff9529565b7e5bcab764ab42c20d}\label{namespacemain_a0e50ff9529565b7e5bcab764ab42c20d}} 
+\index{main@{main}!make\_custom\_response@{make\_custom\_response}}
+\index{make\_custom\_response@{make\_custom\_response}!main@{main}}
+\doxysubsubsection{\texorpdfstring{make\_custom\_response()}{make\_custom\_response()}}
+{\footnotesize\ttfamily def main.\+make\+\_\+custom\+\_\+response (\begin{DoxyParamCaption}\item[{}]{response,  }\item[{}]{request = {\ttfamily None},  }\item[{}]{testing = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} returns an arbitrary response using route actions in the config files
+ replaces $form and $session primitives with their counterparts in the 
+response object
+
+ response = a response object, obtained by reading in the lesson yaml
+ request = a flask request object
+ testing - if False, appends session data to response headers as a cookie and returns flask Response object, otherwise, returns the headers and body dictionaries\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a47c9160b0235c5fd747bc6b95326f401}\label{namespacemain_a47c9160b0235c5fd747bc6b95326f401}} 
+\index{main@{main}!make\_sql\_query@{make\_sql\_query}}
+\index{make\_sql\_query@{make\_sql\_query}!main@{main}}
+\doxysubsubsection{\texorpdfstring{make\_sql\_query()}{make\_sql\_query()}}
+{\footnotesize\ttfamily def main.\+make\+\_\+sql\+\_\+query (\begin{DoxyParamCaption}\item[{}]{query,  }\item[{}]{request = {\ttfamily None},  }\item[{}]{dbname = {\ttfamily \textquotesingle{}pygoat.db\textquotesingle{}},  }\item[{}]{testing = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}make arbitrary sql queries using route actions in the config files
+replace $form and $session primitives with their counterparts in the request
+if designated injectable, pass the parameters into the query as strings, otherwise pass in a prepared statement
+will probably break if you want non-injectable sql and variable tables or column names
+query - a query object, obtained by reading in the lesson yaml
+request - a flask request
+dbname = string - the name of the database to query
+testing = boolean - if False, flashes the sql query and its output to the screen and runs it, otherwise, returns it\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a625fe99fcec3e3fce833aa42f9aeb6b7}\label{namespacemain_a625fe99fcec3e3fce833aa42f9aeb6b7}} 
+\index{main@{main}!register@{register}}
+\index{register@{register}!main@{main}}
+\doxysubsubsection{\texorpdfstring{register()}{register()}}
+{\footnotesize\ttfamily def main.\+register (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /register
+if the user sends a GET request, returns register html
+if user POSTs, adds a new user to the database with the provided username and password
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_ad26ae8979746c2f38a30b2b415e13114}\label{namespacemain_ad26ae8979746c2f38a30b2b415e13114}} 
+\index{main@{main}!report@{report}}
+\index{report@{report}!main@{main}}
+\doxysubsubsection{\texorpdfstring{report()}{report()}}
+{\footnotesize\ttfamily def main.\+report (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /report
+returns the report page
+\end{DoxyVerb}
+ ~\newline
+ \mbox{\Hypertarget{namespacemain_ab684a628ec37df43574a9ebddd8c4af6}\label{namespacemain_ab684a628ec37df43574a9ebddd8c4af6}} 
+\index{main@{main}!reset\_all@{reset\_all}}
+\index{reset\_all@{reset\_all}!main@{main}}
+\doxysubsubsection{\texorpdfstring{reset\_all()}{reset\_all()}}
+{\footnotesize\ttfamily def main.\+reset\+\_\+all (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /resetall
+reinitializes all lesson tables and sets them all to not completed
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a69d730acb611e941b00cc07651e8c6f6}\label{namespacemain_a69d730acb611e941b00cc07651e8c6f6}} 
+\index{main@{main}!reset\_lesson@{reset\_lesson}}
+\index{reset\_lesson@{reset\_lesson}!main@{main}}
+\doxysubsubsection{\texorpdfstring{reset\_lesson()}{reset\_lesson()}}
+{\footnotesize\ttfamily def main.\+reset\+\_\+lesson (\begin{DoxyParamCaption}\item[{}]{lesson\+Title }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}path = /reset/<lessonTitle>
+parameters:
+lessonTitle - the url of the lesson to reset
+
+Sets target lesson to not completed and recreates the associated database tables
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a3133b407dd4d47b897662d8c9feca1a5}\label{namespacemain_a3133b407dd4d47b897662d8c9feca1a5}} 
+\index{main@{main}!send\_webrequest@{send\_webrequest}}
+\index{send\_webrequest@{send\_webrequest}!main@{main}}
+\doxysubsubsection{\texorpdfstring{send\_webrequest()}{send\_webrequest()}}
+{\footnotesize\ttfamily def main.\+send\+\_\+webrequest (\begin{DoxyParamCaption}\item[{}]{webrequest,  }\item[{}]{request = {\ttfamily None},  }\item[{}]{url = {\ttfamily \char`\"{}http\+://localhost\+:5000\char`\"{}},  }\item[{}]{testing = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} send an arbitrary web request using route actions in the config files
+ replaces $form and $session primitives with their counterparts in the request
+
+ webrequest = a webrequest object, obtained by reading in the lesson yaml
+ request = a flask request object
+ url = string - the url to send the webrequest to
+ testing - if False, appends session data to webrequest headers as a cookie
+ and sends the request, otherwise, merely returns it\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacemain_a366591f7dc8f6648760d531aa2ca61e7}\label{namespacemain_a366591f7dc8f6648760d531aa2ca61e7}} 
+\index{main@{main}!valid\_login@{valid\_login}}
+\index{valid\_login@{valid\_login}!main@{main}}
+\doxysubsubsection{\texorpdfstring{valid\_login()}{valid\_login()}}
+{\footnotesize\ttfamily def main.\+valid\+\_\+login (\begin{DoxyParamCaption}\item[{}]{username,  }\item[{}]{password,  }\item[{}]{dbname = {\ttfamily \textquotesingle{}pygoat.db\textquotesingle{}},  }\item[{}]{testing = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}tests a username and password to see if they are in the users table
+username = string - the username
+password = string - the plaintext of the password
+dbname = string - the name of the database to check
+testing = boolean - if false, will flash messages when user fails to log in
+\end{DoxyVerb}
+ 

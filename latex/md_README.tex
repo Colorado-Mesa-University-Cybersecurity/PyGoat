@@ -1,0 +1,43 @@
+
+
+A Python-\/based web platform for education in web vulnerabilities. Inspired by Web\+Goat. \href{https://github.com/WebGoat/WebGoat}{\texttt{ https\+://github.\+com/\+Web\+Goat/\+Web\+Goat}}
+
+Team Members\+: Lucas Walgren (\href{mailto:lawalgren@mavs.coloradomesa.edu}{\texttt{ lawalgren@mavs.\+coloradomesa.\+edu}}), Sean Apsey (\href{mailto:ssapsey@mavs.coloradomesa.edu}{\texttt{ ssapsey@mavs.\+coloradomesa.\+edu}}), Taylor Bradshaw (\href{mailto:tcbradshaw@mavs.coloradomesa.edu}{\texttt{ tcbradshaw@mavs.\+coloradomesa.\+edu}})\hypertarget{md_README_autotoc_md1}{}\doxysection{Installation}\label{md_README_autotoc_md1}
+
+\begin{DoxyItemize}
+\item {\ttfamily pip3 install -\/r requirements.\+txt -\/-\/user}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md2}{}\doxysection{Running}\label{md_README_autotoc_md2}
+
+\begin{DoxyItemize}
+\item {\ttfamily chmod +x run.\+sh}
+\item {\ttfamily ./run.sh}
+\item The served web page will be available at \href{http://localhost:5000}{\texttt{ http\+://localhost\+:5000}}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md3}{}\doxysection{Note About Proxies}\label{md_README_autotoc_md3}
+
+\begin{DoxyItemize}
+\item A web proxy like Burp or Zap should work just fine with Py\+Goat, but if you aren\textquotesingle{}t seeing all the requests, you will have to export the certificate and convert it to a pem file
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md4}{}\doxysubsection{Exporting the certificate in burpsuite}\label{md_README_autotoc_md4}
+
+\begin{DoxyItemize}
+\item Navigate to proxy-\/$>$options-\/$>$import/export ca certificate
+\item Under export, click \textquotesingle{}certificate in D\+ER format\textquotesingle{} and click next
+\item choose a location and name for your file and click next to export the certificate
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md5}{}\doxysubsection{converting to pem format}\label{md_README_autotoc_md5}
+
+\begin{DoxyItemize}
+\item {\ttfamily openssl x509 -\/inform der -\/in $<$new\+\_\+certificate\+\_\+name$>$ -\/out $<$your\+\_\+exported\+\_\+certificate$>$}
+\begin{DoxyItemize}
+\item e.\+g. {\ttfamily openssl x509 -\/inform der -\/in certificate.\+cer -\/out certificate.\+pem}
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md6}{}\doxysubsection{Using the certificate in Py\+Goat}\label{md_README_autotoc_md6}
+\begin{DoxyVerb}* edit run.sh 
+
+    * set "certificate_path" to the absolute path of your newly converted certificate
+
+    * set "http_proxy" to the address and port for your proxy
+\end{DoxyVerb}
+\hypertarget{md_README_autotoc_md7}{}\doxysection{Creating Custom Lessons}\label{md_README_autotoc_md7}
+
+\begin{DoxyItemize}
+\item Py\+Goat uses yaml files to define its lessons. See \href{https://github.com/lawalgren/PyGoat/wiki/How-to-create-new-lessons}{\texttt{ this wiki page}} for more details. 
+\end{DoxyItemize}

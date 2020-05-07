@@ -1,3 +1,7 @@
+"""
+    All the routes and the lesson helper functions are stored here
+"""
+
 from flask import Flask, render_template, session, redirect, url_for, request, flash, Response
 from xml.dom.pulldom import START_ELEMENT, parseString
 from xml.sax import make_parser
@@ -14,9 +18,13 @@ app.secret_key = b'(\xe4S$\xce\xa81\x80\x8e\x83\xfa"b%\x9fr'
 
 lessons = []
 
-# load in the lessons from the yaml config files
 
 def load_lessons(lessondir="%s/lessons" % path):
+    """ load in the lessons from the yaml config files
+        lessondir = string - the absolute path of the directory where the lesson 
+        yaml configs are stored
+    """
+
     for filename in os.listdir(lessondir):
         if filename.endswith('yaml'):
             with open("%s/%s" % (lessondir, filename), "r") as config:
@@ -25,6 +33,9 @@ def load_lessons(lessondir="%s/lessons" % path):
                 lessons.append(current_lesson)
 
 def initialize_db(dbname='pygoat.db'):
+    """ initialize the 'users' table
+        dbname = string - the name of the database to use 
+    """
     print('Ignore the duplicate column errors below, I had to catch it as a workaround')
 
     conn = sqlite3.connect(dbname)
@@ -46,6 +57,11 @@ def initialize_db(dbname='pygoat.db'):
     conn.close()
 
 def initialize_lesson_db(lesson, dbname='pygoat.db'):
+    """ initialize the custom database tables defined in the lesson yamls
+        lesson = lesson object - a lesson object obtained from reading in a lesson
+          yaml file
+        dbname = string - the name of the database to use
+    """
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
     print('initializing %s' % lesson.name)
@@ -72,6 +88,13 @@ def initialize_lesson_db(lesson, dbname='pygoat.db'):
     conn.close()
 
 def valid_login(username, password, dbname='pygoat.db', testing=False):
+    """
+    tests a username and password to see if they are in the users table
+    username = string - the username
+    password = string - the plaintext of the password
+    dbname = string - the name of the database to check
+    testing = boolean - if false, will flash messages when user fails to log in
+    """
     conn = sqlite3.connect(dbname)
     c1 = conn.cursor()
     c1.execute('''SELECT salt FROM users WHERE username = ?''', [username])
@@ -95,8 +118,17 @@ def valid_login(username, password, dbname='pygoat.db', testing=False):
             flash(('danger', 'Invalid credentials'))
         return False
 
-# send an arbitrary web request using route actions in the config files
 def send_webrequest(webrequest, request=None, url="http://localhost:5000", testing=False):
+    """
+     send an arbitrary web request using route actions in the config files
+     replaces $form and $session primitives with their counterparts in the request
+
+     webrequest = a webrequest object, obtained by reading in the lesson yaml
+     request = a flask request object
+     url = string - the url to send the webrequest to
+     testing - if False, appends session data to webrequest headers as a cookie
+     and sends the request, otherwise, merely returns it
+     """
     url = "%s%s" % (url, webrequest['url'])
     headers = {}
     body = {}
@@ -162,11 +194,18 @@ def send_webrequest(webrequest, request=None, url="http://localhost:5000", testi
         elif webrequest['method'] == 'GET':
                 requests.get(url, headers=headers, params=body)
 
-# make arbitrary sql queries using route actions in the config files
-# replace $form and $session primitives with their counterparts in the request
-# if designated injectable, pass the parameters into the query as strings, otherwise pass in a prepared statement
-# will probably break if you want non-injectable sql and variable tables or column names
 def make_sql_query(query, request=None, dbname='pygoat.db', testing=False):
+    """
+    make arbitrary sql queries using route actions in the config files
+    replace $form and $session primitives with their counterparts in the request
+    if designated injectable, pass the parameters into the query as strings, otherwise pass in a prepared statement
+    will probably break if you want non-injectable sql and variable tables or column names
+    query - a query object, obtained by reading in the lesson yaml
+    request - a flask request
+    dbname = string - the name of the database to query
+    testing = boolean - if False, flashes the sql query and its output to the screen and runs it, otherwise, returns it
+
+    """
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
     parameters = []
@@ -226,6 +265,16 @@ def make_sql_query(query, request=None, dbname='pygoat.db', testing=False):
     conn.close()
 
 def make_custom_response(response, request=None, testing=False):
+    """
+     returns an arbitrary response using route actions in the config files
+     replaces $form and $session primitives with their counterparts in the 
+response object
+
+     response = a response object, obtained by reading in the lesson yaml
+     request = a flask request object
+     testing - if False, appends session data to response headers as a cookie and returns flask Response object, otherwise, returns the headers and body dictionaries
+     """
+
     headers = {}
     body = {}
 
@@ -289,6 +338,13 @@ def make_custom_response(response, request=None, testing=False):
         return body, headers
 
 def lesson_success(lesson, dbname='pygoat.db', testing=False):
+    """
+    sets the target lesson as successful in the database
+    lesson - a lesson object, obtained by reading in the lesson yamls
+    dbname = string - the name of the database to use
+    testing = boolean - if False, redirects the user to the lesson page
+    """
+
     colName = "%sCompleted" % lesson.name
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
@@ -299,6 +355,13 @@ def lesson_success(lesson, dbname='pygoat.db', testing=False):
         return(redirect('/lessons/%s' % lesson.url))
 
 def check_success(dbname='pygoat.db'):
+    """
+    loops through the lessons and checks to see if any of them are completed,
+    if so, sets the completed variable in said lesson to true, otherwise, sets it to false
+
+    dbname = string - the name of the database to use
+    """
+
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
     for lesson in lessons:
@@ -314,10 +377,18 @@ def check_success(dbname='pygoat.db'):
 
 @app.route('/favicon.ico')
 def favicon():
+    """ 
+    path = /favicon.ico
+    returns the icon 
+    """
     return(redirect(url_for('static', filename='favicon.ico')))
 
 @app.route('/')
 def index():
+    """ 
+    path = /
+    if user is logged in, return home page, otherwise, return login page 
+    """ 
     if 'username' in session:
         check_success()
         return render_template('lesson.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
@@ -326,6 +397,12 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    """ 
+    path = /login
+    if user sends GET to this page, returns login html
+    if user POSTs this page, checks provided credentials against database, if they login successfully, add their username to the session cookie and redirect to home page
+    """ 
+
     error = None 
     if request.method == 'POST':
         if valid_login(request.form['username'], request.form['password']):
@@ -336,11 +413,19 @@ def login():
 
 @app.route('/logout')
 def logout():
+    """
+    path = /logout
+    logs out the user
+    """
     session.pop('username', None)
     return redirect(url_for('index'))
 
 @app.route('/lessonstatus')
 def lessonstatus():
+    """
+    path = /lessonstatus
+    for testing api, returns a list of lessons and whether they are completable and have been completed
+    """
     if 'username' in session:
         check_success()
         finalDict = {}
@@ -356,6 +441,14 @@ def lessonstatus():
 # route for every lesson with a yaml config
 @app.route('/lessons/<lesson>')
 def lessons_page(lesson):
+    """ 
+    path = /lessons/<lesson>
+
+    parameters:
+    lesson - the url field of the lesson to load
+
+    finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
+    """
     if 'username' in session:
         check_success()
         # get lesson with url passed into the route
@@ -394,6 +487,11 @@ def lessons_page(lesson):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    """
+    path = /register
+    if the user sends a GET request, returns register html
+    if user POSTs, adds a new user to the database with the provided username and password
+    """
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -421,6 +519,14 @@ def register():
 
 @app.route('/reset/<lessonTitle>')
 def reset_lesson(lessonTitle):
+    """
+    path = /reset/<lessonTitle>
+    parameters:
+    lessonTitle - the url of the lesson to reset
+
+    Sets target lesson to not completed and recreates the associated database tables
+    """
+
     if 'username' in session:
         lesson = next(filter(lambda x:x.url == lessonTitle, lessons))
         colName = "%sCompleted" % lesson.name
@@ -436,6 +542,10 @@ def reset_lesson(lessonTitle):
 
 @app.route('/resetall')
 def reset_all():
+    """
+    path = /resetall
+    reinitializes all lesson tables and sets them all to not completed
+    """
     if 'username' in session:
         for lesson in lessons:
             colName = "%sCompleted" % lesson.name
@@ -452,6 +562,20 @@ def reset_all():
 # addtional routes defined in the yaml configs
 @app.route('/<path:routeName>', methods=['POST', 'GET'])
 def custom_routes(routeName):
+    """
+    path = /<path:routeName>
+    parameters:
+    routeName - the path for the custom route
+
+    Checks if a route with the path routeName is defined in a lesson yaml and performs the actions associated with it
+
+    1. send-webrequest - sends a request to the target url with a specified body and headers
+    2. sql-query - query the sql database
+    3. $custom.funcName(args) - runs the function in custom.py with the name funcName and any listed arguments
+    4. response - returns a response defined in the lesson yaml
+
+    It then checks if the lesson is completed.
+    """
     if 'username' in session:
         check_success()
         routename_with_slash = '/' + routeName
@@ -523,6 +647,10 @@ def custom_routes(routeName):
 
 @app.route('/report', methods=['GET'])
 def report():
+    """ 
+    path = /report
+    returns the report page
+    """
     return render_template('report.html', title="Reporting", lessons=lessons)
 
 load_lessons()

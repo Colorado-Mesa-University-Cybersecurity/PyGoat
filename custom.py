@@ -16,8 +16,14 @@ path = os.path.dirname(os.path.realpath(__file__))
 # used to store the phoneHome value from the xss lesson
 phVal = None
 
-# Locate the function string passed here and call the function with any parameters
 def find_and_run(action, request):
+    """
+    Locates the function string passed here and call the function with any parameters
+    params:
+    action - the function to run
+    request - a flask Request object
+    """
+
     end_index = action.find('(')
     func = action[8:end_index:]
     params = action[end_index + 1:-1:].split(',')
@@ -29,15 +35,22 @@ def find_and_run(action, request):
         result = globals()[func](request)
     return result
 
-# Validator for the Test Proxy lesson
 def validate_proxy(request):
+    """
+    Validator for the Test Proxy lesson
+    request - a flask request object
+    """
     response = (request.method == 'GET' and 'X-Request-Intercepted' in request.headers and request.headers['X-Request-Intercepted'] and 'changeMe' in request.args and request.args['changeMe'] == 'Requests are tampered easily')
     if response:
         flash(('success', 'lesson completed'))
     return response
 
-# Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
 def sqlValidator(user_data, request):
+    """
+    Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
+    user_data - irrelevant - TODO delete
+    request - a flask request object
+    """
     if request.method == 'POST':
         if request.form['login'].isnumeric():
             uid = request.form['uid']  
@@ -53,8 +66,12 @@ def sqlValidator(user_data, request):
                 flash(('success', 'lesson completed'))
             return response
 
-# parse xml unsafely (allowing external entities) and add comment to database
 def xxecomment(username, request):
+    """
+    parse xml unsafely (allowing external entities) and add comment to database
+    username - username of PyGoat user
+    request - a flask request object
+    """
     parser = make_parser()
     parser.setFeature(feature_external_ges, True)
     doc = parseString(request.data.decode('utf-8'), parser=parser)
@@ -72,6 +89,10 @@ def xxecomment(username, request):
     conn.close()
 
 def xxeValidator(request):
+    """
+    checks to see if the XXE lesson is completed. If a comment in the table matches the host's /etc/passwd file, then return True
+    request - a flask request object
+    """
     with open('/etc/passwd', 'r') as passwd:
         passwdtxt = ''.join(passwd.readlines()).replace(' ','').replace('\n','')
         conn = sqlite3.connect('pygoat.db')
@@ -85,27 +106,42 @@ def xxeValidator(request):
         conn.close()
         return(False)
 
-# setup function for the xss lesson. Loads all comments from the database and stores them in a tuple
 def render_comments(tablename, request):
+    """
+    setup function for lessons with comments. Loads all comments from the database and stores them in a tuple
+
+    tablename - the name of the table to load comments from
+    request - a flask request object
+    """
     conn = sqlite3.connect('pygoat.db')
     c = conn.cursor()
     result = c.execute('''SELECT * FROM %s''' % tablename).fetchall()
     conn.close()
     return result
 
-# custom action defined in a route for the xss lesson. Receives and stores the last value received from the phoneHome javascript function
 def phoneHome(request):
+    """
+    custom action defined in a route for the xss lesson. Receives and stores the last value received from the phoneHome javascript function
+    request - a flask request object
+    """
     global phVal
     phVal = request.form['phVal']
 
-# validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
 def phoneHomeValidate(request):
+    """
+    validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
+    request - a flask request object
+    """
     response = request.form['xsscommentresponse'] == phVal
     if response:
         flash(('success', 'lesson completed'))
     return response
 
 def csrf_validate_and_comment(username, request):
+    """
+    validator function defined for the CSRF lesson. checks if request came from same host. If not, and the validateReq field contains the right value, insert a comment and complete the lesson
+    request - a flask request object
+    """
     if request.method == "POST":
         if  'Referer' in request.headers and ('localhost:5000' in request.headers['Referer'] or '127.0.0.1:5000' in request.headers['Referer']):
             flash(('danger', 'It appears your request is coming from the same host you are submitting to.'))
@@ -120,6 +156,11 @@ def csrf_validate_and_comment(username, request):
             return True
 
 def insecure_deserialization_validate(request):
+    """
+    validator function for the insecure deserialization lesson
+    Unpickles the string passed into the field and checks to see if they've created a copy of the /etc/passwd file in their PyGoat install directory
+    request - a flask request object
+    """
     if request.method == "POST":
         try:
             os.remove('%s/passwdclone' % path)
@@ -139,6 +180,10 @@ def insecure_deserialization_validate(request):
     return False
 
 def validate_idor(request):
+    """
+    validator for the IDOR lesson. If they type in the other username they could access (Blackbeard), return true 
+    request - a flask request object
+    """
     if request.method == "POST" and 'username' in request.form and request.form['username'] == 'Blackbeard':
         flash(('success', 'Lesson completed'))
         return True

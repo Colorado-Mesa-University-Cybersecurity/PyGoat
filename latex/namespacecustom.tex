@@ -1,0 +1,154 @@
+\hypertarget{namespacecustom}{}\doxysection{custom Namespace Reference}
+\label{namespacecustom}\index{custom@{custom}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacecustom_a2617873d99f24f562bf6c8a013a8d0b8}{find\+\_\+and\+\_\+run}} (action, request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a97823d53029e1db57e633c599c17bde4}{validate\+\_\+proxy}} (request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a20b5272f326adb4a9e20805beec4f1b9}{sql\+Validator}} (user\+\_\+data, request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a0a8070d019a0d29dfcd6e0c700679129}{xxecomment}} (username, request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a95a2ce727c4b671d73cbe56392438bb4}{xxe\+Validator}} (request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a7193b273eef521a202e5ce8331e76613}{render\+\_\+comments}} (tablename, request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a61a07894fde3e2ff405dcd3519cacad0}{phone\+Home}} (request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a95d79a964d3ea74f093c18d2cea89f8b}{phone\+Home\+Validate}} (request)
+\item 
+def \mbox{\hyperlink{namespacecustom_abc006c779e628a5022e20070b8cb0893}{csrf\+\_\+validate\+\_\+and\+\_\+comment}} (username, request)
+\item 
+def \mbox{\hyperlink{namespacecustom_a27564217b8378a765d7f1d3814364793}{insecure\+\_\+deserialization\+\_\+validate}} (request)
+\item 
+def \mbox{\hyperlink{namespacecustom_ab3c004a37b195789cc19453494c845d4}{validate\+\_\+idor}} (request)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacecustom_a5091f40e15f5ae539d0ba632e00640a8}\label{namespacecustom_a5091f40e15f5ae539d0ba632e00640a8}} 
+{\bfseries path} = os.\+path.\+dirname(os.\+path.\+realpath(\+\_\+\+\_\+file\+\_\+\+\_\+))
+\item 
+\mbox{\Hypertarget{namespacecustom_adbc1790c4cd3847285f84cc60ab99fb0}\label{namespacecustom_adbc1790c4cd3847285f84cc60ab99fb0}} 
+{\bfseries ph\+Val} = None
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Put your custom validator and setup functions here. 
+You can access them in the lesson configs using $custom.functionName(params).
+They will always receive a request object. It can receive other things, just put that as a parameter before the request.
+\end{DoxyVerb}
+ ~\newline
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacecustom_abc006c779e628a5022e20070b8cb0893}\label{namespacecustom_abc006c779e628a5022e20070b8cb0893}} 
+\index{custom@{custom}!csrf\_validate\_and\_comment@{csrf\_validate\_and\_comment}}
+\index{csrf\_validate\_and\_comment@{csrf\_validate\_and\_comment}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{csrf\_validate\_and\_comment()}{csrf\_validate\_and\_comment()}}
+{\footnotesize\ttfamily def custom.\+csrf\+\_\+validate\+\_\+and\+\_\+comment (\begin{DoxyParamCaption}\item[{}]{username,  }\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}validator function defined for the CSRF lesson. checks if request came from same host. If not, and the validateReq field contains the right value, insert a comment and complete the lesson
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a2617873d99f24f562bf6c8a013a8d0b8}\label{namespacecustom_a2617873d99f24f562bf6c8a013a8d0b8}} 
+\index{custom@{custom}!find\_and\_run@{find\_and\_run}}
+\index{find\_and\_run@{find\_and\_run}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{find\_and\_run()}{find\_and\_run()}}
+{\footnotesize\ttfamily def custom.\+find\+\_\+and\+\_\+run (\begin{DoxyParamCaption}\item[{}]{action,  }\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Locates the function string passed here and call the function with any parameters
+params:
+action - the function to run
+request - a flask Request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a27564217b8378a765d7f1d3814364793}\label{namespacecustom_a27564217b8378a765d7f1d3814364793}} 
+\index{custom@{custom}!insecure\_deserialization\_validate@{insecure\_deserialization\_validate}}
+\index{insecure\_deserialization\_validate@{insecure\_deserialization\_validate}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{insecure\_deserialization\_validate()}{insecure\_deserialization\_validate()}}
+{\footnotesize\ttfamily def custom.\+insecure\+\_\+deserialization\+\_\+validate (\begin{DoxyParamCaption}\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}validator function for the insecure deserialization lesson
+Unpickles the string passed into the field and checks to see if they've created a copy of the /etc/passwd file in their PyGoat install directory
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a61a07894fde3e2ff405dcd3519cacad0}\label{namespacecustom_a61a07894fde3e2ff405dcd3519cacad0}} 
+\index{custom@{custom}!phoneHome@{phoneHome}}
+\index{phoneHome@{phoneHome}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{phoneHome()}{phoneHome()}}
+{\footnotesize\ttfamily def custom.\+phone\+Home (\begin{DoxyParamCaption}\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}custom action defined in a route for the xss lesson. Receives and stores the last value received from the phoneHome javascript function
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a95d79a964d3ea74f093c18d2cea89f8b}\label{namespacecustom_a95d79a964d3ea74f093c18d2cea89f8b}} 
+\index{custom@{custom}!phoneHomeValidate@{phoneHomeValidate}}
+\index{phoneHomeValidate@{phoneHomeValidate}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{phoneHomeValidate()}{phoneHomeValidate()}}
+{\footnotesize\ttfamily def custom.\+phone\+Home\+Validate (\begin{DoxyParamCaption}\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}validator function for the xss lesson. Ensures the value you pass in matches last value received from the phoneHome function
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a7193b273eef521a202e5ce8331e76613}\label{namespacecustom_a7193b273eef521a202e5ce8331e76613}} 
+\index{custom@{custom}!render\_comments@{render\_comments}}
+\index{render\_comments@{render\_comments}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{render\_comments()}{render\_comments()}}
+{\footnotesize\ttfamily def custom.\+render\+\_\+comments (\begin{DoxyParamCaption}\item[{}]{tablename,  }\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}setup function for lessons with comments. Loads all comments from the database and stores them in a tuple
+
+tablename - the name of the table to load comments from
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a20b5272f326adb4a9e20805beec4f1b9}\label{namespacecustom_a20b5272f326adb4a9e20805beec4f1b9}} 
+\index{custom@{custom}!sqlValidator@{sqlValidator}}
+\index{sqlValidator@{sqlValidator}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{sqlValidator()}{sqlValidator()}}
+{\footnotesize\ttfamily def custom.\+sql\+Validator (\begin{DoxyParamCaption}\item[{}]{user\+\_\+data,  }\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Validator for the Test SQL lesson. Runs the query unsafely and ensures all rows are fetched
+user_data - irrelevant - TODO delete
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_ab3c004a37b195789cc19453494c845d4}\label{namespacecustom_ab3c004a37b195789cc19453494c845d4}} 
+\index{custom@{custom}!validate\_idor@{validate\_idor}}
+\index{validate\_idor@{validate\_idor}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{validate\_idor()}{validate\_idor()}}
+{\footnotesize\ttfamily def custom.\+validate\+\_\+idor (\begin{DoxyParamCaption}\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}validator for the IDOR lesson. If they type in the other username they could access (Blackbeard), return true 
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a97823d53029e1db57e633c599c17bde4}\label{namespacecustom_a97823d53029e1db57e633c599c17bde4}} 
+\index{custom@{custom}!validate\_proxy@{validate\_proxy}}
+\index{validate\_proxy@{validate\_proxy}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{validate\_proxy()}{validate\_proxy()}}
+{\footnotesize\ttfamily def custom.\+validate\+\_\+proxy (\begin{DoxyParamCaption}\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Validator for the Test Proxy lesson
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a0a8070d019a0d29dfcd6e0c700679129}\label{namespacecustom_a0a8070d019a0d29dfcd6e0c700679129}} 
+\index{custom@{custom}!xxecomment@{xxecomment}}
+\index{xxecomment@{xxecomment}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{xxecomment()}{xxecomment()}}
+{\footnotesize\ttfamily def custom.\+xxecomment (\begin{DoxyParamCaption}\item[{}]{username,  }\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}parse xml unsafely (allowing external entities) and add comment to database
+username - username of PyGoat user
+request - a flask request object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecustom_a95a2ce727c4b671d73cbe56392438bb4}\label{namespacecustom_a95a2ce727c4b671d73cbe56392438bb4}} 
+\index{custom@{custom}!xxeValidator@{xxeValidator}}
+\index{xxeValidator@{xxeValidator}!custom@{custom}}
+\doxysubsubsection{\texorpdfstring{xxeValidator()}{xxeValidator()}}
+{\footnotesize\ttfamily def custom.\+xxe\+Validator (\begin{DoxyParamCaption}\item[{}]{request }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}checks to see if the XXE lesson is completed. If a comment in the table matches the host's /etc/passwd file, then return True
+request - a flask request object
+\end{DoxyVerb}
+ 
