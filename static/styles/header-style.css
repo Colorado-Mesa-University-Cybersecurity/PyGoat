@@ -1,11 +1,8 @@
-/* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"; */
 body {
-    /* font-family: 'Poppins', sans-serif; */
     background: #fafafa;
 }
 
 p {
-    /* font-family: 'Arial', sans-serif; */
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
@@ -13,7 +10,6 @@ p {
 }
 
 h1 {
-    /* font-family: 'Poppins', sans-serif; */
     text-align: center;
     color: #376f9e;
 }
@@ -82,17 +78,11 @@ a:focus {
     background: #376f9e;
 }
 
-#sidebar ul p {
-    color: #000000;
-    padding: 10px;
-    list-style-type: none;
-}
-
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
     display: block;
-}
+} 
 
 #sidebar ul li a:hover {
     background: #fff;
