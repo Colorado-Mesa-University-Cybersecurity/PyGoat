@@ -2,6 +2,7 @@ name: Insecure Deserialization
 url: pickle
 content: pickle.html
 difficulty: 8
+type: food
 completable: true
 routes:
         - path: /pickleValidate

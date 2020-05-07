@@ -2,6 +2,7 @@ name: Insecure Direct Object Reference
 url: idor
 content: idor.html
 difficulty: 9
+type: Broken Access Control
 completable: true
 routes:
         - path: /idor

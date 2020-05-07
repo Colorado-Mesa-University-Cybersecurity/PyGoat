@@ -2,6 +2,7 @@ name: XXE
 url: xxe
 content: xxe.html
 difficulty: 6
+type: XML External Entities
 success-condition: $custom.xxeValidator()
 load-script: $custom.render_comments(xxe_comments)
 load-return: comments
