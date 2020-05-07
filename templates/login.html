@@ -1,7 +1,11 @@
 {% extends "header.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
+	{% if login %}
 	<h1>PyGoat Login</h1>
+	{% else %}
+	<h1>PyGoat Registration</h1>
+	{% endif %}
 	<div class="login">
 	{% if login %}
 		<form action="/login" method="post">
