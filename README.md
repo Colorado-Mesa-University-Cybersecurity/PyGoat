@@ -5,6 +5,18 @@ A Python-based web platform for education in web vulnerabilities. Inspired by We
 
 Team Members: Lucas Walgren (lawalgren@mavs.coloradomesa.edu), Sean Apsey (ssapsey@mavs.coloradomesa.edu), Taylor Bradshaw (tcbradshaw@mavs.coloradomesa.edu)
 
+Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
+
+## Presentation Links
+
+[Showcase Presentation](https://youtu.be/0mHFqdhZoes)
+
+[Showcase PowerPoint Slides](https://docs.google.com/presentation/d/135Wbyiy8HzIIVWsrosy1tvG5uLC9MTfQOtMg5U-h_bY/edit?usp=sharing)
+
+[Addendum Presentation](https://youtu.be/HXRJxJE5eBs)
+
+[Addendum PowerPoint Slides](https://docs.google.com/presentation/d/1_VnXvLU2bU3XCIFi_R8Cf9grZnMgZxvVIuOX-JbrCqI/edit?usp=sharing)
+
 ## Installation
 
 * `pip3 install -r requirements.txt --user`
