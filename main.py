@@ -607,9 +607,13 @@ def reset_lesson(lessonTitle):
     if 'username' in session:
         lesson = next(filter(lambda x:x.url == lessonTitle, lessons))
         colName = "%sCompleted" % lesson.name
+        col2Name = "%sAttempts" % lesson.name
+        col3Name = "%sTime" % lesson.name
         conn = sqlite3.connect('pygoat.db')
         c = conn.cursor()
         c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
+        c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % col2Name, [session['username']])
+        c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % col3Name, [session['username']])
         conn.commit()
         conn.close()
         initialize_lesson_db(lesson)
@@ -624,14 +628,19 @@ def reset_all():
     reinitializes all lesson tables and sets them all to not completed
     """
     if 'username' in session:
+        conn = sqlite3.connect('pygoat.db')
+        c = conn.cursor() 
         for lesson in lessons:
             colName = "%sCompleted" % lesson.name
-            conn = sqlite3.connect('pygoat.db')
-            c = conn.cursor()
+            col2Name = "%sAttempts" % lesson.name
+            col3Name = "%sTime" % lesson.name
             c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
+            c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % col2Name, [session['username']])
+            c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % col3Name, [session['username']])
             conn.commit()
-            conn.close()
             initialize_lesson_db(lesson)
+        conn.close()
+        check_success()
         return("Lessons reset")
     else:
         return redirect(url_for('login'))
