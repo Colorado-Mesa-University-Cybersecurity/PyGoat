@@ -535,7 +535,7 @@ def reset_lesson(lessonTitle):
         c.execute('''UPDATE users SET "%s" = 0 WHERE username = ?''' % colName, [session['username']])
         conn.commit()
         conn.close()
-        initialize_db(lesson)
+        initialize_lesson_db(lesson)
         return redirect(url_for('lessons_page', lesson=lesson.url))
     else:
         return redirect(url_for('login'))
