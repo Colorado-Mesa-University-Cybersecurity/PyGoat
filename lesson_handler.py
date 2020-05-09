@@ -11,6 +11,8 @@ class lesson:
             self.type = yaml_config['type']
             self.completable = yaml_config['completable']
             self.completed = False
+            self.attempts = 0
+            self.seconds = 0
             
             self.success_condition = None
             self.load_script = None

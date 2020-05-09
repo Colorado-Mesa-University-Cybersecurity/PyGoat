@@ -6,7 +6,7 @@ from flask import Flask, render_template, session, redirect, url_for, request, f
 from xml.dom.pulldom import START_ELEMENT, parseString
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
-import os, sys, yaml, sqlite3, hashlib, custom, requests, logging, json
+import os, sys, yaml, sqlite3, hashlib, custom, requests, logging, json, time
 from lesson_handler import lesson
 
 logging.getLogger("requests").setLevel(logging.WARNING)
@@ -18,6 +18,8 @@ app.secret_key = b'(\xe4S$\xce\xa81\x80\x8e\x83\xfa"b%\x9fr'
 
 lessons = []
 
+last_loaded = None
+start_time = 0
 
 def load_lessons(lessondir="%s/lessons" % path):
     """ load in the lessons from the yaml config files
@@ -49,8 +51,12 @@ def initialize_db(dbname='pygoat.db'):
         # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now 
         if lesson.completable:
             colName = "%sCompleted" % lesson.name
+            col2Name = "%sAttempts" % lesson.name
+            col3Name = "%sTime" % lesson.name
             try:
                 c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
+                c.execute('''ALTER TABLE users ADD "%s" integer''' % col2Name) 
+                c.execute('''ALTER TABLE users ADD "%s" integer''' % col3Name) 
             except sqlite3.DatabaseError as e:
                 print(e)
     conn.commit()
@@ -375,6 +381,64 @@ def check_success(dbname='pygoat.db'):
                 lesson.completed = False
     conn.close()
 
+def increment_attempts(lesson, dbname='pygoat.db'):
+    """
+    increments the number of times the user has attempted a lesson in the database
+
+    lesson - lesson object retrieved from yaml config
+    dbname - name of database to modify
+    """
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    colName = "%sAttempts" % lesson.name
+    c.execute('''SELECT "%s" from users WHERE username = ?''' % colName, [session['username']])
+    result = c.fetchone()
+    if result is not None:
+        if result[0] is None:
+            newResult = 1
+        else:
+            newResult = int(result[0]) + 1
+        c.execute('''UPDATE users SET "%s" = ? WHERE username = ?''' % colName, [newResult, session['username']])
+        conn.commit()
+    conn.close()
+
+def update_time(lesson, timeToAdd, dbname='pygoat.db'):
+    """
+    updates the amount of time that the user has spent working on a particular lesson
+
+    lesson - lesson object retrieved from yaml config
+    timeToAdd - sqlite time string - the amount of time to add to the lesson
+    dbname - name of database to modify
+    """
+
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    colName = "%sTime" % lesson.name
+    c.execute('''SELECT "%s" from users WHERE username = ?''' % colName, [session['username']])
+    result = c.fetchone()
+    if result is not None:
+        runningTime = result[0]
+        if runningTime is None:
+            runningTime = timeToAdd
+        else:
+            runningTime += timeToAdd
+        c.execute('''UPDATE users SET "%s" = ? WHERE username = ?''' % colName, [runningTime, session['username']])
+    conn.commit()
+    conn.close()
+
+def get_lesson_stats(dbname='pygoat.db'):
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    for lesson in lessons:
+        colName = "%sTime" % lesson.name
+        col2Name = "%sAttempts" % lesson.name
+        c.execute('''SELECT "%s","%s" from users WHERE username = ?''' % (colName, col2Name), [session['username']])
+        result = c.fetchone()
+        if result is not None:
+            lesson.seconds = result[0]
+            lesson.attempts = result[1]
+    conn.close()
+
 @app.route('/favicon.ico')
 def favicon():
     """ 
@@ -450,9 +514,22 @@ def lessons_page(lesson):
     finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
     """
     if 'username' in session:
+        global last_loaded
+        global start_time
+
         check_success()
         # get lesson with url passed into the route
         current_lesson = next(filter(lambda x:x.url == lesson, lessons))
+
+        # track time associated with this lesson
+        if last_loaded is None:
+            last_loaded = current_lesson
+            start_time = int(time.time())
+        elif last_loaded.name != current_lesson.name:
+            timeToAdd = int(time.time()) - start_time
+            update_time(last_loaded, timeToAdd)
+            last_loaded = current_lesson
+            start_time = int(time.time())
 
         # check to see if the lesson has been completed
         if current_lesson.success_condition is not None:
@@ -577,6 +654,9 @@ def custom_routes(routeName):
     It then checks if the lesson is completed.
     """
     if 'username' in session:
+        global last_loaded
+        global start_time
+
         check_success()
         routename_with_slash = '/' + routeName
 
@@ -585,6 +665,19 @@ def custom_routes(routeName):
 
         # determine which route in said lesson got us here
         source_route = next(filter(lambda x: x['path'] == routename_with_slash, source_lesson.routes))
+
+        # track time associated with this lesson
+        if last_loaded is None:
+            last_loaded = source_lesson
+            start_time = int(time.time())
+        elif last_loaded.name != source_lesson.name:
+            timeToAdd = int(time.time()) - start_time
+            update_time(last_loaded, timeToAdd)
+            last_loaded = source_lesson
+            start_time = int(time.time())
+
+        # increment the number of times the user has attempted this lesson
+        increment_attempts(source_lesson)
 
         # check to see if actions here complete the lesson where this route is defined
         if source_lesson.success_condition is not None:
@@ -651,7 +744,23 @@ def report():
     path = /report
     returns the report page
     """
-    return render_template('report.html', title="Reporting", lessons=lessons)
+
+    if 'username' in session:
+        global last_loaded
+        global start_time
+
+        # update time for latest lesson
+        if last_loaded is not None:
+            timeToAdd = int(time.time()) - start_time
+            update_time(last_loaded, timeToAdd)
+            last_loaded = None
+            start_time = 0
+
+        get_lesson_stats()
+
+        return render_template('report.html', title="Reporting", lessons=lessons)
+    else:
+        return redirect(url_for('login'))
 
 load_lessons()
 initialize_db()
