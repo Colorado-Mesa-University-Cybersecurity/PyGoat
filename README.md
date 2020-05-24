@@ -23,9 +23,17 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ## Running
 
+Linux environment: 
+
 * `chmod +x run.sh`
 
 * `./run.sh`
+
+WSL environment: 
+
+* `chmod +x .bashrc`
+
+* `./.bashrc`
 
 * The served web page will be available at http://localhost:5000
 
