@@ -35,7 +35,7 @@ WSL environment:
 
 * `./.bashrc`
 
-* The served web page will be available at http://localhost:5000
+The served web page will be available at http://localhost:5000
 
 * If you run without using a proxy, the python requests module could throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
