@@ -59,7 +59,7 @@ The served web page will be available at http://localhost:5000
 
 ### Using the certificate in PyGoat
 
-	* edit run.sh 
+	* edit run.sh / .bashrc
 
 		* set "certificate_path" to the absolute path of your newly converted certificate
 
