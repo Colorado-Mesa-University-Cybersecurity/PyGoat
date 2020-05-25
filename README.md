@@ -23,11 +23,19 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ## Running
 
+Linux environment: 
+
 * `chmod +x run.sh`
 
 * `./run.sh`
 
-* The served web page will be available at http://localhost:5000
+WSL environment: 
+
+* `chmod +x .bashrc`
+
+* `./.bashrc`
+
+The served web page will be available at http://localhost:5000
 
 * If you run without using a proxy, the python requests module could throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
@@ -51,7 +59,7 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ### Using the certificate in PyGoat
 
-	* edit run.sh 
+	* edit run.sh / .bashrc
 
 		* set "certificate_path" to the absolute path of your newly converted certificate
 
