@@ -23,21 +23,22 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ## Running
 
-Linux environment: 
+Linux environment with Proxy:
 
 * `chmod +x run.sh`
 
 * `./run.sh`
 
-WSL environment: 
+Linux environment without Proxy:
 
-* `chmod +x .bashrc`
+* If you run without using a proxy, the python requests module could throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
-* `./.bashrc`
+Other Environments:
+
+* `python run.py`
 
 The served web page will be available at http://localhost:5000
 
-* If you run without using a proxy, the python requests module could throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
 ## Note About Proxies
 
