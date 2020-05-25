@@ -1,0 +1,78 @@
+PyGoat
+|
+|---- Contract
+|
+|---- html
+|
+|---- latex
+|
+|---- lessons
+|
+|---- solutions
+|     |
+|     |---- curl_scripts
+|     |
+|     |---- payloads
+|     |
+|     |---- writeups
+|
+|
+|---- static
+|     |
+|     |---- styles
+|
+|---- templates
+|     |
+|     |---- content
+|
+|---- tests
+|
+|-pygoat.db
+|
+|- run.sh
+|- run_no_proxy.sh
+|- runtests.sh
+|- assert.sh
+|
+|- custom.py
+|- lesson_handler.py
+|- main.py
+|- run.py
+
+
+Folders:
+
+Contracts:
+    Holds the contract between Dr. Basnet and the original development templates
+
+html:
+    Holds web-related assets for the DoxyGen documentation system
+
+latex:
+    Holds LaTeX markup for the DoxyGen documentation system
+
+lessons:
+    Holds .yaml files that configure the various lessons
+
+solutions:
+    Holds files that are used to test if the user succeeded in completing a task
+
+    Holds 3 directories:
+        curl_scripts
+        payloads
+        writeups
+
+static:
+    Holds the digital assets for the project
+
+    Holds 1 directory, styles:
+        Holds the front-end css and javascript libraries
+
+templates:
+    Holds the Jinja templates to render in flask before being sent to the client
+
+    holds 1 direcoty, content:
+        Holds the individual lesson templates for the project
+
+tests:
+    Holds all tests not contained in the base directory

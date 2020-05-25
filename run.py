@@ -1,3 +1,3 @@
 import main
 main.app.env = 'development'
-main.app.run(host='localhost')
+main.app.run(host='localhost', debug=True)
