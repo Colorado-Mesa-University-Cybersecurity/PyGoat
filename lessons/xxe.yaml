@@ -23,7 +23,7 @@ db-tables:
                     comment: lol!!!:-).
 routes:
         - path: /xxe
-          action: send-webrequest
+          action: send-webrequest 
           webrequest:
                   url: /xxecomment
                   method: POST
