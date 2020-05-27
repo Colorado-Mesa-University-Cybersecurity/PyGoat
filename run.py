@@ -30,7 +30,7 @@ Conventions followed:
             contents of docstring
         '''
     Type Annotations follow the convention
-        variableName: type = value
+        variableName: variableType = variableValue
     Inline Annotations follow the convention:
         def functionName(param1: paramType, param2: paramType...) -> returnType:
 """
