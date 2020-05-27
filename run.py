@@ -38,7 +38,7 @@ Conventions followed:
 def getConfig() -> dict:
     '''Function returns App Configuration'''
 
-    config = {
+    config: dict = {
         'certificate_path': 'None',
         'http_proxy': 'None',
     }
@@ -47,29 +47,33 @@ def getConfig() -> dict:
 
 
 
-def setEnvironment(config: dict) -> None:
+def checkDebug() -> tuple:
+    '''Function checks arguments for a debug statement and accompanying IP address'''
+
+    from sys import argv
+
+    return (argv[2], True) if len(argv) >= 3 and argv[1] == "debug" else ('localhost', False)
+
+
+
+def setEnvironment(config: dict) -> dict:
     '''Function applies App Configuration to local environment'''
 
     from os import environ
 
     environ['REQUESTS_CA_BUNDLE'] = config['certificate_path']
     environ['HTTP_PROXY'] = config['http_proxy']
+    (config['host'], config['debug']) = checkDebug()
 
+    return config
 
-
-def checkDebug() -> bool:
-    '''Function checks arguments for a debug statement'''
-
-    from sys import argv
-
-    return True if len(argv) >= 2 and argv[1] == "debug" else False
 
 
 
 def start():
     '''Function configures local environment then launches the Flask App'''
 
-    setEnvironment(getConfig())
+    config: dict = setEnvironment(getConfig())
 
     # the app is imported after the environment is properly configured
     # this is because flask uses the local environment configuration
@@ -77,7 +81,7 @@ def start():
     import main 
     
     main.app.env = 'development'
-    main.app.run(host='localhost', debug=checkDebug())
+    main.app.run(host=config['host'], debug=config['debug'])
 
 
 
