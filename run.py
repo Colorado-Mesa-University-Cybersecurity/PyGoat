@@ -37,16 +37,19 @@ Conventions followed:
 
 def getConfig() -> dict:
     '''Function returns App Configuration'''
+
     config = {
         'certificate_path': 'None',
         'http_proxy': 'None',
     }
+
     return config
 
 
 
 def setEnvironment(config: dict) -> None:
     '''Function applies App Configuration to local environment'''
+
     from os import environ
 
     environ['REQUESTS_CA_BUNDLE'] = config['certificate_path']
@@ -56,19 +59,23 @@ def setEnvironment(config: dict) -> None:
 
 def checkDebug() -> bool:
     '''Function checks arguments for a debug statement'''
+
     from sys import argv
+
     return True if len(argv) >= 2 and argv[1] == "debug" else False
 
 
 
 def start():
     '''Function configures local environment then launches the Flask App'''
+
     setEnvironment(getConfig())
 
     # the app is imported after the environment is properly configured
     # this is because flask uses the local environment configuration
     # at launch
     import main 
+    
     main.app.env = 'development'
     main.app.run(host='localhost', debug=checkDebug())
 
