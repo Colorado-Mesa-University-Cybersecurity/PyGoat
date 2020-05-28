@@ -64,7 +64,7 @@ static: contains the Figma template used to create the PyGoat Application, packa
 
 ### Set up
 
-###### Installation
+#### Installation
 
 Inside the static directory, run the command:
 
@@ -76,7 +76,7 @@ note: this only works in a CLI environment with node.js installed
 
 ### Run the Transpiler
 
-###### Base
+#### Base
 
 Once npm install has finished, run the following command to build the base components:
 
@@ -86,7 +86,7 @@ Once npm install has finished, run the following command to build the base compo
 
 Note: this command will run a babel transpiler within the user's console window. Babel will watch the static/jsx/base directory, and anytime a file is added or changed, it will transpile that file and deposit it in static/js.
 
-###### Components
+#### Components
 
 Run the following command to build React Components used by the PyGoat Application:
 
