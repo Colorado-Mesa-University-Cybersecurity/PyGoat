@@ -391,7 +391,7 @@ def index():
     """ 
     if 'username' in session:
         check_success()
-        return render_template('lesson.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
+        return render_template('index.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
     else:
         return redirect(url_for('login'))
 
@@ -403,7 +403,6 @@ def login():
     if user POSTs this page, checks provided credentials against database, if they login successfully, add their username to the session cookie and redirect to home page
     """ 
 
-    error = None 
     if request.method == 'POST':
         if valid_login(request.form['username'], request.form['password']):
             session['username'] = request.form['username']
