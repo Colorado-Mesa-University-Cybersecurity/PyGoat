@@ -70,7 +70,7 @@ class Store{
         })
 
         if(exists) {
-            this.warehouse.navItems[atIndex].lessons.push(lesson):
+            this.warehouse.navItems[atIndex].lessons.push(lesson)
         } else {
             this.warehouse.navItems.push({group: lesson.group, lessons: lesson});
         }
