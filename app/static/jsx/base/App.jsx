@@ -42,15 +42,24 @@ function App(props) {
 	const navItemsLength = navItems.length
 
 	const lessonNavItems = [
-		{group: 'Introduction', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
-		{group: 'Lesson Group 2', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
-		{group: 'Lesson Group 3', lessons: [{title: 'Lesson Title 1', current: true}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
-		{group: 'Lesson Group 4', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
-		{group: 'Lesson Group 5', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
-		{group: 'Lesson Group 6', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		{group: 'Introduction'}
+		// {group: 'Introduction', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 2', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 3', lessons: [{title: 'Lesson Title 1', current: true}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 4', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 5', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 6', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
 	]
 
 	console.log('app reloaded')
+
+	React.useEffect(()=> {
+		const fetchOptions = {method: 'GET', 'Content-Type': 'text/html'}
+
+		fetch('/lessonstatus', fetchOptions).then(d=>d.json()).then(console.log)
+		setNewState(1)
+
+	}, [state])
 	return (
 		<div >
 			{/* This is the Header */}

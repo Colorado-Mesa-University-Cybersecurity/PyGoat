@@ -24,7 +24,7 @@ const LessonNavigator = (props) => {
             <div style={lessonSelectionStyle}>
                 {props.groups.map((x, i) => 
                     <LessonGroup  title={x.group} active={activeGroup === i} setActive={setActiveGroup} id={`${x}_${i}`} num={i} key={`${x}_${i}`}>
-                        {x.lessons.map((y, j) => 
+                        {x.lessons && x.lessons.map((y, j) => 
                             <LessonItem title={y.title} key={`${y.title}__${j}`} current={y.current} active={activeGroup === i} />
                         )}
                     </LessonGroup>

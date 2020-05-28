@@ -11,7 +11,7 @@ import { PageNumButton } from './components/pageNumNav.js';
 
 function App(props) {
 
-	const model = props.model;
+	const store = props.store;
 	console.log(1);
 	const [state, setNewState] = React.useState();
 	console.log(2);
@@ -31,7 +31,7 @@ function App(props) {
 		width: format.sidebar.width
 	};
 
-	const sidePanelClass = model.store.hideSideBar ? 'lesson-navigator hide' : 'lesson-navigator';
+	const sidePanelClass = store.warehouse.hideSideBar ? 'lesson-navigator hide' : 'lesson-navigator';
 
 	const numPages = Array(4).fill(0);
 	const currentPage = 1;
@@ -40,9 +40,23 @@ function App(props) {
 
 	const navItemsLength = navItems.length;
 
-	const lessonNavItems = [{ group: 'Introduction', lessons: [{ title: 'Lesson Title 1', current: false }, { title: 'Lesson Title 2', current: false }, { title: 'Lesson Title 3', current: false }] }, { group: 'Lesson Group 2', lessons: [{ title: 'Lesson Title 1', current: false }, { title: 'Lesson Title 2', current: false }, { title: 'Lesson Title 3', current: false }] }, { group: 'Lesson Group 3', lessons: [{ title: 'Lesson Title 1', current: true }, { title: 'Lesson Title 2', current: false }, { title: 'Lesson Title 3', current: false }] }, { group: 'Lesson Group 4', lessons: [{ title: 'Lesson Title 1', current: false }, { title: 'Lesson Title 2', current: false }, { title: 'Lesson Title 3', current: false }] }, { group: 'Lesson Group 5', lessons: [{ title: 'Lesson Title 1', current: false }, { title: 'Lesson Title 2', current: false }, { title: 'Lesson Title 3', current: false }] }, { group: 'Lesson Group 6', lessons: [{ title: 'Lesson Title 1', current: false }, { title: 'Lesson Title 2', current: false }, { title: 'Lesson Title 3', current: false }] }];
+	const lessonNavItems = [{ group: 'Introduction'
+		// {group: 'Introduction', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 2', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 3', lessons: [{title: 'Lesson Title 1', current: true}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 4', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 5', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+		// {group: 'Lesson Group 6', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	}];
 
 	console.log('app reloaded');
+
+	React.useEffect(() => {
+		const fetchOptions = { method: 'GET', 'Content-Type': 'text/html' };
+
+		fetch('/lessonstatus', fetchOptions).then(d => d.json()).then(console.log);
+		setNewState(1);
+	}, [state]);
 	return React.createElement(
 		'div',
 		null,
@@ -70,7 +84,7 @@ function App(props) {
 				React.createElement(
 					LessonArea,
 					null,
-					React.createElement(LessonNavToggleButton, { setToggle: setNewState, store: model.store }),
+					React.createElement(LessonNavToggleButton, { setToggle: setNewState, warehouse: store.warehouse }),
 					numPages.map((x, i) => React.createElement(PageNumButton, { num: i + 1, key: `${x}___${i}`, active: i + 1 === currentPage })),
 					React.createElement(ResetLessonButton, null)
 				)
