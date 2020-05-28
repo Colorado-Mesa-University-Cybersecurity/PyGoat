@@ -62,9 +62,9 @@ static/styles: contains legacy files used to by the login and registration scree
 static: contains the Figma template used to create the PyGoat Application, package.json for installing and running the transpiler, favicon.ico, the babel.config.json file for the transpiler, and other .json files for npm.
 
 
-### Set up
+## Set up
 
-#### Installation
+### Installation
 
 Inside the static directory, run the command:
 
