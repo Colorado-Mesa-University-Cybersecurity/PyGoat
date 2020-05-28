@@ -1,0 +1,140 @@
+/* 
+Main Style Sheet for the PyGoat Client
+*/
+
+
+/* Color Pallet */
+
+.themeColor1 { background-color: #860037; }
+
+.themeColor2 { background-color: #333333; }
+
+.themeColor3 { background-color: #ffd200; }
+
+.themeColor4 { background-color: #eeeeee; }
+
+.themeColor5 { background-color: #c4c4c4; }
+
+
+/* Fonts */
+
+body * {
+    font-family: sans-serif;
+    font-weight: normal;
+}
+
+
+/* Page Formating */
+
+html, body {
+    height:100%;
+    width:100%;
+    margin:0;
+    padding:0;
+}
+
+main {
+    min-height: 55rem;
+    display: flex;
+    /* align-items: ; */
+}
+
+
+/* Utility classes */
+
+.h100 { height: 100%; }
+
+.h75 { height: 75%; }
+
+.h50 { height: 50%; }
+
+.h25 { height: 36%; }
+
+.w100 { width: 100%; }
+
+.w75 { width: 75%; }
+
+.w50 { width: 50%; }
+
+.w25 { width: 25%; }
+
+.hide { display: none; }
+
+
+/* Site Navigator Component */
+
+
+.site-nav-item { 
+    width: 100%;
+    text-align: center;
+    background-color: #ffd200;
+    border: 0pt;
+}
+
+.site-nav-item:hover {
+    width: 100%;
+    background-color: #EEEEEE;
+}
+
+
+/* Lesson Navigator Component */ 
+
+
+/* Lesson Group Component */
+
+.lesson-group {
+    padding-left: 1.5rem;
+    background-color: #eeeeee;
+    height: 50px;
+    display: flex;
+    align-items: 'center';
+    width: 100%;
+    font-size: 16pt;
+}
+
+.lesson-group:hover {
+    background-color: #ffd200;
+}
+
+/* Lesson Item Component */
+.lesson-item:hover {
+    color: 'black';
+    background-color: #ffd200;
+}
+
+.lesson-item {
+    transition: all 0.2s;
+    height: 50px;
+    /* display: flex;
+    align-items: 'center'; */
+    width: 100%;
+    font-size: 16pt;
+    color: white;
+    background-color: #222222;
+}
+
+.current-lesson {
+    color: #ffd200;
+}
+
+#lesson-item-title:hover * {
+    color: black;
+}
+
+#lesson-item-title:hover {
+    /* color: black; */
+    background-color: #ffd200;
+}
+
+/* Lesson Area Component */
+
+.lesson-area {
+    width: 100%;
+    background-color: #c4c4c4;
+    padding: 50px
+}
+
+#inner-lesson-area {
+    background-color: #eeeeee;
+    height: 100%;
+}
