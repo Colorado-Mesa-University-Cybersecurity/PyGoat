@@ -14,15 +14,18 @@ const LessonNavToggleButton = (props) => {
     }
 
     const handleClick = (e) => {
-        console.log('hello world', props.store.hideSideBar, props)
-        props.store.hideSideBar = props.store.hideSideBar? false: true;
-        console.log('hello world', props.store.hideSideBar, props)
+        console.log('hello world', props.warehouse.hideSideBar, props)
+        props.warehouse.hideSideBar = props.warehouse.hideSideBar? false: true;
+        console.log('hello world', props.warehouse.hideSideBar, props)
         props.setToggle(Math.random())
 
         // const reqOptions = {
         //     method: 'GET',
         //     headers: {'Content-Type': 'text/html'}
         // }
+        //
+        //fetch('/lessonstatus', {'Content-Type': 'text/html'}).then(r => r.text()).then(d => console.log(d))
+        //
         // const newData = ''
         // fetch('/lesson/Worlddd', reqOptions)
         //     .then(response =>{

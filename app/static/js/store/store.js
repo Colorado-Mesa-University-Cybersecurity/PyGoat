@@ -1,6 +1,6 @@
 /*
-File: model.js
-Description: file exports Model class that holds and manages data
+File: store.js
+Description: file exports Store class that holds and manages data and state for the React Components
 
 Conventions followed:
     4-space tabs
@@ -17,13 +17,13 @@ Conventions followed:
 
 
 /**
- * Class Model
+ * Class Store
  * 
- * Model instantiates a model object to contain and manage all of the data used by the PyGoat application
+ * Store instantiates a store object to contain and manage all of the data used by the PyGoat application
  * 
  * Methods:
  * 
- * 		constructor  ::  void  ->  model object
+ * 		constructor  ::  void  ->  store object
  *          method creates/instantiates the datastructures the app is dependant upon
  *              If persistent data is found, that data is used
  *          creates the refresh object
@@ -32,10 +32,10 @@ Conventions followed:
  *                      facilitate quick updates
  *         
  * 
- * 		storeLocally  ::  void  ->  model object
+ * 		storeLocally  ::  void  ->  store object
  *          method stores the state of all data structures to local storage
  */
-class Model{
+class Store{
     constructor() {
         if (localStorage.getItem('item') == null) {
             this.item = 'hello world';
@@ -50,7 +50,7 @@ class Model{
         this.refresh = {}
         this.refresh.storeLocally = this.storeLocally.bind(this)
 
-        this.store = {}
+        this.warehouse = {}
 
         return this;
     };
@@ -64,4 +64,4 @@ class Model{
 
 
 
-export {Model}
+export {Store}

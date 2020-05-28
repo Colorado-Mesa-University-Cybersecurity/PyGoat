@@ -12,7 +12,7 @@ import {PageNumButton} from './components/pageNumNav.js'
  
 function App(props) {
 
-	const model = props.model
+	const store = props.store
 	console.log(1)
 	const [state, setNewState] = React.useState()
 	console.log(2)
@@ -32,7 +32,7 @@ function App(props) {
 		width: format.sidebar.width
 	}
 
-	const sidePanelClass = model.store.hideSideBar? 'lesson-navigator hide': 'lesson-navigator';
+	const sidePanelClass = store.warehouse.hideSideBar? 'lesson-navigator hide': 'lesson-navigator';
 
 	const numPages = Array(4).fill(0)
 	const currentPage = 1
@@ -71,7 +71,7 @@ function App(props) {
 				{/* This is Page Contents */}
 				<div className='lesson-area'>
 					<LessonArea>
-						<LessonNavToggleButton setToggle={setNewState} store={model.store} />
+						<LessonNavToggleButton setToggle={setNewState} warehouse={store.warehouse} />
 						{numPages.map((x, i) => <PageNumButton num={i+1} key={`${x}___${i}`} active={(i+1) === currentPage}/>)}
 						<ResetLessonButton />
 					</LessonArea>

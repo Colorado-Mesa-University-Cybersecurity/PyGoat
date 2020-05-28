@@ -1,7 +1,7 @@
 /*
 File: index.js
-Description: file defines the View and Controller classes and instantiates them using the imported Model Class
-				This is designed based on a fundamental architectural pattern the Model-View-Controller
+Description: file defines the View and Controller classes and instantiates them using the imported store Class
+				This is designed based on a fundamental architectural pattern the store-View-Controller
 				The MVC pattern is used client side as opposed to server side to create a Single Page Application
 				learn more about this MVC implementation here: https://www.taniarascia.com/javascript-mvc-todo-app/
 				
@@ -19,7 +19,7 @@ Conventions followed:
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 import {App} from './App.js';
-import {Model} from './models/model.js'
+import {Store} from './store/store.js'
 
 
 /**
@@ -29,8 +29,8 @@ import {Model} from './models/model.js'
  * 
  * Methods:
  *
- * 		render  ::  model object  ->  view object
- * 			renders all of the App components using the data in the model object passed to the method
+ * 		render  ::  store object  ->  view object
+ * 			renders all of the App components using the data in the store object passed to the method
  */
 class View {
   render(props)  {
@@ -41,8 +41,9 @@ class View {
 		// This is JSX, JavaScript with XML
 		// This is used to create component based designs in the React and Vue libraries
 		// learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
-		// <React.StrictMode>
-		<App model={props}/>,
+		<React.StrictMode>
+			<App store={props}/>
+		</React.StrictMode>,
 		document.getElementById('root')
     );
 	console.log('this is from render2')
@@ -55,17 +56,17 @@ class View {
 /**
  * Class Controller
  * 
- * Controller instantiates a controller object to direct the exchange of data between model and view objects
+ * Controller instantiates a controller object to direct the exchange of data between store and view objects
  * 
  * Methods:
  * 
- * 		constructor  ::  ( model object, view object )  ->  controller object
+ * 		constructor  ::  ( store object, view object )  ->  controller object
  */
 class Controller {
-    constructor(model, view) {
-        this.model = model;
+    constructor(store, view) {
+        this.store = store;
         this.view = view;
-		this.view.render(this.model);
+		this.view.render(this.store);
 		
 		return this;
     };
@@ -76,14 +77,14 @@ class Controller {
  * launch  ::  void -> void
  * 
  * Function launch is an IIFE(Immediately Invoked Functional Expression) that instantiates the
- *    Model, View, and Controller Classes 
+ *    Store, View, and Controller Classes 
  * 
  * learn more about IIFE's here: https://developer.mozilla.org/en-US/docs/Glossary/IIFE
  * 
  */
 ;(
     function launch(){
-		const PyGoat = new Controller(new Model, new View);
+		const PyGoat = new Controller(new Store, new View);
 		console.log('index.jsx loaded')
     }    
 )();
