@@ -51,10 +51,32 @@ class Store{
         this.refresh.storeLocally = this.storeLocally.bind(this)
 
         this.warehouse = {}
+        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: '/welcome', current: true, group: 'Introduction'}]}]
+        this.addLesson = this.addLesson.bind(this);
 
         return this;
     };
+    
+    addLesson(lesson) {
+        lesson.group || console.assert(false, 'lessons must have group property')
+        lesson.title || console.assert(false, 'lesson must have title property')
+        lesson.url || console.assert(false, 'lesson must have url property')
 
+        const atIndex;
+        const exists = this.warehouse.navItems.some((x, i) => {
+            const test = x.group === lesson.group
+            if(test){ atIndex = i};
+            return test
+        })
+
+        if(exists) {
+            this.warehouse.navItems[atIndex].lessons.push(lesson):
+        } else {
+            this.warehouse.navItems.push({group: lesson.group, lessons: lesson});
+        }
+
+        return this;
+    }
 
     storeLocally() {
         localStorage.setItem('item', JSON.stringify(this.item))
@@ -62,6 +84,15 @@ class Store{
     };
 };
 
+
+	// 	{group: 'Introduction'}
+	// 	// {group: 'Introduction', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	// 	// {group: 'Lesson Group 2', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	// 	// {group: 'Lesson Group 3', lessons: [{title: 'Lesson Title 1', current: true}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	// 	// {group: 'Lesson Group 4', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	// 	// {group: 'Lesson Group 5', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	// 	// {group: 'Lesson Group 6', lessons: [{title: 'Lesson Title 1', current: false}, {title: 'Lesson Title 2', current: false}, {title: 'Lesson Title 3', current: false},]},
+	
 
 
 export {Store}

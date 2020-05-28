@@ -4,7 +4,9 @@ path = os.path.dirname(os.path.realpath(__file__))
 
 class lesson:
     def __init__(self, yaml_config):
-            self.name = yaml_config['name']
+            self.name = yaml_config['name'] # for the template
+            self.title = yaml_config['name'] # for client-side rendering
+            self.group = yaml_config['group']
             self.url = yaml_config['url']
             self.content = yaml_config['content']
             self.difficulty = yaml_config['difficulty']
