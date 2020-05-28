@@ -13,28 +13,51 @@ This Readme is to help future developers work without confusion
 ### Directory layout
 
 static
+
 |
+
 |___ css
+
 |
+
 |___ js
+
 |   |
+
 |   |___ components
+
 |   |
+
 |   |___ libraries
+
 |   |
+
 |   |___ store
+
 |   |
+
 |   |___ tests
+
 |
+
 |___ jsx
+
 |   |
+
 |   |___ base
+
 |   |
+
 |   |___ components
+
 |   
+
 |___ photos
+
 |
+
 |___ styles
+
 
 ### Directory Contents
 
