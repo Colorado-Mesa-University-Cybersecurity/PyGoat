@@ -23,6 +23,15 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ## Running
 
+To start PyGoat in any Environment run the following command:
+
+```bash
+	python run.py
+```
+
+Note* This requires an installation of Python 3.7+ in the host environment
+
+
 Linux environment with Proxy:
 
 * `chmod +x run.sh`
@@ -33,9 +42,6 @@ Linux environment without Proxy:
 
 * If you run without using a proxy, the python requests module could throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
-Other Environments:
-
-* `python run.py`
 
 The served web page will be available at http://localhost:5000
 
