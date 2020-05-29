@@ -1,6 +1,8 @@
 name: Insecure Direct Object Reference
 url: idor
 content: idor.html
+group: Demo
+numberOfPages: 1
 difficulty: 9
 type: Broken Access Control
 completable: true

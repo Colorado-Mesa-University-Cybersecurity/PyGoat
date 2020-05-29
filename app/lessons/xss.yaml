@@ -1,6 +1,8 @@
 name: Test XSS
 url: testxss
 content: xss.html
+group: Demo
+numberOfPages: 1
 difficulty: 5
 type: Cross Site Scripting
 load-script: $custom.render_comments(comments)

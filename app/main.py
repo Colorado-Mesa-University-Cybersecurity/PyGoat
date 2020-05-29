@@ -431,6 +431,9 @@ def lessonstatus():
         for lesson in lessons:
             finalDict[lesson.name] = {}
             finalDict[lesson.name]['completable'] = lesson.completable
+            finalDict[lesson.name]['url'] = lesson.url
+            finalDict[lesson.name]['group'] = lesson.group
+            finalDict[lesson.name]['pages'] = lesson.pages
             if lesson.completable:
                 finalDict[lesson.name]['completed'] = lesson.completed
         return (json.dumps(finalDict))

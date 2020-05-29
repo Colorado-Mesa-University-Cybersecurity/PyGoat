@@ -1,6 +1,8 @@
 name: Insecure Deserialization
 url: pickle
 content: pickle.html
+group: Demo
+numberOfPages: 1
 difficulty: 8
 type: food
 completable: true

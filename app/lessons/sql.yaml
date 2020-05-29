@@ -1,6 +1,8 @@
 name: Test SQL Injection
 url: testsql
 content: sql.html
+group: Demo
+numberOfPages: 1
 difficulty: 4
 type: Injection
 success-condition: $custom.sqlValidator(user_data)

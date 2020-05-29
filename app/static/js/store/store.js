@@ -42,7 +42,7 @@ class Store{
         } else {
             this.item = JSON.parse(localStorage.getItem('item'));
         };
-        this.storeLocally();
+        // this.storeLocally();
 
         // refresh is an object held that will hold references to methods used to update various components
         // this is to make sure that any component that changes the app data can signal React to re-render the DOM
@@ -50,12 +50,22 @@ class Store{
         this.refresh = {}
         this.refresh.storeLocally = this.storeLocally.bind(this)
 
-        this.warehouse = {}
-        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: '/welcome', current: true, group: 'Introduction'}]}]
-        this.addLesson = this.addLesson.bind(this);
+        this.createWarehouse()
 
+        
         return this;
     };
+    
+    
+    createWarehouse() {
+        this.warehouse = {}
+        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: '/welcome', current: true, group: 'Introduction', pages: 1}]}]
+        this.warehouse.lessonMetaData = {lessonTitles: [], lessons: {}}
+
+        this.addLesson = this.addLesson.bind(this);
+    }
+
+
     
 
     /**
@@ -77,16 +87,30 @@ class Store{
         lesson.group || console.assert(false, 'lessons must have group property')
         lesson.title || console.assert(false, 'lesson must have title property')
         lesson.url || console.assert(false, 'lesson must have url property')
+        lesson.pages || console.assert(false, 'lesson must have pages property')
+        if(this.warehouse.lessonMetaData.lessonTitles.some((x)=> x === lesson.title)) {return this}
+        else {
+            this.warehouse.lessonMetaData.lessonTitles.push(lesson.title)
+            this.warehouse.lessonMetaData.lessons[lesson.title] = lesson
+        }
+        const index = [0]
 
-        const atIndex;
         const exists = this.warehouse.navItems.some((x, i) => {
             const test = x.group === lesson.group
-            if(test){ atIndex = i};
+            if(test){ 
+                index[0] = i
+            };
             return test
         })
 
-        if (exists) { this.warehouse.navItems[atIndex].lessons.push(lesson) } 
-        else { this.warehouse.navItems.push({group: lesson.group, lessons: lesson}) }
+
+        if (exists) { 
+            this.warehouse.navItems[index[0]].lessons.push(lesson) 
+        } 
+        else { 
+            this.warehouse.navItems.push({group: lesson.group, lessons: []})
+            this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson) 
+        }
 
         return this;
     }

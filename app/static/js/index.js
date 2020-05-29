@@ -31,22 +31,19 @@ import { Store } from './store/store.js';
  * 			renders all of the App components using the data in the store object passed to the method
  */
 class View {
-  render(props) {
-    console.log('this is from render', props);
-    console.log(App);
-    ReactDOM.render(
+    render(props) {
+        ReactDOM.render(
 
-    // This is JSX, JavaScript with XML
-    // This is used to create component based designs in the React and Vue libraries
-    // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
-    React.createElement(
-      React.StrictMode,
-      null,
-      React.createElement(App, { store: props })
-    ), document.getElementById('root'));
-    console.log('this is from render2');
-    return this;
-  }
+        // This is JSX, JavaScript with XML
+        // This is used to create component based designs in the React and Vue libraries
+        // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
+        React.createElement(
+            React.StrictMode,
+            null,
+            React.createElement(App, { store: props })
+        ), document.getElementById('root'));
+        return this;
+    }
 };
 
 /**
@@ -59,13 +56,13 @@ class View {
  * 		constructor  ::  ( store object, view object )  ->  controller object
  */
 class Controller {
-  constructor(store, view) {
-    this.store = store;
-    this.view = view;
-    this.view.render(this.store);
+    constructor(store, view) {
+        this.store = store;
+        this.view = view;
+        this.view.render(this.store);
 
-    return this;
-  }
+        return this;
+    }
 };
 
 /**
@@ -78,6 +75,6 @@ class Controller {
  * 
  */
 ;(function launch() {
-  const PyGoat = new Controller(new Store(), new View());
-  console.log('index.jsx loaded');
+    const PyGoat = new Controller(new Store(), new View());
+    console.log('index.jsx loaded');
 })();

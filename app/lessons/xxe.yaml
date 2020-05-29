@@ -1,6 +1,8 @@
 name: XXE
 url: xxe
 content: xxe.html
+group: Demo
+numberOfPages: 1
 difficulty: 6
 type: XML External Entities
 success-condition: $custom.xxeValidator()

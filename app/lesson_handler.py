@@ -7,7 +7,8 @@ class lesson:
             self.name = yaml_config['name'] # for the template
             self.title = yaml_config['name'] # for client-side rendering
             self.group = yaml_config['group']
-            self.url = yaml_config['url']
+            self.url = yaml_config['url'] 
+            self.pages = yaml_config['numberOfPages'] 
             self.content = yaml_config['content']
             self.difficulty = yaml_config['difficulty']
             self.type = yaml_config['type']

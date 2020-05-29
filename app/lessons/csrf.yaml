@@ -1,5 +1,7 @@
 name: CSRF
 url: csrf
+group: Demo
+numberOfPages: 1
 content: csrf.html
 difficulty: 7
 type: Request Forging

@@ -13,9 +13,7 @@ import {PageNumButton} from './components/pageNumNav.js'
 function App(props) {
 
 	const store = props.store
-	console.log(1)
 	const [state, setNewState] = React.useState()
-	console.log(2)
 	
 	const format = {}
 	format.header = {
@@ -50,11 +48,19 @@ function App(props) {
 		state || fetch('/lessonstatus', fetchOptions)
 			.then(d=>d.json())
 			.then((d)=> {
-			console.log(d)
+
+			Object.keys(d).forEach((x, i) => {
+				const lesson = d[x]
+				lesson.title = x
+				lesson.current = false
+				store.addLesson(lesson)
+			})
+			store.refresh.lessonNav.setActiveGroup(0)
+			console.log('rerender sidebar,', store.refresh.lessonNav.setActiveGroup)
+			setNewState(1)
 		})
 
 
-		setNewState(1)
 
 	}, [state])
 
@@ -73,7 +79,7 @@ function App(props) {
 			<main>
 				{/* This is the Side Panel */}
 				<div className={sidePanelClass} style={sidePanelStyle}>
-					<LessonNavigator width={format.sidebar.width} groups={lessonNavItems} />
+					<LessonNavigator store={store} width={format.sidebar.width} groups={lessonNavItems} />
 				</div>
 
 

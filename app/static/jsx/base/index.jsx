@@ -34,8 +34,6 @@ import {Store} from './store/store.js'
  */
 class View {
   render(props)  {
-	console.log('this is from render', props)
-	console.log(App)
     ReactDOM.render(
 
 		// This is JSX, JavaScript with XML
@@ -46,7 +44,6 @@ class View {
 		</React.StrictMode>,
 		document.getElementById('root')
     );
-	console.log('this is from render2')
 	return this;
     };
 };
