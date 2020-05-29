@@ -1,0 +1,12 @@
+name: Proxy Test
+url: proxytest
+content: proxy.html
+group: Demo
+numberOfPages: 1
+difficulty: 3
+type: unknown
+completable: true
+routes:
+        - path: /proxy
+          action: $custom.validate_proxy()
+          success_if_true: true
