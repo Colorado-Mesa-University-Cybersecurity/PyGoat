@@ -83,7 +83,8 @@ def start():
     import main 
     
     main.app.env = 'development'
-    main.app.run(host=config['host'], debug=config['debug'])
+    # main.app.run(host=config['host'], debug=config['debug'])
+    main.app.run(host=config['host'], debug=True)
 
 
 
