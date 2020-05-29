@@ -19,6 +19,8 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ## Installation
 
+Run the following commands to install the dependancies for Flask
+
 
 ```bash
 	cd app
