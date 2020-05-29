@@ -19,7 +19,11 @@ Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
 
 ## Installation
 
-* `pip3 install -r requirements.txt --user`
+
+```bash
+	cd app
+	pip3 install -r requirements.txt --user
+```
 
 ## Running
 
