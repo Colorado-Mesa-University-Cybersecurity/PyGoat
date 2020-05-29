@@ -15,8 +15,6 @@ Conventions followed:
 						function/method  ::  (parameter types) -> (return types)
 */
 
-// import React from 'react';
-// import ReactDOM from 'react-dom';
 import { App } from './App.js';
 import { Store } from './store/store.js';
 
@@ -27,23 +25,35 @@ import { Store } from './store/store.js';
  * 
  * Methods:
  *
+ *		constructor  ::  void  -> view object
+ *			method instantiates view object and creates format object to pass to react components
+ *
+ *
  * 		render  ::  store object  ->  view object
  * 			renders all of the App components using the data in the store object passed to the method
  */
 class View {
-    render(props) {
-        ReactDOM.render(
+  constructor() {
+    this.format = {};
+    this.format.header = { height: '120px', width: '100%' };
+    this.format.sidebar = { minHeight: '20rem', width: '300px' };
 
-        // This is JSX, JavaScript with XML
-        // This is used to create component based designs in the React and Vue libraries
-        // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
-        React.createElement(
-            React.StrictMode,
-            null,
-            React.createElement(App, { store: props })
-        ), document.getElementById('root'));
-        return this;
-    }
+    return this;
+  }
+
+  render(props) {
+    ReactDOM.render(
+
+    // This is JSX, JavaScript with XML
+    // This is used to create component based designs in the React and Vue libraries
+    // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
+    React.createElement(
+      React.StrictMode,
+      null,
+      React.createElement(App, { store: props, format: this.format })
+    ), document.getElementById('root'));
+    return this;
+  }
 };
 
 /**
@@ -56,13 +66,13 @@ class View {
  * 		constructor  ::  ( store object, view object )  ->  controller object
  */
 class Controller {
-    constructor(store, view) {
-        this.store = store;
-        this.view = view;
-        this.view.render(this.store);
+  constructor(store, view) {
+    this.store = store;
+    this.view = view;
+    this.view.render(this.store);
 
-        return this;
-    }
+    return this;
+  }
 };
 
 /**
@@ -75,6 +85,6 @@ class Controller {
  * 
  */
 ;(function launch() {
-    const PyGoat = new Controller(new Store(), new View());
-    console.log('index.jsx loaded');
+  const PyGoat = new Controller(new Store(), new View());
+  console.log('index.jsx loaded');
 })();

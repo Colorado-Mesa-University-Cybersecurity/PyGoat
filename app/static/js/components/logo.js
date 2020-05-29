@@ -26,9 +26,13 @@ const SVGLogo = props => {
         fontSize: '36pt'
     };
 
+    const handleClick = e => {
+        console.log('clicked the logo button!!');
+    };
+
     return React.createElement(
         'div',
-        { className: 'sidebar-header', style: blockStyle },
+        { className: 'sidebar-header', style: blockStyle, onClick: handleClick },
         React.createElement('img', { id: 'logo-img', src: '../static/photos/logo.svg', style: imgStyle }),
         React.createElement(
             'h2',

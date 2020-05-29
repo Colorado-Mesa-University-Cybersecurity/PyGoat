@@ -42,30 +42,95 @@ class Store{
         } else {
             this.item = JSON.parse(localStorage.getItem('item'));
         };
-        // this.storeLocally();
+
+        if (!localStorage.getItem('warehouse') == null) {
+            this.warehouse = JSON.parse(localStorage.getItem('warehouse'));
+        };
+
+        this.storeLocally();
 
         // refresh is an object held that will hold references to methods used to update various components
-        // this is to make sure that any component that changes the app data can signal React to re-render the DOM
-        // allows components that change data to trigger a local and server storage update
+        //   this is to make sure that any component that changes the app data can signal React to re-render the DOM
+        //   allows components that change data to trigger a local and server storage update
         this.refresh = {}
         this.refresh.storeLocally = this.storeLocally.bind(this)
 
-        this.createWarehouse()
+        // warehouse stores all of the data used by the react components
+        this.warehouse || this.createWarehouse()
 
-        
+        // the parsedLessons object will hold all of the DOMs created from jinja templates fetched from the server
+        this.parsedLessons = {}
+
+
         return this;
     };
     
     
     createWarehouse() {
         this.warehouse = {}
-        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: '/welcome', current: true, group: 'Introduction', pages: 1}]}]
+        this.warehouse.cache = {} // cache contains the html fetched from server in string form before parsing
+        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: '/welcome', current: true, group: 'Introduction', pages: 3, currentPage: 1}]}]
         this.warehouse.lessonMetaData = {lessonTitles: [], lessons: {}}
+        this.warehouse.siteNav = [{title: 'Logout', active: false, pages: 1, currentPage: 1}, {title: 'Record', active: false, pages: 1, currentPage: 1}, {title: 'Contact Us', active: false, pages: 1, currentPage: 1}, {title: 'About', active: false, pages: 1, currentPage: 1}]
 
         this.addLesson = this.addLesson.bind(this);
     }
 
 
+    checkActivePage() {
+        const activeItem = [{}]
+        this.warehouse.navItems.forEach((group, i) => {
+            const activeLesson = group.lessons.filter((lesson, j) => {
+                return lesson.current === true;
+            });
+            activeLesson[0] && (activeItem[0] = activeLesson[0]);
+        });
+
+        const activeSiteNavItem = this.warehouse.siteNav.filter((navItem, i) => {
+            return navItem.active === true
+        });
+        activeSiteNavItem[0] && (activeItem[0] = activeSiteNavItem[0])
+
+        return activeItem[0];
+    };
+
+
+    checkCurrentPageNumber() {
+        return this.checkActivePage().currentPage;
+    };
+
+    checkNumberOfPages() {
+        return Array(this.checkActivePage().pages).fill(0);
+    };
+
+    
+    changeActivePage(title) {
+        this.checkActivePage().current && (this.checkActivePage().current = false)
+        this.checkActivePage().active && (this.checkActivePage().active = false)
+
+        this.warehouse.siteNav.forEach((navItem, i) => {
+            if(navItem.title == title) {
+                navItem.active = true;
+            }
+        })
+        
+        this.warehouse.navItems.forEach((group, i) => {
+            group.lessons.forEach((lesson, j) => {
+                if(lesson.title == title) {
+                    lesson.current = true;
+                }
+            })
+        })
+
+        return this;
+    };
+
+
+    changeCurrentPageNumber(pageNumber) {
+        this.checkActivePage().currentPage = pageNumber;
+
+        return this;
+    };
     
 
     /**
@@ -88,25 +153,22 @@ class Store{
         lesson.title || console.assert(false, 'lesson must have title property')
         lesson.url || console.assert(false, 'lesson must have url property')
         lesson.pages || console.assert(false, 'lesson must have pages property')
-        if(this.warehouse.lessonMetaData.lessonTitles.some((x)=> x === lesson.title)) {return this}
-        else {
+
+        if(this.warehouse.lessonMetaData.lessonTitles.some((x)=> x === lesson.title)) {
+            return this
+        } else {
             this.warehouse.lessonMetaData.lessonTitles.push(lesson.title)
             this.warehouse.lessonMetaData.lessons[lesson.title] = lesson
         }
+        
         const index = [0]
-
         const exists = this.warehouse.navItems.some((x, i) => {
             const test = x.group === lesson.group
-            if(test){ 
-                index[0] = i
-            };
+            if(test) { index[0] = i }; // save the index of group that matches the lesson group
             return test
         })
 
-
-        if (exists) { 
-            this.warehouse.navItems[index[0]].lessons.push(lesson) 
-        } 
+        if (exists) { this.warehouse.navItems[index[0]].lessons.push(lesson) }
         else { 
             this.warehouse.navItems.push({group: lesson.group, lessons: []})
             this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson) 

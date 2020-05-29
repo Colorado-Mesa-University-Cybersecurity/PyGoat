@@ -12,8 +12,12 @@ const ResetLessonButton = (props) => {
         borderRadius: '4px',
     }
 
+    const handleClick = (e) => {
+        console.log('clicked reset lesson button')
+    }
+
     return (
-        <button style={resetStyle}>Reset Lesson</button>
+        <button style={resetStyle} onClick={handleClick}>Reset Lesson</button>
     )
 }
 

@@ -16,8 +16,6 @@ Conventions followed:
 */
 
 
-// import React from 'react';
-// import ReactDOM from 'react-dom';
 import {App} from './App.js';
 import {Store} from './store/store.js'
 
@@ -29,22 +27,35 @@ import {Store} from './store/store.js'
  * 
  * Methods:
  *
+ *		constructor  ::  void  -> view object
+ *			method instantiates view object and creates format object to pass to react components
+ *
+ *
  * 		render  ::  store object  ->  view object
  * 			renders all of the App components using the data in the store object passed to the method
  */
 class View {
-  render(props)  {
-    ReactDOM.render(
+	constructor() {
+		this.format = {}
+		this.format.header = { height: '120px', width: '100%' }
+		this.format.sidebar = { minHeight: '20rem', width: '300px'}
 
-		// This is JSX, JavaScript with XML
-		// This is used to create component based designs in the React and Vue libraries
-		// learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
-		<React.StrictMode>
-			<App store={props}/>
-		</React.StrictMode>,
-		document.getElementById('root')
-    );
-	return this;
+		return this;
+	}
+
+
+	render(props)  {
+		ReactDOM.render(
+
+			// This is JSX, JavaScript with XML
+			// This is used to create component based designs in the React and Vue libraries
+			// learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
+			<React.StrictMode>
+				<App store={props} format={this.format}/>
+			</React.StrictMode>,
+			document.getElementById('root')
+		);
+		return this;
     };
 };
 

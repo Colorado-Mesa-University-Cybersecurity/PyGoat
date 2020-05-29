@@ -14,40 +14,8 @@ const LessonNavToggleButton = props => {
     };
 
     const handleClick = e => {
-        console.log('hello world', props.warehouse.hideSideBar, props);
         props.warehouse.hideSideBar = props.warehouse.hideSideBar ? false : true;
-        console.log('hello world', props.warehouse.hideSideBar, props);
         props.setToggle(Math.random());
-
-        // const reqOptions = {
-        //     method: 'GET',
-        //     headers: {'Content-Type': 'text/html'}
-        // }
-        //
-        //fetch('/lessonstatus', {'Content-Type': 'text/html'}).then(r => r.text()).then(d => console.log(d))
-        //
-        // const newData = ''
-        // fetch('/lesson/Worlddd', reqOptions)
-        //     .then(response =>{
-        //         const vals = response.text()
-        //         console.log('vals', vals)
-        //         console.log('response', response)
-        //         return vals})
-        //     .then(data => {
-        //         console.log('data', data)
-        //         return data.body.getReader()
-        //     })
-        //     .then(body => {
-        //         console.log('data1', body)
-        //         // body.releaseLock()
-        //         // console.log(body.read())
-        //         console.log('data2', body)
-        //         return body.read()
-        //     })
-        //     .then(body => {
-        //         console.log('data', body)
-        //         return body
-        //     })
     };
 
     return React.createElement(

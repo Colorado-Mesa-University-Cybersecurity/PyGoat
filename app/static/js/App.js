@@ -1,4 +1,3 @@
-// import React, { useState } from 'react';
 import { SVGLogo } from './components/logo.js';
 import { GoatHeader } from './components/header.js';
 import { SiteNavigator } from './components/siteNav.js';
@@ -11,53 +10,43 @@ import { PageNumButton } from './components/pageNumNav.js';
 
 function App(props) {
 
-	const store = props.store;
+	// React.useState() creates a state for the React component
+	// 	the state variable is the state while the setNewState variable
 	const [state, setNewState] = React.useState();
+	const store = props.store;
+	const format = props.format;
+	store.refresh.rootReRender = setNewState;
 
-	const format = {};
-	format.header = {
-		height: '120px',
-		width: '100%'
-	};
-
-	format.sidebar = {
-		minHeight: '20rem',
-		width: '300px'
-	};
-
-	const sidePanelStyle = {
-		width: format.sidebar.width
-	};
+	const numPages = store.checkNumberOfPages();
+	const currentPage = store.checkCurrentPageNumber();
+	const siteNavItems = store.warehouse.siteNav;
+	const siteNavItemsLength = siteNavItems.length;
 
 	const sidePanelClass = store.warehouse.hideSideBar ? 'lesson-navigator hide' : 'lesson-navigator';
-
-	const numPages = Array(4).fill(0);
-	const currentPage = 1;
-
-	const navItems = ['Logout', 'Record', 'Contact Us', 'About'];
-
-	const navItemsLength = navItems.length;
-
+	const sidePanelStyle = { width: format.sidebar.width };
 	const lessonNavItems = store.warehouse.navItems;
 
+	// React.useEffect runs supplied function once after component is rendered, 
+	// 	and runs it whenever the value inside the array supplied in the second 
+	//  is changed
 	React.useEffect(() => {
-		const fetchOptions = { method: 'GET', 'Content-Type': 'text/html' };
 
-		state || fetch('/lessonstatus', fetchOptions).then(d => d.json()).then(d => {
-
+		// if state has been given a non-zero value, fetch doesnt run
+		// 	this ensures that it only runs once after initial component rendering
+		state || fetch('/lessonstatus', { method: 'GET', 'Content-Type': 'application/json' }).then(d => d.json()).then(d => {
 			Object.keys(d).forEach((x, i) => {
 				const lesson = d[x];
 				lesson.title = x;
 				lesson.current = false;
+				lesson.currentPage = 1;
 				store.addLesson(lesson);
 			});
-			store.refresh.lessonNav.setActiveGroup(0);
-			console.log('rerender sidebar,', store.refresh.lessonNav.setActiveGroup);
 			setNewState(1);
 		});
 	}, [state]);
 
-	console.log('app reloaded');
+	state || console.log('app loaded');
+	state && console.log('app reloaded');
 
 	return React.createElement(
 		'div',
@@ -69,7 +58,7 @@ function App(props) {
 			React.createElement(
 				SiteNavigator,
 				{ height: format.header.height },
-				navItems.map((x, i) => React.createElement(SiteNavItem, { key: `${x}_${i}`, height: `${100 / navItemsLength}%`, title: x }))
+				siteNavItems.map((x, i) => React.createElement(SiteNavItem, { key: `${x.title}_${i}`, height: `${100 / siteNavItemsLength}%`, title: x.title, active: x.active, store: store }))
 			)
 		),
 		React.createElement(
@@ -87,7 +76,7 @@ function App(props) {
 					LessonArea,
 					null,
 					React.createElement(LessonNavToggleButton, { setToggle: setNewState, warehouse: store.warehouse }),
-					numPages.map((x, i) => React.createElement(PageNumButton, { num: i + 1, key: `${x}___${i}`, active: i + 1 === currentPage })),
+					numPages.map((x, i) => React.createElement(PageNumButton, { num: i + 1, key: `${x}___${i}`, active: i + 1 === currentPage, store: store })),
 					React.createElement(ResetLessonButton, null)
 				)
 			)

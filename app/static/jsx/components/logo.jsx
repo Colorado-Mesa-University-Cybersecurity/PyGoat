@@ -26,8 +26,12 @@ const SVGLogo = (props)=>{
         fontSize: '36pt',
     }
 
+    const handleClick = (e) => {
+        console.log('clicked the logo button!!')
+    }
+
     return (
-        <div className="sidebar-header" style={blockStyle}>
+        <div className="sidebar-header" style={blockStyle} onClick={handleClick}>
                 <img id="logo-img" src={'../static/photos/logo.svg'} style={imgStyle}/>
                 <h2 style={titleStyle}>PyGoat</h2> 
         </div>

@@ -12,9 +12,13 @@ const ResetLessonButton = props => {
         borderRadius: '4px'
     };
 
+    const handleClick = e => {
+        console.log('clicked reset lesson button');
+    };
+
     return React.createElement(
         'button',
-        { style: resetStyle },
+        { style: resetStyle, onClick: handleClick },
         'Reset Lesson'
     );
 };

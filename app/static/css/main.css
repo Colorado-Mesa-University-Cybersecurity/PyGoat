@@ -71,9 +71,23 @@ main {
     border: 0pt;
 }
 
+.site-nav-item-active { 
+    width: 100%;
+    text-align: center;
+    background-color: #860037;
+    color: white;
+    border: 0pt;
+}
+
 .site-nav-item:hover {
     width: 100%;
     background-color: #EEEEEE;
+}
+
+.site-nav-item-active:hover {
+    width: 100%;
+    background-color: #EEEEEE;
+    color: black;
 }
 
 

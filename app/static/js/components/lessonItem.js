@@ -15,9 +15,17 @@ const LessonItem = props => {
         paddingLeft: '50px'
     };
 
+    const handleClick = e => {
+        console.log('clicked Lesson nav button!', props.store.refresh.rootReRender);
+        if (props.store.checkActivePage().title != props.title) {
+            props.store.changeActivePage(props.title);
+            props.store.refresh.rootReRender(Math.random());
+        }
+    };
+
     return React.createElement(
         'div',
-        { className: classNameIs, style: lessonStyle, id: 'lesson-item-title' },
+        { className: classNameIs, style: lessonStyle, id: 'lesson-item-title', onClick: handleClick },
         React.createElement(
             'h2',
             { style: titleStyle, className: currentLesson },
