@@ -1,0 +1,32 @@
+<div class="page1">
+	<h1>Post a review on someone else’s behalf</h1>
+
+	<p>The page below simulates a comment/review page. The difference here is that you have to initiate the submission elsewhere as you might with a CSRF attack and like the previous exercise. It’s easier than you think. In most cases, the trickier part is finding somewhere that you want to execute the CSRF attack. The classic example is account/wire transfers in someone’s bank account.</p>
+
+	<p>But we’re keeping it simple here. In this case, you just need to trigger a review submission on behalf of the currently logged in user.</p>
+
+	<div class="border border-primary rounded">
+
+	<img src="../static/photos/ts_cat.jpg">
+
+	<form action="/csrf" method="get">
+		<input type="text" name="csrfcontent" id="csrfcontent">
+		<input type="text" name="stars" id="stars">
+		<input type="hidden" name="validateReq" value="2aa14227b9a13d0bede0388a7fba9aa9">
+		<input type="submit" value="Submit review">
+	</form>
+
+	{% if comments %}
+	<div id="comments">
+		{% for username, comment, stars in comments %}
+		<div id="comment">
+			{{ username }} | {{ stars }} stars<br>
+		{{ comment }}
+		</div>
+		<hr>
+		{% endfor %}
+	</div>
+	{% endif %}
+
+	</div>
+</div>

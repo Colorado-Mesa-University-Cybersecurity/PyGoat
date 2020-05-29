@@ -1,0 +1,42 @@
+name: XXE
+url: xxe
+content: xxe.html
+group: Demo
+numberOfPages: 1
+difficulty: 6
+type: XML External Entities
+success-condition: $custom.xxeValidator()
+load-script: $custom.render_comments(xxe_comments)
+load-return: comments
+completable: true
+db-tables:
+        - name: xxe_comments
+          columns:
+                  - name: username
+                    type: text
+                  - name: comment
+                    type: text
+          rows:
+                  - username: webgoat
+                    comment: Silly cat...
+                  - username: guest
+                    comment: I think I will use this picture in one of my projects.
+                  - username: guest
+                    comment: lol!!!:-).
+routes:
+        - path: /xxe
+          action: send-webrequest 
+          webrequest:
+                  url: /xxecomment
+                  method: POST
+                  headers:
+                        content-type: xml
+                  body: 
+                        '<?xml version="1.0"?>
+                        <!--This is the request you want-->
+                                <comm>
+                                  <text> $form.xxecontent </text>
+                                </comm>'
+        
+        - path: /xxecomment
+          action: $custom.xxecomment( $session.username )

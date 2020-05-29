@@ -1,0 +1,29 @@
+<div class="page1">
+	<h1>Let’s try</h1>
+
+	<p>In this assignment you will add a comment to the photo, when submitting the form try to execute an XXE injection with the comments field. Try printing out the contents of /etc/passwd</p>
+
+
+	<div class="border border-primary rounded">
+
+	<img src="../static/photos/ts_cat.jpg">
+
+	<form action="/xxe" method="post">
+		<input type="text" name="xxecontent" id="xxecontent">
+		<input type="submit" value="Submit">
+	</form>
+
+	{% if comments %}
+	<div id="comments">
+		{% for username, comment in comments %}
+		<div id="comment">
+			{{ username }}<br>
+		{{ comment }}
+		</div>
+		<hr>
+		{% endfor %}
+	</div>
+	{% endif %}
+
+	</div>
+</div>

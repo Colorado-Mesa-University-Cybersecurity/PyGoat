@@ -1,0 +1,111 @@
+
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, .container {
+    margin: 0rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+	padding: 0rem;
+	padding-left: 0rem;
+	padding-right: 0rem;
+	padding-top: 0rem;
+	padding-bottom: 0rem;
+	border: 0rem;
+	font-size: 100%;
+	font: serif;
+	vertical-align: baseline;
+}
+ 
+:focus {
+    outline: 0rem;
+}
+
+
+ol, ul {
+	list-style: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0rem;
+}
+
+textarea {
+    overflow: auto;
+    vertical-align: top;
+    resize: vertical;
+}
+
+html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+a:focus {
+    outline: thin dotted;
+}
+
+a:active, a:hover {
+    outline: 0rem;
+}
+
+img {
+    border: 0rem;
+}
+
+figure {
+    margin: 0rem;
+}
+
+form {
+    margin: 0rem;
+}
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+legend {
+    border: 0rem;
+    padding: 0rem;
+    white-space: normal;
+    *margin-left: -7px; 
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; 
+    margin: 0rem; 
+    vertical-align: baseline;
+    *vertical-align: middle; 
+}
+
+textarea {
+    overflow: auto;
+    vertical-align: top;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0rem;
+}
+
+html, button, input, select, textarea {
+    color: #222;
+}
+
+img {
+    vertical-align: middle;
+}
+
+fieldset {
+    border: 0rem;
+    margin: 0rem;
+    padding: 0rem;
+}
