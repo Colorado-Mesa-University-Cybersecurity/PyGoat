@@ -1,14 +1,16 @@
-<h1>Insecure Direct Object References</h1>
+<div class="page1">
+	<h1>Insecure Direct Object References</h1>
 
-<p>The button below will show you the details of your profile.</p>
+	<p>The button below will show you the details of your profile.</p>
 
-<form action="/idor" method="GET">
-	<input type=Submit value="Get Profile">
-</form>
+	<form action="/idor" method="GET">
+		<input type=Submit value="Get Profile">
+	</form>
 
-<p>Try to find another profile by changing the number at the end. When you do, type that username in the form below.</p>
+	<p>Try to find another profile by changing the number at the end. When you do, type that username in the form below.</p>
 
-<form action="/idorvalidate" method="POST">
-	<input type="text" name="username" id="username">
-	<input type="submit" value="Submit">
-</form>
+	<form action="/idorvalidate" method="POST">
+		<input type="text" name="username" id="username">
+		<input type="submit" value="Submit">
+	</form>
+</div>

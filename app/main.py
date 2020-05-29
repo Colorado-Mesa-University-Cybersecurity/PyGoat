@@ -480,12 +480,16 @@ def lessons_page(lesson):
             return render_template(**param_dict) 
         
         # for lessons with no custom initialization scripts
-        return render_template('lesson.html',
+        return render_template("/content/%s" % current_lesson.content,
                 title=current_lesson.name,
                 contentFile="/content/%s" % current_lesson.content,
                 lessons=lessons)
     else:
         return redirect(url_for('login'))
+
+@app.route('/welcome')
+def welcomePage():
+    return render_template('welcome.html')
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():

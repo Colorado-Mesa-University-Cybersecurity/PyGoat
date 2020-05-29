@@ -1,52 +1,53 @@
-<h1>XSS</h1> 
+<div class="page1">
+	<h1>XSS</h1> 
 
-<script>
-	function phoneHome() {
-		const Http = new XMLHttpRequest();
-		const url = '/phoneHome'
-		Http.open("POST", url, true);
-		Http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		var val=Math.random() * 9999; 
-		console.log("phoneHome Response is " + val);
-		Http.send("phVal=" + val);
-	}
-</script>
+	<script>
+		function phoneHome() {
+			const Http = new XMLHttpRequest();
+			const url = '/phoneHome'
+			Http.open("POST", url, true);
+			Http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			var val=Math.random() * 9999; 
+			console.log("phoneHome Response is " + val);
+			Http.send("phVal=" + val);
+		}
+	</script>
 
-<p>See the comments below.</p>
+	<p>See the comments below.</p>
 
-<p>Add a comment with a JavaScript payload. Again … you want to call the phoneHome function.</p>
+	<p>Add a comment with a JavaScript payload. Again … you want to call the phoneHome function.</p>
 
-<p>As an attacker (offensive security), keep in mind that most apps are not going to have such a straight-forwardly named compromise. Also, you may have to find a way to load your own JavaScript dynamically to fully achieve goals of extracting data.</p>
-
-
-<div class="border border-primary rounded">
-	<img src="{{url_for('static',filename='ts_cat.jpg')}}">
+	<p>As an attacker (offensive security), keep in mind that most apps are not going to have such a straight-forwardly named compromise. Also, you may have to find a way to load your own JavaScript dynamically to fully achieve goals of extracting data.</p>
 
 
-<form action="/xsscomment" method="post">
-	<input type="text" id="xsscomment" name="xsscomment">
-	<input type="submit" value="Submit">
-</form>
+	<div class="border border-primary rounded">
+		<img src="{{url_for('static',filename='ts_cat.jpg')}}">
 
-{% if comments %}
-<div id="comments">
-        {% for username, comment in comments %}
-        <div id="comment">
-		{{ username }}<br>
-        {{ comment | safe }}
-        <hr>
-        </div>
-        {% endfor %}
+
+	<form action="/xsscomment" method="post">
+		<input type="text" id="xsscomment" name="xsscomment">
+		<input type="submit" value="Submit">
+	</form>
+
+	{% if comments %}
+	<div id="comments">
+			{% for username, comment in comments %}
+			<div id="comment">
+			{{ username }}<br>
+			{{ comment | safe }}
+			<hr>
+			</div>
+			{% endfor %}
+	</div>
+	{% endif %}
+	</div>
+
+
+	<p>Watching in your browser’s developer tools or your proxy, the output should include a value starting with 'phoneHome Response is …" Put that value in below to complete this exercise. Note that, each subsequent call to the phoneHome method will change that value. You may need to ensure you have the most recent one.</p>
+
+	<form action="/xsscommentresponse" method="post">
+		<input type="text" id="xsscommentresponse" name="xsscommentresponse">
+		<input type="submit" value="Submit">
+	</form>
 </div>
-{% endif %}
-</div>
-
-
-<p>Watching in your browser’s developer tools or your proxy, the output should include a value starting with 'phoneHome Response is …" Put that value in below to complete this exercise. Note that, each subsequent call to the phoneHome method will change that value. You may need to ensure you have the most recent one.</p>
-
-<form action="/xsscommentresponse" method="post">
-	<input type="text" id="xsscommentresponse" name="xsscommentresponse">
-	<input type="submit" value="Submit">
-</form>
-
 

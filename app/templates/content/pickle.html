@@ -1,8 +1,10 @@
-<h1>Sour Pickles</h1>
-<p>Every programming language has some form of serializing and deserializing files. Python, while supporting standards like JSON, also has its own: pickles. Unfortunately, improper handling of pickles can lead to an arbitrary code execution vulnerability.</p>
-<p>In the form below, enter the bytes of a python object (exported by pickle.dumps) that makes a copy of the /etc/passwd file in the PyGoat install directory called passwdclone</P
-<p><a href="https://blog.nelhage.com/2011/03/exploiting-pickle/">This blog</a> should help with the specifics</p>
-<form action="/pickleValidate" method="POST">
-	<input type="text" name="pickle" id="pickle">
-	<input type="submit" value="Submit">
-</form>
+<div class="page1">
+	<h1>Sour Pickles</h1>
+	<p>Every programming language has some form of serializing and deserializing files. Python, while supporting standards like JSON, also has its own: pickles. Unfortunately, improper handling of pickles can lead to an arbitrary code execution vulnerability.</p>
+	<p>In the form below, enter the bytes of a python object (exported by pickle.dumps) that makes a copy of the /etc/passwd file in the PyGoat install directory called passwdclone</P
+	<p><a href="https://blog.nelhage.com/2011/03/exploiting-pickle/">This blog</a> should help with the specifics</p>
+	<form action="/pickleValidate" method="POST">
+		<input type="text" name="pickle" id="pickle">
+		<input type="submit" value="Submit">
+	</form>
+</div>
