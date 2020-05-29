@@ -29,7 +29,7 @@ Run the following commands to install the dependancies for Flask
 
 ## Running
 
-To start PyGoat in any Environment run the following command:
+To start PyGoat in any Environment run the following command from the app directory:
 
 ```bash
 	python run.py
