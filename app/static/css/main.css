@@ -152,3 +152,13 @@ main {
     background-color: #eeeeee;
     height: 100%;
 }
+
+.page1, .page2, .page3, .page4, .page5, .page6, .page7, .page8, .page9 {
+    padding: 20px;
+    font-size: larger;
+}
+
+.page1 p, .page2 p, .page3 p, .page4 p, .page5 p, .page6 p, .page7 p, .page8 p, .page9 p {
+    padding: 5px;
+}
+

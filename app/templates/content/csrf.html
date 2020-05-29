@@ -7,9 +7,9 @@
 
 	<div class="border border-primary rounded">
 
-	<img src="{{url_for('static',filename='ts_cat.jpg')}}">
+	<img src="../static/photos/ts_cat.jpg">
 
-	<form action="/csrf" method="post">
+	<form action="/csrf" method="get">
 		<input type="text" name="csrfcontent" id="csrfcontent">
 		<input type="text" name="stars" id="stars">
 		<input type="hidden" name="validateReq" value="2aa14227b9a13d0bede0388a7fba9aa9">
