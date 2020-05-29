@@ -11,18 +11,23 @@ import {PageNumButton} from './components/pageNumNav.js'
  
 function App(props) {
 
+	const store = props.store
+	const format = props.store.format
+	const currentPage = store.checkActivePage();
+
 	// React.useState() creates a state for the React component
 	// 	the state variable is the state while the setNewState variable
 	//	is used to trigger a rerender the component
 	const [state, setNewState] = React.useState()
-	const store = props.store
-	const format = props.format
+	const [rendered, render] = React.useState('none')
 	store.refresh.rootReRender = setNewState;
+	store.refresh.innerHTMLReRender = render;
 	
 	const numPages = store.checkNumberOfPages()
-	const currentPage = store.checkCurrentPageNumber();
+	const currentPageNumber = store.checkCurrentPageNumber();
 	const siteNavItems = store.warehouse.siteNav
 	const siteNavItemsLength = siteNavItems.length
+	const pageTitle = store.checkActivePage().title
 
 	const sidePanelClass = store.warehouse.hideSideBar? 'lesson-navigator hide': 'lesson-navigator';
 	const sidePanelStyle = { width: format.sidebar.width }
@@ -45,16 +50,30 @@ function App(props) {
 					store.addLesson(lesson)
 			})
 			setNewState(1)
+			store.cacheLessonHTML()
+			// console.log('hello', Object.keys(store.parsedHTML))
+			// document.querySelector('.renderHTML').append(store.parsedHTML['About'].querySelector('.page1'))
 		})
 	}, [state])
 
-	state || console.log('app loaded')
-	state && console.log('app reloaded')
+	React.useEffect(()=>{
+	// 	store.renderArea || (store.renderArea = document.querySelector('.renderHTML'))
+	// 	console.log('rendered=', rendered)
+	// 	if(store.renderArea) {
+	// 		store.renderArea.innerHTML = ''
+	// 		store.renderArea.append(store.parsedHTML[currentPage.title].querySelector(`.page${currentPageNumber}`))
+	// 	}
+	// console.log('loaded parsed HTML')
+	store.renderInnerPage()
+	}, [rendered])
+
+	state || console.log('app loaded')   // runs before state is initialized
+	state && console.log('app reloaded') // runs after state is initialized
 
 	return (
 		<div >
 			{/* This is the Header */}
-			<GoatHeader height={format.header.height} >
+			<GoatHeader height={format.header.height} title={pageTitle}>
 				<SVGLogo height={format.header.height} width={format.sidebar.width}/>
 				<SiteNavigator height={format.header.height}>
 					{siteNavItems.map((x, i)=><SiteNavItem key={`${x.title}_${i}`} height={`${100/siteNavItemsLength}%`} title={x.title} active={x.active} store={store}/>)}
@@ -72,7 +91,7 @@ function App(props) {
 				<div className='lesson-area'>
 					<LessonArea>
 						<LessonNavToggleButton setToggle={setNewState} warehouse={store.warehouse} />
-						{numPages.map((x, i) => <PageNumButton num={i+1} key={`${x}___${i}`} active={(i+1) === currentPage} store={store}/>)}
+						{numPages.map((x, i) => <PageNumButton num={i+1} key={`${x}___${i}`} active={(i+1) === currentPageNumber} store={store}/>)}
 						<ResetLessonButton />
 					</LessonArea>
 				</div>

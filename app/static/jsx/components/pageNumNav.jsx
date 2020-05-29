@@ -14,12 +14,9 @@ const PageNumButton = (props) => {
     }
 
     const handleClick = (e) => {
-        console.log('clicked page nav button, current page number:', props.num)
-        console.log(props.store.checkCurrentPageNumber())
-        console.log(props.store.checkActivePage())
+        props.store.refresh.innerHTMLReRender(props.num)
         if(props.store.checkCurrentPageNumber() != props.num) {
             props.store.changeCurrentPageNumber(props.num)
-            console.log(props.store.checkCurrentPageNumber())
             props.store.refresh.rootReRender(Math.random())
         }
     }

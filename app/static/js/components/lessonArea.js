@@ -27,7 +27,8 @@ const LessonArea = props => {
                 { style: innerNavStyle, id: 'inner-page-nav' },
                 pageNav
             ),
-            React.createElement('hr', null)
+            React.createElement('hr', null),
+            React.createElement('div', { className: 'renderHTML' })
         )
     );
 };

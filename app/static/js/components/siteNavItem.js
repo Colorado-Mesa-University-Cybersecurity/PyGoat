@@ -10,10 +10,12 @@ const SiteNavItem = props => {
     const navClass = props.active ? 'site-nav-item-active' : 'site-nav-item';
 
     const handleClick = e => {
-        console.log('clicked site navigation button!!');
+        props.store.refresh.innerHTMLReRender(props.title);
         if (props.store.checkActivePage().title != props.title && props.title != 'Logout') {
             props.store.changeActivePage(props.title);
             props.store.refresh.rootReRender(Math.random());
+        } else if (props.title == 'Logout') {
+            window.location.href = 'logout';
         }
     };
 

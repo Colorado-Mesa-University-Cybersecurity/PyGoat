@@ -10,17 +10,23 @@ import { PageNumButton } from './components/pageNumNav.js';
 
 function App(props) {
 
+	const store = props.store;
+	const format = props.store.format;
+	const currentPage = store.checkActivePage();
+
 	// React.useState() creates a state for the React component
 	// 	the state variable is the state while the setNewState variable
+	//	is used to trigger a rerender the component
 	const [state, setNewState] = React.useState();
-	const store = props.store;
-	const format = props.format;
+	const [rendered, render] = React.useState('none');
 	store.refresh.rootReRender = setNewState;
+	store.refresh.innerHTMLReRender = render;
 
 	const numPages = store.checkNumberOfPages();
-	const currentPage = store.checkCurrentPageNumber();
+	const currentPageNumber = store.checkCurrentPageNumber();
 	const siteNavItems = store.warehouse.siteNav;
 	const siteNavItemsLength = siteNavItems.length;
+	const pageTitle = store.checkActivePage().title;
 
 	const sidePanelClass = store.warehouse.hideSideBar ? 'lesson-navigator hide' : 'lesson-navigator';
 	const sidePanelStyle = { width: format.sidebar.width };
@@ -42,18 +48,32 @@ function App(props) {
 				store.addLesson(lesson);
 			});
 			setNewState(1);
+			store.cacheLessonHTML();
+			// console.log('hello', Object.keys(store.parsedHTML))
+			// document.querySelector('.renderHTML').append(store.parsedHTML['About'].querySelector('.page1'))
 		});
 	}, [state]);
 
-	state || console.log('app loaded');
-	state && console.log('app reloaded');
+	React.useEffect(() => {
+		// 	store.renderArea || (store.renderArea = document.querySelector('.renderHTML'))
+		// 	console.log('rendered=', rendered)
+		// 	if(store.renderArea) {
+		// 		store.renderArea.innerHTML = ''
+		// 		store.renderArea.append(store.parsedHTML[currentPage.title].querySelector(`.page${currentPageNumber}`))
+		// 	}
+		// console.log('loaded parsed HTML')
+		store.renderInnerPage();
+	}, [rendered]);
+
+	state || console.log('app loaded'); // runs before state is initialized
+	state && console.log('app reloaded'); // runs after state is initialized
 
 	return React.createElement(
 		'div',
 		null,
 		React.createElement(
 			GoatHeader,
-			{ height: format.header.height },
+			{ height: format.header.height, title: pageTitle },
 			React.createElement(SVGLogo, { height: format.header.height, width: format.sidebar.width }),
 			React.createElement(
 				SiteNavigator,
@@ -76,7 +96,7 @@ function App(props) {
 					LessonArea,
 					null,
 					React.createElement(LessonNavToggleButton, { setToggle: setNewState, warehouse: store.warehouse }),
-					numPages.map((x, i) => React.createElement(PageNumButton, { num: i + 1, key: `${x}___${i}`, active: i + 1 === currentPage, store: store })),
+					numPages.map((x, i) => React.createElement(PageNumButton, { num: i + 1, key: `${x}___${i}`, active: i + 1 === currentPageNumber, store: store })),
 					React.createElement(ResetLessonButton, null)
 				)
 			)

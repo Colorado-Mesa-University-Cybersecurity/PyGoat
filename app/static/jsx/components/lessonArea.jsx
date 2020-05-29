@@ -24,6 +24,7 @@ const LessonArea = (props) => {
                     {pageNav}
                 </div>
                 <hr/>
+                <div className="renderHTML"></div>
             </div>
         </div>
     )

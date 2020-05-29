@@ -42,6 +42,8 @@ class View {
   }
 
   render(props) {
+    props.format = this.format;
+
     ReactDOM.render(
 
     // This is JSX, JavaScript with XML
@@ -50,7 +52,7 @@ class View {
     React.createElement(
       React.StrictMode,
       null,
-      React.createElement(App, { store: props, format: this.format })
+      React.createElement(App, { store: props })
     ), document.getElementById('root'));
     return this;
   }

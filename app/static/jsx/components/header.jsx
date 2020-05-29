@@ -35,7 +35,7 @@ const GoatHeader = (props)=>{
 
                 </div>
                 <div style={titleBoxStyle}>
-                    <h1 style={titleStyle}>Lesson/Page Title</h1>
+                    <h1 style={titleStyle}>{props.title}</h1>
                 </div>
                 {props.children[1]  /* The second child should be the site navigation panel*/}
             </div>

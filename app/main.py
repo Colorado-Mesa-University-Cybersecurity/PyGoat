@@ -487,9 +487,9 @@ def lessons_page(lesson):
     else:
         return redirect(url_for('login'))
 
-@app.route('/welcome')
-def welcomePage():
-    return render_template('welcome.html')
+@app.route('/nav/<page>')
+def welcomePage(page):
+    return render_template('%s.html' % page)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():

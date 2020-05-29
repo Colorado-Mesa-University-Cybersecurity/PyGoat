@@ -58,8 +58,12 @@ class Store{
         // warehouse stores all of the data used by the react components
         this.warehouse || this.createWarehouse()
 
-        // the parsedLessons object will hold all of the DOMs created from jinja templates fetched from the server
-        this.parsedLessons = {}
+        // the parsedHTML object will hold all of the DOMs created from jinja templates fetched from the server
+        this.parser = new DOMParser()
+        this.parsedHTML = {}
+
+        this.currentlyRenderedHTML = 'none'
+        this.currentlyRenderedPageNumber = 'none'
 
 
         return this;
@@ -69,11 +73,55 @@ class Store{
     createWarehouse() {
         this.warehouse = {}
         this.warehouse.cache = {} // cache contains the html fetched from server in string form before parsing
-        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: '/welcome', current: true, group: 'Introduction', pages: 3, currentPage: 1}]}]
+        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: 'welcome', current: true, group: 'Introduction', pages: 3, currentPage: 1}]}]
         this.warehouse.lessonMetaData = {lessonTitles: [], lessons: {}}
-        this.warehouse.siteNav = [{title: 'Logout', active: false, pages: 1, currentPage: 1}, {title: 'Record', active: false, pages: 1, currentPage: 1}, {title: 'Contact Us', active: false, pages: 1, currentPage: 1}, {title: 'About', active: false, pages: 1, currentPage: 1}]
+        this.warehouse.siteNav = [{title: 'Logout', active: false, pages: 1, currentPage: 1, url: 'logout'}, {title: 'Report', active: false, pages: 1, currentPage: 1, url: 'report'}, {title: 'Contact Us', active: false, pages: 1, currentPage: 1, url: 'contactUs'}, {title: 'About', active: false, pages: 1, currentPage: 1, url: 'about'}]
 
         this.addLesson = this.addLesson.bind(this);
+
+        this.cacheSiteNavHTML()
+
+        return this;
+    }
+
+
+    cacheSiteNavHTML() {
+        this.warehouse.siteNav.forEach((item, i) => {
+            if(item.title === 'Logout') return;
+            const URL = `/nav/${item.url}`
+            fetch(URL, {method: 'GET', 'Content-Type': 'text/html'})
+                .then( d => d.text())
+                .then( htmlString => {
+                        this.parseHTML(item.title, htmlString)
+                        this.warehouse.cache[item.title] = htmlString
+                })
+        })
+        
+        return this;
+    }
+
+
+    cacheLessonHTML() {
+        this.warehouse.navItems.forEach((group, i) => {
+            group.lessons.forEach((lesson, j) => {
+                if(lesson.title == 'Welcome') {
+                    var URL = `/nav/${lesson.url}`
+                } else {
+                    var URL = `/lessons/${lesson.url}`
+                }
+
+                fetch(URL, {method: 'GET', 'Content-Type': 'text/html'})
+                    .then( d => d.text())
+                    .then( htmlString => {
+                        this.parseHTML(lesson.title, htmlString)
+                        this.warehouse.cache[lesson.title] = htmlString
+                        this.renderArea || (this.renderArea = document.querySelector('.renderHTML')) || console.log('cannot grab render area yet')
+                        this.refresh.innerHTMLReRender(Math.random())
+                })
+            })
+        })
+        
+        return this;
     }
 
 
@@ -174,8 +222,34 @@ class Store{
             this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson) 
         }
 
+        // this.cacheLessonHTML()
+
         return this;
     }
+
+
+    parseHTML(title, htmlString) {
+        this.parsedHTML[title] = this.parser.parseFromString(htmlString, 'text/html')
+
+        return this;
+    }
+
+
+    renderInnerPage() {
+        if(!this.renderArea) return this;
+        const page = this.checkActivePage()
+        const pageTitle = page.title
+        if(!this.parsedHTML[pageTitle]) return this;
+        if(this.currentlyRenderedHTML == pageTitle && page.currentPage == this.currentlyRenderedPageNumber) return this;
+        console.log('hello world from render', this.checkActivePage().title, this.renderArea.inner)
+        this.renderArea.innerHTML = ''
+        console.log(pageTitle, page.currentPage, this.parsedHTML[pageTitle], this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`))
+        this.renderArea.append(this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`)) && console.log('append ran')
+        this.parseHTML(page.title, this.warehouse.cache[page.title])
+        this.currentlyRenderedHTML = pageTitle   
+        this.currentlyRenderedPageNumber = page.currentPage
+    }
+
 
     storeLocally() {
         localStorage.setItem('item', JSON.stringify(this.item))

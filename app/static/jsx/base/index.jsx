@@ -45,13 +45,15 @@ class View {
 
 
 	render(props)  {
+		props.format = this.format
+		
 		ReactDOM.render(
 
 			// This is JSX, JavaScript with XML
 			// This is used to create component based designs in the React and Vue libraries
 			// learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
 			<React.StrictMode>
-				<App store={props} format={this.format}/>
+				<App store={props} />
 			</React.StrictMode>,
 			document.getElementById('root')
 		);

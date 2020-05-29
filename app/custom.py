@@ -4,7 +4,7 @@ You can access them in the lesson configs using $custom.functionName(params).
 They will always receive a request object. It can receive other things, just put that as a parameter before the request.
 """
 
-import sqlite3, os, pickle, filecmp, urllib, time
+import sqlite3, os, pickle, filecmp, urllib, time, sys
 from flask import flash
 from xml.dom.pulldom import parseString, START_ELEMENT
 from xml.sax import make_parser
@@ -93,6 +93,8 @@ def xxeValidator(request):
     checks to see if the XXE lesson is completed. If a comment in the table matches the host's /etc/passwd file, then return True
     request - a flask request object
     """
+    if sys.platform != 'linux':
+        return False
     with open('/etc/passwd', 'r') as passwd:
         passwdtxt = ''.join(passwd.readlines()).replace(' ','').replace('\n','')
         conn = sqlite3.connect('pygoat.db')

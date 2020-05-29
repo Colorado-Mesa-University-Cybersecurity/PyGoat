@@ -44,7 +44,7 @@ const GoatHeader = props => {
                 React.createElement(
                     'h1',
                     { style: titleStyle },
-                    'Lesson/Page Title'
+                    props.title
                 )
             ),
             props.children[1] /* The second child should be the site navigation panel*/

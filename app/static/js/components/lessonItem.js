@@ -16,7 +16,7 @@ const LessonItem = props => {
     };
 
     const handleClick = e => {
-        console.log('clicked Lesson nav button!', props.store.refresh.rootReRender);
+        props.store.refresh.innerHTMLReRender(props.title);
         if (props.store.checkActivePage().title != props.title) {
             props.store.changeActivePage(props.title);
             props.store.refresh.rootReRender(Math.random());
