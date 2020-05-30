@@ -22,18 +22,21 @@ def favicon():
     return(redirect(url_for('static', filename='favicon.ico')))
 
 
-@app.route('/')
-def index():
-    """ 
-    path = /
-    if user is logged in, return home page, otherwise, return login page 
-    """ 
-    if 'username' in session:
-        check_success()
-        return render_template('index.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
-    else:
-        return redirect(url_for('login'))
+def indexRoute(lessons: list):
+    @app.route('/')
+    def index():
+        """ 
+        path = /
+        if user is logged in, return home page, otherwise, return login page 
+        """ 
+        if 'username' in session:
+            check_success()
+            return render_template('index.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
+        else:
+            return redirect(url_for('login'))
+    return index 
 
+indexRoute(lessons)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -60,75 +63,81 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+def lessonStatusRoute(lessons: list):
+    @app.route('/lessonstatus')
+    def lessonstatus():
+        """
+        path = /lessonstatus
+        for testing api, returns a list of lessons and whether they are completable and have been completed
+        """
+        if 'username' in session:
+            check_success()
+            finalDict = {}
+            for lesson in lessons:
+                finalDict[lesson.name] = {}
+                finalDict[lesson.name]['completable'] = lesson.completable
+                finalDict[lesson.name]['url'] = lesson.url
+                finalDict[lesson.name]['group'] = lesson.group
+                finalDict[lesson.name]['pages'] = lesson.pages
+                if lesson.completable:
+                    finalDict[lesson.name]['completed'] = lesson.completed
+            return (json.dumps(finalDict))
+        else:
+            return redirect(url_for('login'))
+    return lessonstatus
 
-@app.route('/lessonstatus')
-def lessonstatus():
-    """
-    path = /lessonstatus
-    for testing api, returns a list of lessons and whether they are completable and have been completed
-    """
-    if 'username' in session:
-        check_success()
-        finalDict = {}
-        for lesson in lessons:
-            finalDict[lesson.name] = {}
-            finalDict[lesson.name]['completable'] = lesson.completable
-            finalDict[lesson.name]['url'] = lesson.url
-            finalDict[lesson.name]['group'] = lesson.group
-            finalDict[lesson.name]['pages'] = lesson.pages
-            if lesson.completable:
-                finalDict[lesson.name]['completed'] = lesson.completed
-        return (json.dumps(finalDict))
-    else:
-        return redirect(url_for('login'))
-
+lessonStatusRoute(lessons)
 
 # route for every lesson with a yaml config
-@app.route('/lessons/<lesson>')
-def lessons_page(lesson):
-    """ 
-    path = /lessons/<lesson>
+def lessons_page_route(lessons: list):
+    @app.route('/lessons/<lesson>')
+    def lessons_page(lesson):
+        """ 
+        path = /lessons/<lesson>
 
-    parameters:
-    lesson - the url field of the lesson to load
+        parameters:
+        lesson - the url field of the lesson to load
 
-    finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
-    """
-    if 'username' in session:
-        check_success()
-        # get lesson with url passed into the route
-        current_lesson = next(filter(lambda x:x.url == lesson, lessons))
+        finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
+        """
+        if 'username' in session:
+            check_success()
+            # get lesson with url passed into the route
+            current_lesson = next(filter(lambda x:x.url == lesson, lessons))
 
-        # check to see if the lesson has been completed
-        if current_lesson.success_condition is not None:
-            results = custom.find_and_run(current_lesson.success_condition, request)
-            if results is not None and results == True:
-                lesson_success(current_lesson)
+            # check to see if the lesson has been completed
+            if current_lesson.success_condition is not None:
+                results = custom.find_and_run(current_lesson.success_condition, request)
+                if results is not None and results == True:
+                    lesson_success(current_lesson)
 
-        # if the lesson has been completed at some point in the past, let the user know
-        if current_lesson.completed:
-            flash(('success', 'You have completed this lesson'))
+            # if the lesson has been completed at some point in the past, let the user know
+            if current_lesson.completed:
+                flash(('success', 'You have completed this lesson'))
 
-        # some lessons will define custom scripts to pass information to the html files
-        # run those scripts and pass the information to the html here
-        if current_lesson.load_script is not None:
-            result = custom.find_and_run(current_lesson.load_script, request)
-            param_dict = {
-                    'template_name_or_list':'lesson.html',
-                    'title':current_lesson.name,
-                    'contentFile':"/content/%s" % current_lesson.content,
-                    'lessons':lessons,
-                    current_lesson.load_return: result}
+            # some lessons will define custom scripts to pass information to the html files
+            # run those scripts and pass the information to the html here
+            if current_lesson.load_script is not None:
+                result = custom.find_and_run(current_lesson.load_script, request)
+                param_dict = {
+                        'template_name_or_list':'lesson.html',
+                        'title':current_lesson.name,
+                        'contentFile':"/content/%s" % current_lesson.content,
+                        'lessons':lessons,
+                        current_lesson.load_return: result}
 
-            return render_template(**param_dict) 
-        
-        # for lessons with no custom initialization scripts
-        return render_template("/content/%s" % current_lesson.content,
-                title=current_lesson.name,
-                contentFile="/content/%s" % current_lesson.content,
-                lessons=lessons)
-    else:
-        return redirect(url_for('login'))
+                return render_template(**param_dict) 
+            
+            # for lessons with no custom initialization scripts
+            return render_template("/content/%s" % current_lesson.content,
+                    title=current_lesson.name,
+                    contentFile="/content/%s" % current_lesson.content,
+                    lessons=lessons)
+        else:
+            return redirect(url_for('login'))
+    return lessons_page
+
+lessons_page_route(lessons)
 
 
 @app.route('/nav/<page>')

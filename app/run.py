@@ -84,6 +84,7 @@ def start():
     
     main.app.env = 'development'
     # main.app.run(host=config['host'], debug=config['debug'])
+    print(f' * Running on http://{config["host"]}:5000/')
     main.app.run(host=config['host'], debug=True)
 
 
