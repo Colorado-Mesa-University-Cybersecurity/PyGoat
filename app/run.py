@@ -18,25 +18,31 @@ IMPORTANT!!!
                     'http_proxy': 'http://127.0.0.1:8082',
                 }
 
+
 Conventions followed:
     4-space tabs
     3 empty lines between classes and functions
     Lines should be limited to less than 80 characters where possible
     Avoid Polluting the global scope
-    DocStrings are restrained to a single line where possible
+    DocStrings are restrained to a single line where possible:
+       def functionName(paramName: paramType) -> returnType:
+            ''' contents of docstring describing function behaviour '''
     Multi-line DocStrings follow the convention:
-        '''
-            contents of docstring
-        '''
-    Type Annotations follow the convention:
+       def functionName(paramName: paramType) -> returnType:
+             '''
+                  contents of docstring describing function behaviour
+             '''
+    Inline Type Annotations follow the convention:
         variableName: variableType = variableValue
-    Inline Annotations follow the convention:
+    Inline Function/Method Annotations follow the convention:
         def functionName(param1: paramType, param2: paramType...) -> returnType:
 """
+
 from os import environ
 from sys import argv
-
 from app import server
+
+
 
 def getConfig() -> dict:
     '''Function returns App Configuration'''
@@ -68,8 +74,7 @@ def setEnvironment(config: dict) -> dict:
 
 
 
-
-def start():
+def start() -> None:
     '''Function configures local environment then launches the Flask App'''
 
     config: dict = setEnvironment(getConfig())
@@ -80,9 +85,10 @@ def start():
 
     app = server()
     app.env = 'development'
-    # main.app.run(host=config['host'], debug=config['debug'])
     print(f' * Running on http://{config["host"]}:5000/')
     app.run(host=config['host'], debug=True)
+    # app.run(host=config['host'], debug=config['debug'])
+
 
 
 

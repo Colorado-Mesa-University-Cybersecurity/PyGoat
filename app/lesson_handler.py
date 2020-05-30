@@ -1,6 +1,6 @@
-import os, yaml
+import yaml
 
-path = os.path.dirname(os.path.realpath(__file__))
+
 
 class lesson:
     def __init__(self, yaml_config):

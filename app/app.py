@@ -1,7 +1,5 @@
 import os, logging
-
 from flask import Flask
-
 from routes import router
 import network
 

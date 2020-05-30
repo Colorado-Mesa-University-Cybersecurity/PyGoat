@@ -2,16 +2,11 @@
     All the routes and the lesson helper functions are stored here
 """
 
+import os, sys, yaml, sqlite3, hashlib, custom, requests, json
 from flask import Flask, render_template, session, redirect, url_for, request, flash, Response
 from xml.dom.pulldom import START_ELEMENT, parseString
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
-import os, sys, yaml, sqlite3, hashlib, custom, requests, json
-# import network
-# import app
-# from lesson_handler import lesson
-# from app import path, app, lessons
-# from network import network.load_lessons, network.initialize_db, network.initialize_lesson_db, network.valid_login, network.send_webrequest, network.make_sql_query, network.make_custom_response, network.lesson_success, network.check_success
 
 
 
