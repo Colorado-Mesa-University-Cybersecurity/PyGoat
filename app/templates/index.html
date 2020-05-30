@@ -28,13 +28,23 @@
         <!-- page renders here -->
     </div>
     
-    <div style="display: none">
-        <!-- jQuery local -->
-        <!-- <script src="../static/js/libraries/jquery-3.4.1.js"></script> -->
-        <!-- Popper.JS -->
-        <!-- <script src="../static/js/libraries/popper.js"></script> -->
-        <!-- Bootstrap JS local -->
-        <!-- <script src="../static/js/libraries/bootstrap.min.js"></script> -->
+    <div class="hide">
+        <h1>hello world1</h1>
+        {% with messages = get_flashed_messages() %}
+            <h1>hello world2</h1>
+            {% if messages %}
+                <h1>hello world3</h1>
+                {% for category, message in messages %}
+                    <h1>hello world4</h1>
+                    <div class="fixed-bottom alert-{{ category }} alert-dismissible text-center" role="alert">
+                        {{ message }}
+                        <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> -->
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </div>
 </body>
 </html>
