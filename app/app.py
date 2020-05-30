@@ -1,6 +1,13 @@
 from flask import Flask
 import os, logging
 
+
+logging.basicConfig(  
+        filename = 'app.log',  
+        level = logging.INFO,  
+        format = '%(levelname)s:%(asctime)s:%(message)s') 
+
+
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 path = os.path.dirname(os.path.realpath(__file__))

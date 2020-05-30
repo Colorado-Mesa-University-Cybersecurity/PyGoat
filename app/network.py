@@ -1,7 +1,7 @@
-from flask import session, redirect, flash
+from flask import session, redirect, flash, Response
 import os, yaml, sqlite3, hashlib, requests
 from lesson_handler import lesson
-from app import path, lessons
+from app import path, lessons, logging
 
 
 
@@ -23,7 +23,7 @@ def initialize_db(dbname='pygoat.db'):
     """ initialize the 'users' table
         dbname = string - the name of the database to use 
     """
-    print('Ignore the duplicate column errors below, I had to catch it as a workaround')
+    logging.info('Ignore the duplicate column errors below, I had to catch it as a workaround') # print('Ignore the duplicate column errors below, I had to catch it as a workaround')
 
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
@@ -39,7 +39,8 @@ def initialize_db(dbname='pygoat.db'):
             try:
                 c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
             except sqlite3.DatabaseError as e:
-                print(e)
+                logging.info(e)  # print(f'logging:{e}')
+
     conn.commit()
     conn.close()
 
@@ -52,14 +53,15 @@ def initialize_lesson_db(lesson, dbname='pygoat.db'):
     """
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    print('initializing %s' % lesson.name)
+    logging.info('initializing %s' % lesson.name) # print('initializing %s' % lesson.name)
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
                 c.execute('''DROP TABLE %s''' % table['name'])
                 conn.commit()
             except sqlite3.DatabaseError as e:
-                print(e)
+                print(f'Error Restart program to access following: {e}')
+                print('This error always occurs upon first launch, do not worry')
             sqlString = '''CREATE TABLE %s (''' % table['name']
             conn.commit()
             for column in table['columns']:
@@ -272,8 +274,8 @@ response object
 
     if 'headers' in response:
         for header,value in response['headers'].items():
-            tempheader = ""
-            tempbody = ""
+            tempheader: str = ""
+            tempbody: str = ""
             if header.startswith('$form'):
                 tempheader = request.form[header[6::]]
             elif header.startswith('$session'):
