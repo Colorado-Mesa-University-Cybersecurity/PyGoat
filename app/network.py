@@ -1,12 +1,14 @@
 from flask import session, redirect, flash, Response
 import os, yaml, sqlite3, hashlib, requests
 from lesson_handler import lesson
-from app import path, lessons, logging
+# from app import path, lessons, logging 
+import logging
 
 
 
-def load_lessons(lessondir="%s/lessons" % path):
-    """ load in the lessons from the yaml config files
+def load_lessons(lessondir: str, lessons: list):
+    """ 
+        load in the lessons from the yaml config files
         lessondir = string - the absolute path of the directory where the lesson 
         yaml configs are stored
     """
@@ -19,7 +21,7 @@ def load_lessons(lessondir="%s/lessons" % path):
                 lessons.append(current_lesson)
 
 
-def initialize_db(dbname='pygoat.db'):
+def initialize_db(lessons: list, dbname='pygoat.db'):
     """ initialize the 'users' table
         dbname = string - the name of the database to use 
     """
@@ -260,14 +262,14 @@ def make_sql_query(query, request=None, dbname='pygoat.db', testing=False):
 
 def make_custom_response(response, request=None, testing=False):
     """
-     returns an arbitrary response using route actions in the config files
-     replaces $form and $session primitives with their counterparts in the 
-response object
+        returns an arbitrary response using route actions in the config files
+        replaces $form and $session primitives with their counterparts in the 
+        response object
 
-     response = a response object, obtained by reading in the lesson yaml
-     request = a flask request object
-     testing - if False, appends session data to response headers as a cookie and returns flask Response object, otherwise, returns the headers and body dictionaries
-     """
+        response = a response object, obtained by reading in the lesson yaml
+        request = a flask request object
+        testing - if False, appends session data to response headers as a cookie and returns flask Response object, otherwise, returns the headers and body dictionaries
+    """
 
     headers = {}
     body = {}
@@ -350,7 +352,7 @@ def lesson_success(lesson, dbname='pygoat.db', testing=False):
         return(redirect('/lessons/%s' % lesson.url))
 
 
-def check_success(dbname='pygoat.db'):
+def check_success(lessons: list, dbname='pygoat.db'):
     """
     loops through the lessons and checks to see if any of them are completed,
     if so, sets the completed variable in said lesson to true, otherwise, sets it to false
@@ -370,3 +372,10 @@ def check_success(dbname='pygoat.db'):
             else:
                 lesson.completed = False
     conn.close()
+
+
+def start(lessons: list, path: str):
+    load_lessons(f'{path}/lessons', lessons) # lessondir="%s/lessons" % path
+    initialize_db(lessons)
+    for lesson in lessons:
+        initialize_lesson_db(lesson)
