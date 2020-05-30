@@ -23,7 +23,6 @@ Conventions followed:
     3 empty lines between classes and functions
     Lines should be limited to less than 80 characters where possible
     Avoid Polluting the global scope
-    Import inside a function's scope if Library is only used in that function
     DocStrings are restrained to a single line where possible
     Multi-line DocStrings follow the convention:
         '''
