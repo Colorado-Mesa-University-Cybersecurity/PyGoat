@@ -1,23 +1,33 @@
-from flask import Flask
 import os, logging
+
+from flask import Flask
+
 from routes import router
 import network
 
-path = os.path.dirname(os.path.realpath(__file__))
 
-logging.getLogger("requests").setLevel(logging.WARNING)
+def server():
+    path = os.path.dirname(os.path.realpath(__file__))
 
-logging.basicConfig(  
-        filename = 'app.log',  
-        level = logging.INFO,  
-        format = '%(levelname)s:%(asctime)s:%(message)s') 
+    logging.getLogger("requests").setLevel(logging.WARNING)
 
-app = Flask(__name__)
+    logging.basicConfig(  
+            filename = 'app.log',  
+            level = logging.INFO,  
+            format = '%(levelname)s:%(asctime)s:%(message)s') 
 
-app.secret_key = b'(\xe4S$\xce\xa81\x80\x8e\x83\xfa"b%\x9fr'
+    app = Flask(__name__)
 
-lessons = []
+    app.secret_key = b'(\xe4S$\xce\xa81\x80\x8e\x83\xfa"b%\x9fr'
 
-router(lessons, network, path, app)
+    lessons = []
 
-network.start(lessons, path)
+    router(lessons, network, path, app)
+
+    network.start(lessons, path)
+
+    return app
+
+
+if __name__ == "__main__":
+    server()

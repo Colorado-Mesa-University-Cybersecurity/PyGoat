@@ -34,8 +34,10 @@ Conventions followed:
     Inline Annotations follow the convention:
         def functionName(param1: paramType, param2: paramType...) -> returnType:
 """
+from os import environ
+from sys import argv
 
-
+from app import server
 
 def getConfig() -> dict:
     '''Function returns App Configuration'''
@@ -52,16 +54,12 @@ def getConfig() -> dict:
 def checkDebug() -> tuple:
     '''Function checks arguments for a debug statement and accompanying IP address'''
 
-    from sys import argv
-
     return (argv[2], True) if len(argv) >= 3 and argv[1] == "debug" else ('localhost', False)
 
 
 
 def setEnvironment(config: dict) -> dict:
     '''Function applies App Configuration to local environment'''
-
-    from os import environ
 
     environ['REQUESTS_CA_BUNDLE'] = config['certificate_path']
     environ['HTTP_PROXY'] = config['http_proxy']
@@ -80,8 +78,8 @@ def start():
     # the app is imported after the environment is properly configured
     # this is because flask uses the local environment configuration
     # at launch
-    from app import app
-    
+
+    app = server()
     app.env = 'development'
     # main.app.run(host=config['host'], debug=config['debug'])
     print(f' * Running on http://{config["host"]}:5000/')
@@ -89,7 +87,6 @@ def start():
 
 
 
-# An IIFE (Immediately Invoked Funcitonal Expression)
-# Function takes no input and starts the program immediately
-#   after creation without entering the global scope
-(lambda: start() if __name__ == "__main__" else None)()
+
+if __name__ == "__main__":
+    start()
