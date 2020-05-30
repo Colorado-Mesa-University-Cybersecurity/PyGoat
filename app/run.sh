@@ -1,4 +1,4 @@
-filename="main.py"
+filename="app.py"
 certificate_path="/home/lucas/certificate.pem"
 http_proxy="http://127.0.0.1:8082"
 export FLASK_APP="$filename"

@@ -80,12 +80,12 @@ def start():
     # the app is imported after the environment is properly configured
     # this is because flask uses the local environment configuration
     # at launch
-    import main 
+    from app import app
     
-    main.app.env = 'development'
+    app.env = 'development'
     # main.app.run(host=config['host'], debug=config['debug'])
     print(f' * Running on http://{config["host"]}:5000/')
-    main.app.run(host=config['host'], debug=True)
+    app.run(host=config['host'], debug=True)
 
 
 
