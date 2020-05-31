@@ -45,7 +45,7 @@ from app import server
 
 
 def getConfig() -> dict:
-    '''Function returns App Configuration'''
+    ''' Function returns App Configuration '''
 
     config: dict = {
         'certificate_path': 'None',
@@ -57,14 +57,14 @@ def getConfig() -> dict:
 
 
 def checkDebug() -> tuple:
-    '''Function checks arguments for a debug statement and accompanying IP address'''
+    ''' Function checks arguments for a debug statement and accompanying IP address '''
 
     return (argv[2], True) if len(argv) >= 3 and argv[1] == "debug" else ('localhost', False)
 
 
 
 def setEnvironment(config: dict) -> dict:
-    '''Function applies App Configuration to local environment'''
+    ''' Function applies App Configuration to local environment '''
 
     environ['REQUESTS_CA_BUNDLE'] = config['certificate_path']
     environ['HTTP_PROXY'] = config['http_proxy']
@@ -75,7 +75,7 @@ def setEnvironment(config: dict) -> dict:
 
 
 def start() -> None:
-    '''Function configures local environment then launches the Flask App'''
+    ''' Function configures local environment then launches the Flask App '''
 
     config: dict = setEnvironment(getConfig())
 
