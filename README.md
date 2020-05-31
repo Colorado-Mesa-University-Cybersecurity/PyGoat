@@ -24,6 +24,7 @@ Run the following commands to install the dependancies for Flask
 
 ```bash
 	cd app
+	
 	pip3 install -r requirements.txt --user
 ```
 
