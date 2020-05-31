@@ -199,7 +199,7 @@ def send_webrequest(webrequest, request=None, url="http://localhost:5000", testi
 
 
 
-def make_sql_query(query, request=None, dbname='pygoat.db', testing=False):
+def make_sql_query(query, request=None, dbname='pygoat.db', testing=False) -> None:
     """
         make arbitrary sql queries using route actions in the config files
         replace $form and $session primitives with their counterparts in the request
@@ -390,6 +390,7 @@ def check_success(lessons: list, dbname='pygoat.db') -> None:
 
 def start(lessons: list, path: str) -> None:
     ''' Function initializes database after loading lessons '''
+    
     load_lessons(f'{path}/lessons', lessons) # lessondir="%s/lessons" % path
     initialize_db(lessons)
     for lesson in lessons:

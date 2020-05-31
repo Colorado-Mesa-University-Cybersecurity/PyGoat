@@ -11,7 +11,15 @@ from xml.sax.handler import feature_external_ges
 
 
 def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tuple:
+    ''' 
+        Router function encapsulates routes allowing them to access variables
+        within the scope of the router function.
 
+        This enables the functions to operate without any dependency of global variables
+
+        returns a tuple packed with the names of the routing functions
+    
+    '''
     
     @app.route('/favicon.ico')
     def favicon():
