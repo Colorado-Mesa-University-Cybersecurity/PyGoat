@@ -5,6 +5,8 @@ import network
 
 
 def server():
+    ''' Server function instantiates a server and returns the server instance '''
+
     path = os.path.dirname(os.path.realpath(__file__))
 
     logging.getLogger("requests").setLevel(logging.WARNING)
@@ -12,7 +14,7 @@ def server():
     logging.basicConfig(  
             filename = 'app.log',  
             level = logging.INFO,  
-            format = '%(levelname)s:%(asctime)s:%(message)s') 
+            format = '%(levelname)s:%(asctime)s:\t%(message)s') 
 
     app = Flask(__name__)
 

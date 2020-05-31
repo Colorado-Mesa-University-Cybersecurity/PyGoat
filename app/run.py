@@ -35,7 +35,7 @@ Conventions followed:
     Inline Type Annotations follow the convention:
         variableName: variableType = variableValue
     Inline Function/Method Annotations follow the convention:
-        def functionName(param1: paramType, param2: paramType...) -> returnType:
+        def functionName(paramName1: paramType, paramName2: paramType...) -> returnType:
 """
 
 from os import environ
@@ -79,13 +79,11 @@ def start() -> None:
 
     config: dict = setEnvironment(getConfig())
 
-    # the app is imported after the environment is properly configured
-    # this is because flask uses the local environment configuration
-    # at launch
-
     app = server()
     app.env = 'development'
+
     print(f' * Running on http://{config["host"]}:5000/')
+    
     app.run(host=config['host'], debug=True)
     # app.run(host=config['host'], debug=config['debug'])
 
