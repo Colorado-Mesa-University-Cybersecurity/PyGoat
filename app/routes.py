@@ -15,7 +15,7 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
         Router function encapsulates routes allowing them to access variables
         within the scope of the router function.
 
-        This enables the functions to operate without any dependency of global variables
+        This enables the functions to operate without any dependency on global variables
 
         returns a tuple packed with the names of the routing functions
     
@@ -24,9 +24,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/favicon.ico')
     def favicon():
         """ 
-        path = /favicon.ico
-        returns the icon 
+            path = /favicon.ico
+            returns the icon 
         """
+
         return(redirect(url_for('static', filename='favicon.ico')))
 
 
@@ -34,12 +35,13 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/')
     def index():
         """ 
-        path = /
-        if user is logged in, return home page, otherwise, return login page 
+            path = /
+            if user is logged in, return home page, otherwise, return login page 
         """ 
+
         if 'username' in session:
             network.check_success(lessons)
-            return render_template('index.html', lessons=lessons, title="Lessons", contentFile="doesn't exist")
+            return render_template('index.html', lessons=lessons, title="Lessons", contentFile="doesn't exist", name=session['username'])
         else:
             return redirect(url_for('login'))
 
@@ -48,9 +50,9 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/login', methods=['POST', 'GET'])
     def login():
         """ 
-        path = /login
-        if user sends GET to this page, returns login html
-        if user POSTs this page, checks provided credentials against database, if they login successfully, add their username to the session cookie and redirect to home page
+            path = /login
+            if user sends GET to this page, returns login html
+            if user POSTs this page, checks provided credentials against database, if they login successfully, add their username to the session cookie and redirect to home page
         """ 
 
         if request.method == 'POST':
@@ -65,9 +67,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/logout')
     def logout():
         """
-        path = /logout
-        logs out the user
+            path = /logout
+            logs out the user
         """
+
         session.pop('username', None)
         return redirect(url_for('index'))
 
@@ -76,9 +79,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/lessonstatus')
     def lessonstatus():
         """
-        path = /lessonstatus
-        for testing api, returns a list of lessons and whether they are completable and have been completed
+            path = /lessonstatus
+            for testing api, returns a list of lessons and whether they are completable and have been completed
         """
+
         if 'username' in session:
             network.check_success(lessons)
             finalDict = {}
@@ -90,6 +94,8 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 finalDict[lesson.name]['pages'] = lesson.pages
                 if lesson.completable:
                     finalDict[lesson.name]['completed'] = lesson.completed
+                if hasattr(lesson, 'complete_response'):
+                    finalDict[lesson.name]['completeResponse'] = lesson.complete_response
             return (json.dumps(finalDict))
         else:
             return redirect(url_for('login'))
@@ -100,13 +106,14 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/lessons/<lesson>')
     def lessons_page(lesson):
         """ 
-        path = /lessons/<lesson>
+            path = /lessons/<lesson>
 
-        parameters:
-        lesson - the url field of the lesson to load
+            parameters:
+            lesson - the url field of the lesson to load
 
-        finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
+            finds the lesson with the url field of lesson, checks if user has completed it, runs any cutom load scripts, and returns the loaded lesson
         """
+
         if 'username' in session:
             network.check_success(lessons)
             # get lesson with url passed into the route
@@ -136,10 +143,15 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 return render_template(**param_dict) 
             
             # for lessons with no custom initialization scripts
-            return render_template("/content/%s" % current_lesson.content,
+            out: str = render_template("/content/%s" % current_lesson.content,
                     title=current_lesson.name,
                     contentFile="/content/%s" % current_lesson.content,
-                    lessons=lessons)
+                    lessons=lessons,
+                    name=session['username'])
+
+            print('out:', out)
+
+            return out
         else:
             return redirect(url_for('login'))
 
@@ -147,6 +159,8 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
 
     @app.route('/nav/<page>')
     def welcome_page(page):
+        ''' Function returns jinja templates for the site navigation bar '''
+
         return render_template('%s.html' % page)
 
 
@@ -154,10 +168,11 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/register', methods=['POST', 'GET'])
     def register():
         """
-        path = /register
-        if the user sends a GET request, returns register html
-        if user POSTs, adds a new user to the database with the provided username and password
+            path = /register
+            if the user sends a GET request, returns register html
+            if user POSTs, adds a new user to the database with the provided username and password
         """
+        
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
@@ -188,11 +203,11 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/reset/<lessonTitle>')
     def reset_lesson(lessonTitle):
         """
-        path = /reset/<lessonTitle>
-        parameters:
-        lessonTitle - the url of the lesson to reset
+            path = /reset/<lessonTitle>
+            parameters:
+            lessonTitle - the url of the lesson to reset
 
-        Sets target lesson to not completed and recreates the associated database tables
+            Sets target lesson to not completed and recreates the associated database tables
         """
 
         if 'username' in session:
@@ -213,9 +228,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/resetall')
     def reset_all():
         """
-        path = /resetall
-        reinitializes all lesson tables and sets them all to not completed
+            path = /resetall
+            reinitializes all lesson tables and sets them all to not completed
         """
+
         if 'username' in session:
             for lesson in lessons:
                 colName = "%sCompleted" % lesson.name
@@ -235,19 +251,20 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/<path:routeName>', methods=['POST', 'GET'])
     def custom_routes(routeName):
         """
-        # path = /<path:routeName>
-        parameters:
-        routeName - the path for the custom route
+            # path = /<path:routeName>
+            parameters:
+            routeName - the path for the custom route
 
-        Checks if a route with the path routeName is defined in a lesson yaml and performs the actions associated with it
+            Checks if a route with the path routeName is defined in a lesson yaml and performs the actions associated with it
 
-        1. send-webrequest - sends a request to the target url with a specified body and headers
-        2. sql-query - query the sql database
-        3. $custom.funcName(args) - runs the function in custom.py with the name funcName and any listed arguments
-        4. response - returns a response defined in the lesson yaml
+            1. send-webrequest - sends a request to the target url with a specified body and headers
+            2. sql-query - query the sql database
+            3. $custom.funcName(args) - runs the function in custom.py with the name funcName and any listed arguments
+            4. response - returns a response defined in the lesson yaml
 
-        It then checks if the lesson is completed.
+            It then checks if the lesson is completed.
         """
+
         if 'username' in session:
             network.check_success(lessons)
             routename_with_slash = '/' + routeName
@@ -264,6 +281,8 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             source_route = next(filter(
                 lambda x: x['path'] == routename_with_slash,
                 source_lesson.routes))
+
+            print(f'source route:\t{source_route}')
 
             # check to see if actions here complete the lesson where this route is defined
             if source_lesson.success_condition is not None:
@@ -309,7 +328,7 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             if source_lesson.load_script is not None:
                 result = custom.find_and_run(source_lesson.load_script, request)
                 param_dict = {
-                        'template_name_or_list':'lesson.html',
+                        'template_name_or_list':'index.html',
                         'title':source_lesson.name,
                         'contentFile':"/content/%s" % source_lesson.content,
                         'lessons':lessons,
@@ -317,10 +336,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
 
                 return render_template(**param_dict) 
 
-            return render_template('lesson.html',
-            title=source_lesson.name,
-            contentFile="/content/%s" % source_lesson.content,
-            lessons=lessons)
+            return render_template('index.html',
+                title=source_lesson.name,
+                contentFile=f"/content/{source_lesson.content}", # contentFile="/content/%s" % source_lesson.content,
+                lessons=lessons)
         else: 
             return(redirect(url_for('login')))
 
@@ -329,9 +348,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
     @app.route('/report', methods=['GET'])
     def report() -> 'report.html':
         """ 
-        path = /report
-        returns the report page
+            path = /report
+            returns the report page
         """
+        
         return render_template('report.html', title="Reporting", lessons=lessons)
 
     return (favicon, index, login, logout, lessonstatus, lessons_page, welcome_page, register, reset_lesson, reset_all, custom_routes, report)

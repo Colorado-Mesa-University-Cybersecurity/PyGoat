@@ -1,4 +1,24 @@
-// import React from 'react';
+/*
+File: sideBarToggle.jsx
+Description: file exports the LessonNavToggleButton React Component which implements a button that 
+                hides the lesson navigation sidebar when clicked
+
+IMPORTANT!!! If you are reading this from within a .js file, it is important to note that you should not 
+	make any changes to that file if you wish to edit the PyGoat client, instead follow the directions on 
+	the README.md contained within the static directory. Make sure any editing is done with the .jsx version
+	of this file inside the static/jsx directory
+
+Conventions followed:
+    4-space tabs
+    always place semicolons
+    3 empty lines between classes and functions
+    2 empty lines between methods
+    Class methods always return this unless other return value desired
+    Annotations follow the convention:     
+            function/method  ::  (parameter types) -> (return types)
+*/
+
+'use strict';
 
 const LessonNavToggleButton = props => {
 

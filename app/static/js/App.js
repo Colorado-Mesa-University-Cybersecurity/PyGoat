@@ -1,3 +1,22 @@
+/*
+File: App.jsx
+Description: file exports the App React Component which is composed of all of the Project components to create the UI
+
+IMPORTANT!!! If you are reading this from within a .js file, it is important to note that you should not 
+	make any changes to that file if you wish to edit the PyGoat client, instead follow the directions on 
+	the README.md contained within the static directory. Make sure any editing is done with the .jsx version
+	of this file inside the static/jsx directory
+
+Conventions followed:
+    4-space tabs
+    always place semicolons
+    3 empty lines between classes and functions
+    2 empty lines between methods
+    Class methods always return this unless other return value desired
+    Annotations follow the convention:     
+            function/method  ::  (parameter types) -> (return types)
+*/
+
 import { SVGLogo } from './components/logo.js';
 import { GoatHeader } from './components/header.js';
 import { SiteNavigator } from './components/siteNav.js';
@@ -8,6 +27,18 @@ import { LessonNavToggleButton } from './components/sideBarToggle.js';
 import { ResetLessonButton } from './components/resetLesson.js';
 import { PageNumButton } from './components/pageNumNav.js';
 
+'use strict';
+
+/**
+ * App  ::  Object  ->  JSX
+ * 
+ * @param {'Object'} props 
+ * 
+ * Component is composed of every individual component used to create the PyGoat client, the
+ * 		props object must have an object passed in underneath the key store.
+ * 
+ * Returns a JSX component
+ */
 function App(props) {
 
 	const store = props.store;
@@ -49,25 +80,26 @@ function App(props) {
 			});
 			setNewState(1);
 			store.cacheLessonHTML();
-			// console.log('hello', Object.keys(store.parsedHTML))
-			// document.querySelector('.renderHTML').append(store.parsedHTML['About'].querySelector('.page1'))
 		});
 	}, [state]);
 
+	// triggers a re render of the contents of LessonArea
 	React.useEffect(() => {
-		// 	store.renderArea || (store.renderArea = document.querySelector('.renderHTML'))
-		// 	console.log('rendered=', rendered)
-		// 	if(store.renderArea) {
-		// 		store.renderArea.innerHTML = ''
-		// 		store.renderArea.append(store.parsedHTML[currentPage.title].querySelector(`.page${currentPageNumber}`))
-		// 	}
-		// console.log('loaded parsed HTML')
 		store.renderInnerPage();
 	}, [rendered]);
+
+	// 	store.renderArea || (store.renderArea = document.querySelector('.renderHTML'))
+	// 	console.log('rendered=', rendered)
+	// 	if(store.renderArea) {
+	// 		store.renderArea.innerHTML = ''
+	// 		store.renderArea.append(store.parsedHTML[currentPage.title].querySelector(`.page${currentPageNumber}`))
+	// 	}
+	// console.log('loaded parsed HTML')
 
 	state || console.log('app loaded'); // runs before state is initialized
 	state && console.log('app reloaded'); // runs after state is initialized
 
+	// The layout is flat because most transitions outside of the navbar require the entire app to be rerendered 
 	return React.createElement(
 		'div',
 		null,
@@ -102,6 +134,6 @@ function App(props) {
 			)
 		)
 	);
-}
+};
 
 export { App };
