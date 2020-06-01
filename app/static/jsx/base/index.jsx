@@ -1,10 +1,16 @@
 /*
 File: index.js
 Description: file defines the View and Controller classes and instantiates them using the imported store Class
-				This is designed based on a fundamental architectural pattern the store-View-Controller
+				This is designed based on Reacts role as the View in a traditional MVC, but views contain their
+				state along with the application state in an object known as the Store instead of a model.
 				The MVC pattern is used client side as opposed to server side to create a Single Page Application
 				learn more about this MVC implementation here: https://www.taniarascia.com/javascript-mvc-todo-app/
 				
+IMPORTANT!!! If you are reading this from within a .js file, it is important to note that you should not 
+	make any changes to that file if you wish to edit the PyGoat client, instead follow the directions on 
+	the README.md contained within the static directory. Make sure any editing is done with the .jsx version
+	of this file inside the static/jsx directory
+
 Conventions followed:
 				4-space tabs
 				always place semicolons

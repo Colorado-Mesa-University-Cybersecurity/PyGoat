@@ -1,6 +1,16 @@
-/* 
-Main Style Sheet for the PyGoat Client
+/*
+File: main.css
+Description: Main Style Sheet for the PyGoat Client
+
+Conventions followed:
+    The Color Pallet is the first set of rules outlined in this sheet
+    4-space tabs
+    1 empty lines between rules
+    3 empty lines between rules affecting different components or with different purposes
+    1 line rules are to follow the convention:
+        Selector { rule: ruleValue; }
 */
+
 
 
 /* Color Pallet */
@@ -16,12 +26,14 @@ Main Style Sheet for the PyGoat Client
 .themeColor5 { background-color: #c4c4c4; }
 
 
+
 /* Fonts */
 
 body * {
     font-family: sans-serif;
     font-weight: normal;
 }
+
 
 
 /* Page Formating */
@@ -38,6 +50,7 @@ main {
     display: flex;
     /* align-items: ; */
 }
+
 
 
 /* Utility classes */
@@ -60,9 +73,43 @@ main {
 
 .hide { display: none; }
 
+.inBlock { display: inline-block; }
+
+.flexIt { display: flex; }
+
+.boxIt {
+    display: flex;
+    align-items: center;
+}
+
+
+
+/* GoatHeader Component */
+
+.goat-header {
+    background-color: #333333;
+    color: white;
+}
+
+.header-title {
+    font-size: 36pt;
+    font-weight: lightest;
+}
+
+.header-title-box { padding-left: 60px;}
+
+
+
+/* SVG Logo Component */
+
+.page-title {
+    margin-left: 5px;
+    font-size: 36pt;
+}
+
+
 
 /* Site Navigator Component */
-
 
 .site-nav-item { 
     width: 100%;
@@ -91,7 +138,11 @@ main {
 }
 
 
+
 /* Lesson Navigator Component */ 
+
+.lesson-selection-area { margin-top: 50px; }
+
 
 
 /* Lesson Group Component */
@@ -106,11 +157,14 @@ main {
     font-size: 16pt;
 }
 
-.lesson-group:hover {
-    background-color: #ffd200;
-}
+.lesson-group:hover { background-color: #ffd200; }
+
+
 
 /* Lesson Item Component */
+
+.lesson-title { padding-left: 50px; }
+
 .lesson-item:hover {
     color: 'black';
     background-color: #ffd200;
@@ -127,18 +181,13 @@ main {
     background-color: #222222;
 }
 
-.current-lesson {
-    color: #ffd200;
-}
+.current-lesson { color: #ffd200; }
 
-#lesson-item-title:hover * {
-    color: black;
-}
+#lesson-item-title:hover * { color: black; }
 
-#lesson-item-title:hover {
-    /* color: black; */
-    background-color: #ffd200;
-}
+#lesson-item-title:hover { background-color: #ffd200; }
+
+
 
 /* Lesson Area Component */
 
@@ -152,6 +201,22 @@ main {
     background-color: #eeeeee;
     height: 100%;
 }
+
+
+
+/* Page Number Navigation Component */
+
+.page-num-nav {
+    border: 0pt;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+
+/* Rules for Lesson Pages */
+/* IMPORTANT!!! This is the area for style rules that apply to the lessons that are added to the PyGoat Application */
 
 .page1, .page2, .page3, .page4, .page5, .page6, .page7, .page8, .page9 {
     padding: 20px;

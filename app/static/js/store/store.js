@@ -32,22 +32,64 @@ Conventions followed:
  *                      facilitate quick updates
  *         
  * 
- * 		storeLocally  ::  void  ->  store object
- *          method stores the state of all data structures to local storage
+ *      createWarehouse  ::  Void  ->  store object
+ * 
+ *      cacheSiteNavHTML  ::  Void  ->  store object
+ * 
+ *      cacheLessonHTML  ::  Void  ->  store object
+ * 
+ *      checkActivePage  ::  Void  ->  {title: String, group: String, current/active: Boolean, pages: Number, currentPage: Number}
+ * 
+ *      checkCurrentPageNumber  ::  Void  ->  Number
+ * 
+ *      checkNumberOfPages  ::  Void  ->  Number
+ * 
+ *      changeActivePage  ::  String  ->  store object
+ * 
+ *      changeCurrentPageNumber  ::  Number  ->  store object
+ * 
+ *      getID  ::  Void  ->  Void
+ * 
+ *      addLesson  ::  {group: string, title: string, url: string} -> store object
+ * 
+ *      parseHTML  ::  (String, String)  ->  store object
+ * 
+ *      renderInnerPage  ::  Void  ->  store object
+ * 
+ *      storeLocally  ::  Void  -> storeObject
+ * 
+ * 
  */
 class Store{
     constructor() {
+        // the getID function will fetch the user's 'unique' id to use to store page state
+        this.getID()
+        this.id || (this.id = 'None')
+        console.log(localStorage.getItem(this.id))
+        
+        // the parsedHTML object will hold all of the DOMs created from jinja templates fetched from the server
+        // the DOMParser object is used to transformed cached html from the server into a DOM object without 
+        //      rendering the cached html. The new DOMs are indexed by page name and pages are extracted from
+        //      the parsedHTML object by using .queryselector on the DOM 
+        this.parser = new DOMParser()
+        this.parsedHTML = {}
+
+        // 'item' is in local storage for bug testing PyGoats ability to persist state
         if (localStorage.getItem('item') == null) {
             this.item = 'hello world';
         } else {
             this.item = JSON.parse(localStorage.getItem('item'));
         };
 
-        if (!localStorage.getItem('warehouse') == null) {
-            this.warehouse = JSON.parse(localStorage.getItem('warehouse'));
+        // If id exists in localStorage, reinstantiate the store object's "warehouse" 
+        //      which contains the applications state
+        if (!(localStorage.getItem(this.id) == null || localStorage.getItem(this.id) == 'undefined')) {
+            this.warehouse = JSON.parse(localStorage.getItem(this.id));
+            Object.keys(this.warehouse.cache).forEach((x) => {
+                this.parseHTML(x, this.warehouse.cache[x])
+            })
+            this.addLesson = this.addLesson.bind(this);
         };
-
-        this.storeLocally();
 
         // refresh is an object held that will hold references to methods used to update various components
         //   this is to make sure that any component that changes the app data can signal React to re-render the DOM
@@ -58,18 +100,27 @@ class Store{
         // warehouse stores all of the data used by the react components
         this.warehouse || this.createWarehouse()
 
-        // the parsedHTML object will hold all of the DOMs created from jinja templates fetched from the server
-        this.parser = new DOMParser()
-        this.parsedHTML = {}
-
+        // initial inner page area state
         this.currentlyRenderedHTML = 'none'
         this.currentlyRenderedPageNumber = 'none'
 
+        // store client state using local storage, server storage is updated upon 
+        //      interaction with lessons contained in the inner page area
+        this.storeLocally();
 
         return this;
     };
     
     
+    /**
+     * createWarehouse  ::  Void  ->  store object
+     * 
+     * Method creates the warehouse object and sets its initial state as well as 
+     *      triggering a fetch for the clients site navigation pages to cache.
+     *      Also binds the functions that operate on the warehouse object
+     * 
+     * Returns this to enable method chaining
+     */
     createWarehouse() {
         this.warehouse = {}
         this.warehouse.cache = {} // cache contains the html fetched from server in string form before parsing
@@ -85,15 +136,24 @@ class Store{
     }
 
 
+    /**
+     * cacheSiteNavHTML  ::  Void  ->  store object
+     * 
+     * Method fetches html for the top right site navigation bar from the server and
+     *      stores it as a string within this.warehouse.cache. It then calls the parseHTML 
+     *      method to create and stash a document object based upon that html cache
+     * 
+     * Returns this to allow for method chaining
+     */
     cacheSiteNavHTML() {
         this.warehouse.siteNav.forEach((item, i) => {
-            if(item.title === 'Logout') return;
+            if(item.title === 'Logout') return; // renders no page for logout screen, user will be redirected to login screen
             const URL = `/nav/${item.url}`
             fetch(URL, {method: 'GET', 'Content-Type': 'text/html'})
-                .then( d => d.text())
+                .then( d => d.text())  // promise chains are used due to the asynchronous nature of fetching server data
                 .then( htmlString => {
-                        this.parseHTML(item.title, htmlString)
                         this.warehouse.cache[item.title] = htmlString
+                        this.parseHTML(item.title, htmlString)
                 })
         })
         
@@ -101,6 +161,15 @@ class Store{
     }
 
 
+    /**
+     * cacheLessonHTML  ::  Void  ->  store object
+     * 
+     * Method fetches lesson html templates prerendered by the server and stores their HTML
+     *      within this.warehouse.cache. Calls parseHTML method to store DOM objects created
+     *      from the server rendered jinja templates and stores them inside the this.parsedHTML object
+     * 
+     * Returns this to allow for method chaining
+     */
     cacheLessonHTML() {
         this.warehouse.navItems.forEach((group, i) => {
             group.lessons.forEach((lesson, j) => {
@@ -124,9 +193,15 @@ class Store{
         return this;
     }
 
-
+    /**
+     * checkActivePage  ::  Void  ->  {title: String, group: String, current/active: Boolean, pages: Number, currentPage: Number}
+     * 
+     * Method checks the warehouse navItems for a single page object that has a property of current or a active with a value of true
+     * 
+     * Returns the page object with a current/active property of true
+     */
     checkActivePage() {
-        const activeItem = [{}]
+        const activeItem = [{}] // empty object is given so that the inner objects reference can be replace instead of pushing to the array
         this.warehouse.navItems.forEach((group, i) => {
             const activeLesson = group.lessons.filter((lesson, j) => {
                 return lesson.current === true;
@@ -143,15 +218,38 @@ class Store{
     };
 
 
+    /**
+     * checkCurrentPageNumber  ::  Void  ->  Number
+     * 
+     * Method returns the page number the client should render 
+     */
     checkCurrentPageNumber() {
         return this.checkActivePage().currentPage;
     };
 
+
+    /**
+     * checkNumberOfPages  ::  Void  ->  Number
+     * 
+     * Method returns the total number of pages for the current lesson being displayed
+     *      It is used to determine how many page navigation buttons to spawn
+     */
     checkNumberOfPages() {
         return Array(this.checkActivePage().pages).fill(0);
     };
 
     
+    /**
+     * changeActivePage  ::  String  ->  store object
+     * 
+     * @param {string} title 
+     * 
+     * Method takes a page title and searches the warehouse for objects that have a matching title property
+     *      Takes the object with a matching title quality and changes its current property to true
+     *      This is used to change the page when react re-renders after a page navigation item is clicked
+     * 
+     * Returns this to facilitate method chaining
+     */
     changeActivePage(title) {
         this.checkActivePage().current && (this.checkActivePage().current = false)
         this.checkActivePage().active && (this.checkActivePage().active = false)
@@ -170,17 +268,49 @@ class Store{
             })
         })
 
+        this.storeLocally()
+
         return this;
     };
 
 
+    /**
+     * changeCurrentPageNumber  ::  Number  ->  store object
+     * 
+     * @param {number} pageNumber 
+     * 
+     * Method takes a number and changes the current page property of the object returned
+     *      by the checkActivePage method to match the number given. 
+     *      This is used by the page navigation to change what page a user is looking at within a lesson
+     * 
+     * Returns this to allow for method chaining
+     */
     changeCurrentPageNumber(pageNumber) {
         this.checkActivePage().currentPage = pageNumber;
+        this.storeLocally();
 
         return this;
     };
-    
 
+
+    /**
+     * getID  ::  Void  ->  Void
+     * 
+     * Method takes no parameters and returns no output values. Checks the page for an element
+     *      with an id of id, this.id is set to the innerText of that element, and that element
+     *      has its innerText rewritten to nothing
+     * 
+     * This Method is technically insecure, which would be bad in the context of any other 
+     *      web application, but since this is a Purposefully Insecure web application meant to
+     *      teach students what NOT to do, this could be seen as more of a feature than a vulnerability
+     */
+    getID() {
+        const idArea = document.getElementById('id')
+        this.id = idArea.innerText
+        idArea.innerText = ''
+    }
+
+    
     /**
      * addLesson  ::  {group: string, title: string, url: string} -> store object
      * 
@@ -228,6 +358,18 @@ class Store{
     }
 
 
+    /**
+     * parseHTML  ::  (String, String)  ->  store object
+     * 
+     * @param {string} title 
+     * @param {string} htmlString 
+     * 
+     * Method takes a title and an html string and parses the html string into a DOM object
+     *      it then stores that DOM object with this.parsedHTML using the supplied title
+     *      as the key
+     * 
+     * Returns this to allow for method chaining
+     */
     parseHTML(title, htmlString) {
         this.parsedHTML[title] = this.parser.parseFromString(htmlString, 'text/html')
 
@@ -235,25 +377,44 @@ class Store{
     }
 
 
+    /**
+     * renderInnerPage  ::  Void  ->  store object
+     * 
+     * Method swaps out the page being displayed inside the lesson area, first it destroys the 
+     *      contents of the lessons area then the this.parsedHTML object has a node of a dom 
+     *      matching the new page pulled out and appended to the display area. it then re-renders
+     *      a new DOM object using the parseHTML method to replace the node that was pulled out
+     * 
+     * Returns this to allow for method chainings
+     */
     renderInnerPage() {
         if(!this.renderArea) return this;
         const page = this.checkActivePage()
         const pageTitle = page.title
         if(!this.parsedHTML[pageTitle]) return this;
         if(this.currentlyRenderedHTML == pageTitle && page.currentPage == this.currentlyRenderedPageNumber) return this;
-        console.log('hello world from render', this.checkActivePage().title, this.renderArea.inner)
         this.renderArea.innerHTML = ''
-        console.log(pageTitle, page.currentPage, this.parsedHTML[pageTitle], this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`))
-        this.renderArea.append(this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`)) && console.log('append ran')
-        this.parseHTML(page.title, this.warehouse.cache[page.title])
-        this.currentlyRenderedHTML = pageTitle   
-        this.currentlyRenderedPageNumber = page.currentPage
+        this.renderArea.append(
+            this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`)
+            ) && console.log('append ran')
+        this.parseHTML(page.title, this.warehouse.cache[page.title]);
+        this.currentlyRenderedHTML = pageTitle;
+        this.currentlyRenderedPageNumber = page.currentPage;
+
+        return this;
     }
 
 
+    /**
+     * storeLocally  ::  Void  -> storeObject
+     * 
+     * Method is used to store the state of the client within localStorage
+     * 
+     * Returns this to allow for method chaining
+     */
     storeLocally() {
-        localStorage.setItem('item', JSON.stringify(this.item))
-        localStorage.setItem('warehouse', JSON.stringify(this.warehouse))
+        localStorage.setItem('item', JSON.stringify(this.item));
+        localStorage.setItem(this.id, JSON.stringify(this.warehouse));
         return this;
     };
 };
