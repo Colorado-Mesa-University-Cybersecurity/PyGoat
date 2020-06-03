@@ -3,8 +3,7 @@ from flask import Flask
 from routes import router
 import network
 
-
-def server():
+def server(app):
     ''' Server function instantiates a server and returns the server instance '''
 
     path = os.path.dirname(os.path.realpath(__file__))
@@ -16,7 +15,6 @@ def server():
             level = logging.INFO,  
             format = '%(levelname)s:%(asctime)s:\t%(message)s') 
 
-    app = Flask(__name__)
 
     app.secret_key = b'(\xe4S$\xce\xa81\x80\x8e\x83\xfa"b%\x9fr'
 
@@ -28,6 +26,6 @@ def server():
 
     return app
 
-
-if __name__ == "__main__":
-    server()
+# App wouldn't initialize without this (functionality moved to run.py)
+# if __name__ == "__main__":
+# server()

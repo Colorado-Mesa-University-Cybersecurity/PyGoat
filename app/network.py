@@ -11,13 +11,18 @@ def load_lessons(lessondir: str, lessons: list) -> None:
         lessondir = string - the absolute path of the directory where the lesson 
         yaml configs are stored
     """
+    
+    for lesson_name in os.listdir(lessondir):
+        lesson_path = f"{lessondir}/{lesson_name}"
+        lesson_yaml = f"{lesson_path}/{lesson_name}.yaml"
+        if os.path.isdir(lesson_path) and os.path.exists(lesson_yaml):
+            config = open(lesson_yaml, "r")
 
-    for filename in os.listdir(lessondir):
-        if filename.endswith('yaml'):
-            with open("%s/%s" % (lessondir, filename), "r") as config:
-                config_list = yaml.safe_load(config)
-                current_lesson = lesson(config_list)
-                lessons.append(current_lesson)
+            # Note: Avoid unecessary nesting (above line does exactly the same thing, without nesting)
+            # with open(lesson_yaml, "r") as config:
+            config_list = yaml.safe_load(config)
+            current_lesson = lesson(config_list)
+            lessons.append(current_lesson)
 
 
 
@@ -67,8 +72,8 @@ def initialize_lesson_db(lesson, dbname='pygoat.db') -> None:
                 c.execute('''DROP TABLE %s''' % table['name'])
                 conn.commit()
             except sqlite3.DatabaseError as e:
-                print(f'Error Restart program to access following: {e}')
-                print('This error always occurs upon first launch, do not worry')
+                print(f'Error: Restart program to access following: {e}')
+                print('    This error always occurs upon first launch, do not worry')
             sqlString = '''CREATE TABLE %s (''' % table['name']
             conn.commit()
             for column in table['columns']:

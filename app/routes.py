@@ -118,6 +118,8 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             network.check_success(lessons)
             # get lesson with url passed into the route
             current_lesson = next(filter(lambda x:x.url == lesson, lessons))
+            lesson_folder = current_lesson.content[0:current_lesson.content.index(".")]
+            lesson_dir = f"/{lesson_folder}/{current_lesson.content}"
 
             # check to see if the lesson has been completed
             if current_lesson.success_condition is not None:
@@ -134,22 +136,26 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             if current_lesson.load_script is not None:
                 result = custom.find_and_run(current_lesson.load_script, request)
                 param_dict = {
-                        'template_name_or_list':'lesson.html',
-                        'title':current_lesson.name,
-                        'contentFile':"/content/%s" % current_lesson.content,
-                        'lessons':lessons,
-                        current_lesson.load_return: result}
+                    'template_name_or_list': 'lesson.html',
+                    'title': current_lesson.name,
+                    'contentFile': lesson_dir, # % (lesson_folder, current_lesson.content),
+                    'lessons': lessons,
+                    current_lesson.load_return: result
+                }
 
                 return render_template(**param_dict) 
             
             # for lessons with no custom initialization scripts
-            out: str = render_template("/content/%s" % current_lesson.content,
-                    title=current_lesson.name,
-                    contentFile="/content/%s" % current_lesson.content,
-                    lessons=lessons,
-                    name=session['username'])
+            out: str = render_template(
+                lesson_dir,
+                #"/content/%s" % current_lesson.content,
+                title = current_lesson.name,
+                contentFile = lesson_dir, # % current_lesson.content,
+                lessons = lessons,
+                name = session['username']
+            )
 
-            print('out:', out)
+            # print('out:', out)
 
             return out
         else:
@@ -282,6 +288,9 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 lambda x: x['path'] == routename_with_slash,
                 source_lesson.routes))
 
+            lesson_folder = source_lesson.content[0:source_lesson.content.index(".")]
+            lesson_dir = f"/{lesson_folder}/{source_lesson.content}"
+
             print(f'source route:\t{source_route}')
 
             # check to see if actions here complete the lesson where this route is defined
@@ -328,18 +337,21 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             if source_lesson.load_script is not None:
                 result = custom.find_and_run(source_lesson.load_script, request)
                 param_dict = {
-                        'template_name_or_list':'index.html',
-                        'title':source_lesson.name,
-                        'contentFile':"/content/%s" % source_lesson.content,
-                        'lessons':lessons,
-                        source_lesson.load_return: result}
+                    'template_name_or_list': 'index.html',
+                    'title': source_lesson.name,
+                    'contentFile': lesson_dir,
+                    'lessons': lessons,
+                    source_lesson.load_return: result
+                }
 
                 return render_template(**param_dict) 
 
-            return render_template('index.html',
-                title=source_lesson.name,
-                contentFile=f"/content/{source_lesson.content}", # contentFile="/content/%s" % source_lesson.content,
-                lessons=lessons)
+            return render_template(
+                'index.html',
+                title = source_lesson.name,
+                contentFile = lesson_dir, # contentFile="/content/%s" % source_lesson.content,
+                lessons = lessons
+            )
         else: 
             return(redirect(url_for('login')))
 

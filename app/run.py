@@ -37,22 +37,23 @@ Conventions followed:
     Inline Function/Method Annotations follow the convention:
         def functionName(paramName1: paramType, paramName2: paramType...) -> returnType:
 """
-
+import os, jinja2, config
+from flask import Flask
 from os import environ
 from sys import argv
 from app import server
 
+# The initialization of app had to be moved out here in order for the app to start from bash command line - Let me know if this isn't the whole story
+app = Flask(__name__)
 
-
-def getConfig() -> dict:
-    ''' Function returns App Configuration '''
-
-    config: dict = {
-        'certificate_path': 'None',
-        'http_proxy': 'None',
-    }
-
-    return config
+loader = jinja2.ChoiceLoader([
+    app.jinja_loader,
+    jinja2.FileSystemLoader([
+        f'{PROJECT_DIR}/templates',
+        *config['template_dirs']
+    ]),
+])
+app.jinja_loader = loader
 
 
 
@@ -77,19 +78,19 @@ def setEnvironment(config: dict) -> dict:
 def start() -> None:
     ''' Function configures local environment then launches the Flask App '''
 
-    config: dict = setEnvironment(getConfig())
+    session_config: dict = setEnvironment(config)
 
-    app = server()
+    server(app)
     app.env = 'development'
 
-    print(f' * Running on http://{config["host"]}:5000/')
+    print(f' * Running on http://{session_config["host"]}:5000/')
     
-    app.run(host=config['host'], debug=True)
+    # app.run(host=config['host'], debug=True)
     # app.run(host=config['host'], debug=config['debug'])
 
 
 
 
 
-if __name__ == "__main__":
-    start()
+# if __name__ == "__main__":
+start()
