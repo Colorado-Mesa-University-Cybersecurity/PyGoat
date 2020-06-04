@@ -2,22 +2,8 @@
 File: run.py
 Description: Program configures the local environment and then launches the PyGoat application
 
-IMPORTANT!!!
-    If a user wishes to pass in a .pem security certificate
-        and a proxy host, then alter the dictionary in getConfig
-
-            config = {
-                    'certificate_path': '<Absolute path to .pem certificate>',
-                    'http_proxy': 'http://<proxyIP>:<proxyPort>',
-                }
-
-            Ex.
-
-            config = {
-                    'certificate_path': '/home/lucas/certificate.pem',
-                    'http_proxy': 'http://127.0.0.1:8082',
-                }
-
+IMPORTANT!!! 
+    To change configuration go to config.py, there you can set the proxy and security certificate settings
 
 Conventions followed:
     4-space tabs
@@ -37,23 +23,13 @@ Conventions followed:
     Inline Function/Method Annotations follow the convention:
         def functionName(paramName1: paramType, paramName2: paramType...) -> returnType:
 """
-import os, jinja2, config
+
+
 from flask import Flask
-from os import environ
+from os import environ, path
 from sys import argv
 from app import server
-
-# The initialization of app had to be moved out here in order for the app to start from bash command line - Let me know if this isn't the whole story
-app = Flask(__name__)
-
-loader = jinja2.ChoiceLoader([
-    app.jinja_loader,
-    jinja2.FileSystemLoader([
-        f'{PROJECT_DIR}/templates',
-        *config['template_dirs']
-    ]),
-])
-app.jinja_loader = loader
+from config import env_config
 
 
 
@@ -75,22 +51,27 @@ def setEnvironment(config: dict) -> dict:
 
 
 
-def start() -> None:
+def start(run_through_python: bool) -> None:
     ''' Function configures local environment then launches the Flask App '''
+
+    config: dict = env_config(path.dirname(path.realpath(__file__)))
 
     session_config: dict = setEnvironment(config)
 
-    server(app)
+    app = server()
+
     app.env = 'development'
 
     print(f' * Running on http://{session_config["host"]}:5000/')
-    
-    # app.run(host=config['host'], debug=True)
-    # app.run(host=config['host'], debug=config['debug'])
+
+    if run_through_python:  # if running using run.py activates, otherwise if using run.sh, skips
+        app.run(host=session_config['host'], debug=session_config['debug'])
 
 
 
 
 
-# if __name__ == "__main__":
-start()
+if __name__ == "__main__":
+    start(True)
+else:
+    start(False)
