@@ -2,22 +2,8 @@
 File: run.py
 Description: Program configures the local environment and then launches the PyGoat application
 
-IMPORTANT!!!
-    If a user wishes to pass in a .pem security certificate
-        and a proxy host, then alter the dictionary in getConfig
-
-            config = {
-                    'certificate_path': '<Absolute path to .pem certificate>',
-                    'http_proxy': 'http://<proxyIP>:<proxyPort>',
-                }
-
-            Ex.
-
-            config = {
-                    'certificate_path': '/home/lucas/certificate.pem',
-                    'http_proxy': 'http://127.0.0.1:8082',
-                }
-
+IMPORTANT!!! 
+    To change configuration go to config.py, there you can set the proxy and security certificate settings
 
 Conventions followed:
     4-space tabs
@@ -38,21 +24,12 @@ Conventions followed:
         def functionName(paramName1: paramType, paramName2: paramType...) -> returnType:
 """
 
-from os import environ
+
+from flask import Flask
+from os import environ, path
 from sys import argv
 from app import server
-
-
-
-def getConfig() -> dict:
-    ''' Function returns App Configuration '''
-
-    config: dict = {
-        'certificate_path': 'None',
-        'http_proxy': 'None',
-    }
-
-    return config
+from config import env_config
 
 
 
@@ -74,22 +51,27 @@ def setEnvironment(config: dict) -> dict:
 
 
 
-def start() -> None:
+def start(run_through_python: bool) -> None:
     ''' Function configures local environment then launches the Flask App '''
 
-    config: dict = setEnvironment(getConfig())
+    config: dict = env_config(path.dirname(path.realpath(__file__)))
+
+    session_config: dict = setEnvironment(config)
 
     app = server()
+
     app.env = 'development'
 
-    print(f' * Running on http://{config["host"]}:5000/')
-    
-    app.run(host=config['host'], debug=True)
-    # app.run(host=config['host'], debug=config['debug'])
+    print(f' * Running on http://{session_config["host"]}:5000/')
+
+    if run_through_python:  # if running using run.py activates, otherwise if using run.sh, skips
+        app.run(host=session_config['host'], debug=session_config['debug'])
 
 
 
 
 
 if __name__ == "__main__":
-    start()
+    start(True)
+else:
+    start(False)

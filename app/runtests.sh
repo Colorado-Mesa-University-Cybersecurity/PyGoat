@@ -2,7 +2,7 @@
 
 . assert.sh
 
-filename="app.py"
+filename="run.py"
 
 export FLASK_APP="$filename"
 
