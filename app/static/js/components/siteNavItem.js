@@ -37,7 +37,12 @@ const SiteNavItem = props => {
             props.store.refresh.rootReRender(Math.random());
         } else if (props.title == 'Logout') {
             window.location.href = 'logout';
-        }
+        };
+        fetch('/save', {
+            method: 'POST',
+            'Content-Type': 'application/json',
+            body: JSON.stringify(props.store.warehouse)
+        });
     };
 
     return React.createElement(

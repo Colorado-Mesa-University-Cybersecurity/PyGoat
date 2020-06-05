@@ -124,7 +124,7 @@ class Store{
     createWarehouse() {
         this.warehouse = {}
         this.warehouse.cache = {} // cache contains the html fetched from server in string form before parsing
-        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: 'welcome', current: true, group: 'Introduction', pages: 3, currentPage: 1}]}]
+        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: 'welcome', current: true, group: 'Introduction', pages: 3, currentPage: 1, completed: false, completable: false}]}]
         this.warehouse.lessonMetaData = {lessonTitles: [], lessons: {}}
         this.warehouse.siteNav = [{title: 'Logout', active: false, pages: 1, currentPage: 1, url: 'logout'}, {title: 'Report', active: false, pages: 1, currentPage: 1, url: 'report'}, {title: 'Contact Us', active: false, pages: 1, currentPage: 1, url: 'contactUs'}, {title: 'About', active: false, pages: 1, currentPage: 1, url: 'about'}]
 
