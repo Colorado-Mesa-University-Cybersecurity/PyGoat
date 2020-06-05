@@ -64,7 +64,7 @@ def start(run_through_python: bool) -> None:
 
     print(f' * Running on http://{session_config["host"]}:5000/')
 
-    if run_through_python:  # if running using run.py activates, otherwise if using run.sh, skips
+    if run_through_python:  # if running using run.py activates, otherwise if using run.sh or flask run, skips
         app.run(host=session_config['host'], debug=session_config['debug'])
 
 

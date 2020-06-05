@@ -1,5 +1,5 @@
 import os, yaml, sqlite3, hashlib, requests
-from flask import session, redirect, flash, Response
+from flask import session, redirect, flash, Response, render_template
 import logging
 from lesson_handler import lesson
 
@@ -22,6 +22,7 @@ def load_lessons(lessondir: str, lessons: list) -> None:
             # with open(lesson_yaml, "r") as config:
             config_list = yaml.safe_load(config)
             current_lesson = lesson(config_list)
+
             lessons.append(current_lesson)
 
 

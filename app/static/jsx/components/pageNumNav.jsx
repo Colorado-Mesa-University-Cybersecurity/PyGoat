@@ -44,17 +44,25 @@ const PageNumButton = (props) => {
     }
 
     const handleClick = (e) => {
-        props.store.refresh.innerHTMLReRender(props.num)
+        props.store.refresh.innerHTMLReRender(props.num);
         if(props.store.checkCurrentPageNumber() != props.num) {
-            props.store.changeCurrentPageNumber(props.num)
-            props.store.refresh.rootReRender(Math.random())
-        }
-    }
+            props.store.changeCurrentPageNumber(props.num);
+            props.store.refresh.rootReRender(Math.random());
+        };
+        fetch(
+            '/save', 
+            { 
+                method: 'POST', 
+                'Content-Type': 'application/json',
+                body: JSON.stringify(props.store.warehouse)
+            }
+        );
+    };
 
     return (
         <button className='page-num-nav' style={pageNumStyle} onClick={handleClick}>{props.num}</button>
     )
-}
+};
 
 
 export {PageNumButton}

@@ -3,7 +3,7 @@
 """
 
 import os, sys, yaml, sqlite3, hashlib, custom, requests, json
-from flask import Flask, render_template, session, redirect, url_for, request, flash, Response
+from flask import Flask, render_template, session, redirect, url_for, request, flash, Response, request
 from xml.dom.pulldom import START_ELEMENT, parseString
 from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
@@ -20,6 +20,11 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
         returns a tuple packed with the names of the routing functions
     
     '''
+
+    # This is a dictionary meant to hold the current state of the user client during this session
+    # Takes the json store object sent from the client, state of this variable is not meant to persist 
+    cache: dict = {}
+
     
     @app.route('/favicon.ico')
     def favicon():
@@ -29,6 +34,7 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
         """
 
         return(redirect(url_for('static', filename='favicon.ico')))
+
 
 
 
@@ -83,24 +89,66 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             for testing api, returns a list of lessons and whether they are completable and have been completed
         """
 
-        if 'username' in session:
+
+        if 'username' in session:  
+            print('session in cache: ', session['username'] in cache)          
+            if session['username'] in cache:
+                print('sending user cache\n')
+                print('state' in cache[session['username']])
+                return cache[session['username']]
+                    
             network.check_success(lessons)
             finalDict = {}
             for lesson in lessons:
+                lesson_folder = lesson.content[0:lesson.content.index(".")]
+                lesson_dir = f"/{lesson_folder}/{lesson.content}"
+                if not hasattr(lesson, 'HTML'):
+                    lesson.HTML = render_template(
+                        lesson_dir,
+                        #"/content/%s" % current_lesson.content,
+                        title = lesson.name,
+                        contentFile = lesson_dir, # % current_lesson.content,
+                        lessons = lessons,
+                        name = session['username']
+                    )
+
                 finalDict[lesson.name] = {}
                 finalDict[lesson.name]['completable'] = lesson.completable
                 finalDict[lesson.name]['url'] = lesson.url
                 finalDict[lesson.name]['group'] = lesson.group
+                if not hasattr(lesson, 'active'):
+                    lesson.active = False
                 finalDict[lesson.name]['pages'] = lesson.pages
+                finalDict[lesson.name]['active'] = lesson.active
+                if hasattr(lesson, 'HTML'):
+                    finalDict[lesson.name]['HTML'] = lesson.HTML
                 if lesson.completable:
                     finalDict[lesson.name]['completed'] = lesson.completed
                 if hasattr(lesson, 'complete_response'):
                     finalDict[lesson.name]['completeResponse'] = lesson.complete_response
+
             return (json.dumps(finalDict))
         else:
             return redirect(url_for('login'))
 
 
+
+    @app.route('/save', methods=['POST'])
+    def save_client_state():
+        print('client data recieved:')
+        cache[session['username']] = {'state': request.data.decode("utf-8")}
+        return 'message recieved'
+        
+        
+
+    @app.route('/state', methods=['GET'])
+    def get_client_state():
+        print('state function triggered')        
+        out = cache[session['username']]
+        print(out)
+        return out
+
+        
 
     # route for every lesson with a yaml config
     @app.route('/lessons/<lesson>')
@@ -127,9 +175,6 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 if results is not None and results == True:
                     network.lesson_success(current_lesson)
 
-            # if the lesson has been completed at some point in the past, let the user know
-            if current_lesson.completed:
-                flash(('success', 'You have completed this lesson'))
 
             # some lessons will define custom scripts to pass information to the html files
             # run those scripts and pass the information to the html here
@@ -155,7 +200,7 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 name = session['username']
             )
 
-            # print('out:', out)
+            # print(f'out for {lesson}', out)
 
             return out
         else:
@@ -226,7 +271,7 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
             conn.close()
             network.initialize_lesson_db(lesson)
             return redirect(url_for('lessons_page', lesson=lesson.url))
-        else:
+        else: 
             return redirect(url_for('login'))
 
 
@@ -270,6 +315,10 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
 
             It then checks if the lesson is completed.
         """
+        print('route name:', routeName)
+        if routeName == 'save':
+            print('save route activated')
+            return 'save route'
 
         if 'username' in session:
             network.check_success(lessons)
@@ -366,4 +415,4 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
         
         return render_template('report.html', title="Reporting", lessons=lessons)
 
-    return (favicon, index, login, logout, lessonstatus, lessons_page, welcome_page, register, reset_lesson, reset_all, custom_routes, report)
+    return (favicon, index, login, logout, lessonstatus, save_client_state, get_client_state, lessons_page, welcome_page, register, reset_lesson, reset_all, custom_routes, report)

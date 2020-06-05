@@ -22,7 +22,7 @@ Conventions followed:
 'use strict'
 
 
-
+ 
 /**
  * LessonItem  ::  Object  ->  JSX
  * 
@@ -44,19 +44,31 @@ const LessonItem = (props) => {
         alignItems: 'center',
     }: {};
 
+    console.log('lesson item props: ', props.completed, 'for item: ', props.title)
+    props.completed? lessonStyle.backgroundColor = 'green': null;
+    // props.completed? lessonStyle.backgroundColor = '#556B2F': null;
+
     const handleClick = (e) => {
-        props.store.refresh.innerHTMLReRender(props.title) // Changes LessonArea
+        props.store.refresh.innerHTMLReRender(props.title); // Changes LessonArea
         if(props.store.checkActivePage().title != props.title){
-            props.store.changeActivePage(props.title)
-            props.store.refresh.rootReRender(Math.random()) // Changes LessonNavigator
-        }
-    }
+            props.store.changeActivePage(props.title);
+            props.store.refresh.rootReRender(Math.random()); // Changes LessonNavigator
+        };
+        fetch(
+            '/save', 
+            { 
+                method: 'POST', 
+                'Content-Type': 'application/json',
+                body: JSON.stringify(props.store.warehouse)
+            }
+        );
+    };
 
     return (
         <div className={classNameIs} style={lessonStyle} id='lesson-item-title' onClick={handleClick}>
             <h2 className={currentLesson}>{props.title}</h2>
         </div>
     )
-}
+};
 
 export {LessonItem}

@@ -74,19 +74,25 @@ function App(props) {
 
 		// if state has been given a non-zero value, fetch doesnt run
 		// 	this ensures that it only runs once after initial component rendering
-		state || fetch('/lessonstatus', {method: 'GET', 'Content-Type': 'application/json'})
-			.then(d=>d.json()).then((d)=> {
+		state || fetch('/lessonstatus', { method: 'GET', 'Content-Type': 'application/json' }).then(d => d.json()).then(d => {
+			if(d.state) {
+				// console.log("the data is here")
+				props.store.warehouse = JSON.parse(d.state)
+			} else {
+				// console.log('data is ', d)
 				Object.keys(d).forEach((x, i) => {
-					const lesson = d[x]
-					lesson.title = x
-					lesson.current = false
+					const lesson = d[x];
+					// console.log('lesson=', lesson);
+					lesson.title = x;
+					lesson.current = false;
 					lesson.currentPage = 1;
-					store.addLesson(lesson)
-			})
-			setNewState(1)
-			store.cacheLessonHTML()
-		})
-	}, [state])
+					store.addLesson(lesson);
+				});
+			}
+			setNewState(1);
+			store.cacheLessonHTML();
+		});
+	}, [state]);
 
 	// triggers a re render of the contents of LessonArea
 	React.useEffect(()=>{
