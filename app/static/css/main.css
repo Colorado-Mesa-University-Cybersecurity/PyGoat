@@ -82,6 +82,7 @@ main {
     align-items: center;
 }
 
+.centerIt { text-align: center; }
 
 
 /* GoatHeader Component */
@@ -202,6 +203,11 @@ main {
     height: 100%;
 }
 
+.renderResultHTML {
+    margin-left: 12.5%;
+}
+
+.server-feedback { padding: 15px; }
 
 
 /* Page Number Navigation Component */

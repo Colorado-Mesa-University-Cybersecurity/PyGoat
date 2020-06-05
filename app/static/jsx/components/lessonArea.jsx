@@ -38,6 +38,9 @@ const LessonArea = (props) => {
         pageNav.unshift(props.children[0])
         pageNav.push(props.children[2])
 
+    const feedbackColor = props.store.checkActivePage().completed? 'green': 'blue';
+    
+
     return (
         <div id='inner-lesson-area'>
             <div className='inBlock w100' id='page-nav'>
@@ -45,7 +48,8 @@ const LessonArea = (props) => {
                     {pageNav}
                 </div>
                 <hr/>
-                <div className="renderHTML"></div>
+                <div className="renderHTML w100"></div>
+                <div className="renderResultHTML w75" style={{backgroundColor: feedbackColor, color: 'white'}}></div>
             </div>
         </div>
     )

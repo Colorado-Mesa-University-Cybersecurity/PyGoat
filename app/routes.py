@@ -348,8 +348,8 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 if results is not None and results == True:
                     network.lesson_success(source_lesson)
 
-            if source_lesson.completed:
-                flash(('success', 'You have completed this lesson'))
+            # if source_lesson.completed:
+            #     flash(('success', 'You have completed this lesson'))
 
             # handle route actions: there are 3 types
             # 1: send request to some other part of the site

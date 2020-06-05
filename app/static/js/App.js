@@ -85,6 +85,17 @@ function App(props) {
 					store.addLesson(lesson);
 				});
 			}
+			console.log('feedback: ', props.store.feedback);
+			if (props.store.feedback !== 'None') {
+				const page = props.store.checkActivePage();
+				const feedbackType = page.completed ? 'complete' : 'feedback';
+				props.store.warehouse.cache[`${page.title}_${feedbackType}`] = props.store.feedback;
+			}
+			fetch('/save', {
+				method: 'POST',
+				'Content-Type': 'application/json',
+				body: JSON.stringify(props.store.warehouse)
+			});
 			setNewState(1);
 			store.cacheLessonHTML();
 		});
@@ -94,14 +105,6 @@ function App(props) {
 	React.useEffect(() => {
 		store.renderInnerPage();
 	}, [rendered]);
-
-	// 	store.renderArea || (store.renderArea = document.querySelector('.renderHTML'))
-	// 	console.log('rendered=', rendered)
-	// 	if(store.renderArea) {
-	// 		store.renderArea.innerHTML = ''
-	// 		store.renderArea.append(store.parsedHTML[currentPage.title].querySelector(`.page${currentPageNumber}`))
-	// 	}
-	// console.log('loaded parsed HTML')
 
 	state || console.log('app loaded'); // runs before state is initialized
 	state && console.log('app reloaded'); // runs after state is initialized
@@ -133,7 +136,7 @@ function App(props) {
 				{ className: 'lesson-area' },
 				React.createElement(
 					LessonArea,
-					null,
+					{ store: store },
 					React.createElement(LessonNavToggleButton, { setToggle: setNewState, warehouse: store.warehouse }),
 					numPages.map((x, i) => React.createElement(PageNumButton, { num: i + 1, key: `${x}___${i}`, active: i + 1 === currentPageNumber, store: store })),
 					React.createElement(ResetLessonButton, null)

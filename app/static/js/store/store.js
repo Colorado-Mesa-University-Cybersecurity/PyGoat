@@ -66,6 +66,9 @@ class Store{
         this.getID()
         this.id || (this.id = 'None')
         console.log(localStorage.getItem(this.id))
+
+        this.getFeedback()
+        this.feedback || (this.feedback = 'None')
         
         // the parsedHTML object will hold all of the DOMs created from jinja templates fetched from the server
         // the DOMParser object is used to transformed cached html from the server into a DOM object without 
@@ -178,6 +181,7 @@ class Store{
                 } else {
                     var URL = `/lessons/${lesson.url}`
                 }
+                console.log('the store cache', lesson.title)
 
                 fetch(URL, {method: 'GET', 'Content-Type': 'text/html'})
                     .then( d => d.text())
@@ -185,6 +189,7 @@ class Store{
                         this.parseHTML(lesson.title, htmlString)
                         this.warehouse.cache[lesson.title] = htmlString
                         this.renderArea || (this.renderArea = document.querySelector('.renderHTML')) || console.log('cannot grab render area yet')
+                        this.feedbackArea || (this.feedbackArea = document.querySelector('.renderResultHTML'))
                         this.refresh.innerHTMLReRender(Math.random())
                 })
             })
@@ -292,6 +297,12 @@ class Store{
         return this;
     };
 
+    getFeedback() {
+        const feedbackArea = document.getElementById('feedback')
+        this.feedback = feedbackArea.innerHTML
+        return this;
+    }
+
 
     /**
      * getID  ::  Void  ->  Void
@@ -391,6 +402,8 @@ class Store{
         if(!this.renderArea) return this;
         const page = this.checkActivePage()
         const pageTitle = page.title
+
+        const feedbackName = page.completed? `${page.title}_complete`: `${page.title}_feedback`;
         if(!this.parsedHTML[pageTitle]) return this;
         if(this.currentlyRenderedHTML == pageTitle && page.currentPage == this.currentlyRenderedPageNumber) return this;
         this.renderArea.innerHTML = ''
@@ -400,6 +413,19 @@ class Store{
         this.parseHTML(page.title, this.warehouse.cache[page.title]);
         this.currentlyRenderedHTML = pageTitle;
         this.currentlyRenderedPageNumber = page.currentPage;
+        console.log('the are we are in: ', this.warehouse.cache[feedbackName])
+        console.log(Object.keys(this.warehouse.cache))
+        this.feedbackArea.innerHTML = ''
+        if(this.warehouse.cache[feedbackName]) {
+            this.parseHTML(feedbackName, this.warehouse.cache[feedbackName])
+            console.log(this.parsedHTML[feedbackName].body)
+            // console.log(this.warehouse.cache[feedbackName])
+            this.feedbackArea.append(
+                this.parsedHTML[feedbackName].body
+            )
+        }
+
+
 
         return this;
     }

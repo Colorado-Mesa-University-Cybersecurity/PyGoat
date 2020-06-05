@@ -37,6 +37,8 @@ const LessonArea = props => {
     pageNav.unshift(props.children[0]);
     pageNav.push(props.children[2]);
 
+    const feedbackColor = props.store.checkActivePage().completed ? 'green' : 'blue';
+
     return React.createElement(
         'div',
         { id: 'inner-lesson-area' },
@@ -49,7 +51,8 @@ const LessonArea = props => {
                 pageNav
             ),
             React.createElement('hr', null),
-            React.createElement('div', { className: 'renderHTML' })
+            React.createElement('div', { className: 'renderHTML w100' }),
+            React.createElement('div', { className: 'renderResultHTML w75', style: { backgroundColor: feedbackColor, color: 'white' } })
         )
     );
 };
