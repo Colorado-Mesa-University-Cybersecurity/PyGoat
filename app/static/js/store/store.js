@@ -60,52 +60,49 @@ Conventions followed:
  * 
  * 
  */
-class Store{
+export class Store {
     constructor() {
         // the getID function will fetch the user's 'unique' id to use to store page state
-        this.getID()
-        this.id || (this.id = 'None')
-        console.log(localStorage.getItem(this.id))
+        this.getID();
+        if (!this.id) this.id = "None";
+        console.log(localStorage.getItem(this.id));
 
-        this.getFeedback()
-        this.feedback || (this.feedback = 'None')
-        
+        this.getFeedback();
+        if (!this.feedback) this.feedback = "None";
+
         // the parsedHTML object will hold all of the DOMs created from jinja templates fetched from the server
         // the DOMParser object is used to transformed cached html from the server into a DOM object without 
         //      rendering the cached html. The new DOMs are indexed by page name and pages are extracted from
         //      the parsedHTML object by using .queryselector on the DOM 
-        this.parser = new DOMParser()
-        this.parsedHTML = {}
+        this.parser = new DOMParser();
+        this.parsedHTML = {};
 
         // 'item' is in local storage for bug testing PyGoats ability to persist state
-        if (localStorage.getItem('item') == null) {
-            this.item = 'hello world';
-        } else {
-            this.item = JSON.parse(localStorage.getItem('item'));
-        };
+        if (localStorage.getItem("item") == null) this.item = "hello world";
+        else this.item = JSON.parse(localStorage.getItem("item"));
 
         // If id exists in localStorage, reinstantiate the store object's "warehouse" 
         //      which contains the applications state
-        if (!(localStorage.getItem(this.id) == null || localStorage.getItem(this.id) == 'undefined')) {
+        if (localStorage.getItem(this.id) != null && localStorage.getItem(this.id) != "undefined") {
             this.warehouse = JSON.parse(localStorage.getItem(this.id));
             Object.keys(this.warehouse.cache).forEach((x) => {
-                this.parseHTML(x, this.warehouse.cache[x])
-            })
+                this.parseHTML(x, this.warehouse.cache[x]);
+            });
             this.addLesson = this.addLesson.bind(this);
         };
 
         // refresh is an object held that will hold references to methods used to update various components
         //   this is to make sure that any component that changes the app data can signal React to re-render the DOM
         //   allows components that change data to trigger a local and server storage update
-        this.refresh = {}
-        this.refresh.storeLocally = this.storeLocally.bind(this)
+        this.refresh = {};
+        this.refresh.storeLocally = this.storeLocally.bind(this);
 
         // warehouse stores all of the data used by the react components
-        this.warehouse || this.createWarehouse()
+        if (!this.warehouse) this.createWarehouse();
 
         // initial inner page area state
-        this.currentlyRenderedHTML = 'none'
-        this.currentlyRenderedPageNumber = 'none'
+        this.currentlyRenderedHTML = "none";
+        this.currentlyRenderedPageNumber = "none";
 
         // store client state using local storage, server storage is updated upon 
         //      interaction with lessons contained in the inner page area
@@ -113,8 +110,8 @@ class Store{
 
         return this;
     };
-    
-    
+
+
     /**
      * createWarehouse  ::  Void  ->  store object
      * 
@@ -125,15 +122,70 @@ class Store{
      * Returns this to enable method chaining
      */
     createWarehouse() {
-        this.warehouse = {}
-        this.warehouse.cache = {} // cache contains the html fetched from server in string form before parsing
-        this.warehouse.navItems = [{group: 'Introduction', lessons: [{title: 'Welcome', url: 'welcome', current: true, group: 'Introduction', pages: 3, currentPage: 1, completed: false, completable: false}]}]
-        this.warehouse.lessonMetaData = {lessonTitles: [], lessons: {}}
-        this.warehouse.siteNav = [{title: 'Logout', active: false, pages: 1, currentPage: 1, url: 'logout'}, {title: 'Report', active: false, pages: 1, currentPage: 1, url: 'report'}, {title: 'Contact Us', active: false, pages: 1, currentPage: 1, url: 'contactUs'}, {title: 'About', active: false, pages: 1, currentPage: 1, url: 'about'}]
+        this.warehouse = {};
+        this.warehouse.cache = {}; // cache contains the html fetched from server in string form before parsing
+        this.warehouse.navItems = [
+            {
+                group: "Introduction",
+                lessons: [
+                    {
+                        title: "Welcome",
+                        url: "welcome",
+                        current: true,
+                        group: "Introduction",
+                        pages: 3,
+                        currentPage: 1,
+                        completed: false,
+                        completable: false
+                    }
+                ]
+            }
+        ];
+        this.warehouse.lessonMetaData = {
+            lessonTitles: [],
+            lessons: {}
+        };
+        this.warehouse.siteNav = [
+            {
+                title: "Logout",
+                active: false,
+                pages: 1,
+                currentPage: 1,
+                url: "logout"
+            },
+            {
+                title: "Report",
+                active: false,
+                pages: 1,
+                currentPage: 1,
+                url: "report"
+            },
+            {
+                title: "About",
+                active: false,
+                pages: 1,
+                currentPage: 1,
+                url: "about"
+            },
+            /*{
+                title: "Contact Us",
+                active: false,
+                pages: 1,
+                currentPage: 1,
+                url: "contactUs"
+            }*/
+            {
+                title: "Create Lesson",
+                active: false,
+                pages: 1,
+                currentPage: 1,
+                url: "createLesson"
+            }
+        ];
 
         this.addLesson = this.addLesson.bind(this);
 
-        this.cacheSiteNavHTML()
+        this.cacheSiteNavHTML();
 
         return this;
     }
@@ -149,17 +201,22 @@ class Store{
      * Returns this to allow for method chaining
      */
     cacheSiteNavHTML() {
-        this.warehouse.siteNav.forEach((item, i) => {
-            if(item.title === 'Logout') return; // renders no page for logout screen, user will be redirected to login screen
-            const URL = `/nav/${item.url}`
-            fetch(URL, {method: 'GET', 'Content-Type': 'text/html'})
-                .then( d => d.text())  // promise chains are used due to the asynchronous nature of fetching server data
-                .then( htmlString => {
-                        this.warehouse.cache[item.title] = htmlString
-                        this.parseHTML(item.title, htmlString)
-                })
-        })
-        
+        this.warehouse.siteNav.forEach(async (item) => {
+            if (item.title === "Logout") return; // renders no page for logout screen, user will be redirected to login screen
+            const URL = `/nav/${item.url}`;
+            let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
+            this.warehouse.cache[item.title] = htmlString;
+            this.parseHTML(item.title, htmlString);
+                /*
+                NOTE: async/await preferred over .then() to promote clearer code flow.
+                
+                .then(d => d.text())  // promise chains are used due to the asynchronous nature of fetching server data
+                .then(htmlString => {
+                    this.warehouse.cache[item.title] = htmlString;
+                    this.parseHTML(item.title, htmlString);
+                });*/
+        });
+
         return this;
     }
 
@@ -175,26 +232,35 @@ class Store{
      */
     cacheLessonHTML() {
         this.warehouse.navItems.forEach((group, i) => {
-            group.lessons.forEach((lesson, j) => {
-                if(lesson.title == 'Welcome') {
-                    var URL = `/nav/${lesson.url}`
-                } else {
-                    var URL = `/lessons/${lesson.url}`
-                }
-                console.log('the store cache', lesson.title)
+            group.lessons.forEach(async (lesson, j) => {
+                let URL;
+                if (lesson.title == "Welcome") URL = `/nav/${lesson.url}`;
+                else URL = `/lessons/${lesson.url}`;
 
-                fetch(URL, {method: 'GET', 'Content-Type': 'text/html'})
-                    .then( d => d.text())
-                    .then( htmlString => {
-                        this.parseHTML(lesson.title, htmlString)
-                        this.warehouse.cache[lesson.title] = htmlString
-                        this.renderArea || (this.renderArea = document.querySelector('.renderHTML')) || console.log('cannot grab render area yet')
-                        this.feedbackArea || (this.feedbackArea = document.querySelector('.renderResultHTML'))
-                        this.refresh.innerHTMLReRender(Math.random())
-                })
-            })
-        })
-        
+                console.log("the store cache", lesson.title);
+
+                let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
+                this.parseHTML(lesson.title, htmlString);
+                this.warehouse.cache[lesson.title] = htmlString;
+                if (!this.renderArea) this.renderArea = document.querySelector(".renderHTML");
+                //this.renderArea || (this.renderArea = document.querySelector(".renderHTML")) || console.log("cannot grab render area yet");
+                if (!this.feedbackArea) this.feedbackArea = document.querySelector(".renderResultHTML");
+                //this.feedbackArea || (this.feedbackArea = document.querySelector(".renderResultHTML"));
+                this.refresh.innerHTMLReRender(Math.random());
+                    /*
+                    NOTE: async/await preferred over .then() to promote clearer code flow.
+                    
+                    .then(d => d.text())
+                    .then(htmlString => {
+                        this.parseHTML(lesson.title, htmlString);
+                        this.warehouse.cache[lesson.title] = htmlString;
+                        this.renderArea || (this.renderArea = document.querySelector(".renderHTML")) || console.log("cannot grab render area yet");
+                        this.feedbackArea || (this.feedbackArea = document.querySelector(".renderResultHTML"));
+                        this.refresh.innerHTMLReRender(Math.random());
+                    });*/
+            });
+        });
+
         return this;
     }
 
@@ -206,20 +272,16 @@ class Store{
      * Returns the page object with a current/active property of true
      */
     checkActivePage() {
-        const activeItem = [{}] // empty object is given so that the inner objects reference can be replace instead of pushing to the array
-        this.warehouse.navItems.forEach((group, i) => {
-            const activeLesson = group.lessons.filter((lesson, j) => {
-                return lesson.current === true;
-            });
-            activeLesson[0] && (activeItem[0] = activeLesson[0]);
+        let activeItem = {}; // empty object is given so that the inner objects reference can be replace instead of pushing to the array
+        this.warehouse.navItems.forEach((group) => {
+            const activeLesson = group.lessons.filter((lesson) => lesson.current === true);
+            if (activeLesson[0]) activeItem = activeLesson[0];
         });
 
-        const activeSiteNavItem = this.warehouse.siteNav.filter((navItem, i) => {
-            return navItem.active === true
-        });
-        activeSiteNavItem[0] && (activeItem[0] = activeSiteNavItem[0])
+        const activeSiteNavItem = this.warehouse.siteNav.filter((navItem) => navItem.active === true);
+        if (activeSiteNavItem[0]) activeItem = activeSiteNavItem[0];
 
-        return activeItem[0];
+        return activeItem;
     };
 
 
@@ -243,7 +305,7 @@ class Store{
         return Array(this.checkActivePage().pages).fill(0);
     };
 
-    
+
     /**
      * changeActivePage  ::  String  ->  store object
      * 
@@ -256,24 +318,14 @@ class Store{
      * Returns this to facilitate method chaining
      */
     changeActivePage(title) {
-        this.checkActivePage().current && (this.checkActivePage().current = false)
-        this.checkActivePage().active && (this.checkActivePage().active = false)
+        if (this.checkActivePage().current) this.checkActivePage().current = false;
+        if (this.checkActivePage().active) this.checkActivePage().active = false;
 
-        this.warehouse.siteNav.forEach((navItem, i) => {
-            if(navItem.title == title) {
-                navItem.active = true;
-            }
-        })
-        
-        this.warehouse.navItems.forEach((group, i) => {
-            group.lessons.forEach((lesson, j) => {
-                if(lesson.title == title) {
-                    lesson.current = true;
-                }
-            })
-        })
+        for (let navItem of this.warehouse.siteNav) if (navItem.title == title) navItem.active = true;
 
-        this.storeLocally()
+        for (let group of this.warehouse.navItems) for (let lesson of group.lessons) if (lesson.title == title) lesson.current = true;
+
+        this.storeLocally();
 
         return this;
     };
@@ -298,8 +350,9 @@ class Store{
     };
 
     getFeedback() {
-        const feedbackArea = document.getElementById('feedback')
-        this.feedback = feedbackArea.innerHTML
+        // Thoughts on shorter syntax?
+        //const feedbackArea = document.getElementById("feedback");
+        this.feedback = document.getElementById("feedback").innerHTML;
         return this;
     }
 
@@ -316,12 +369,12 @@ class Store{
      *      teach students what NOT to do, this could be seen as more of a feature than a vulnerability
      */
     getID() {
-        const idArea = document.getElementById('id')
-        this.id = idArea.innerText
-        idArea.innerText = ''
+        const idArea = document.getElementById("id");
+        this.id = idArea.innerText;
+        idArea.innerText = "";
     }
 
-    
+
     /**
      * addLesson  ::  {group: string, title: string, url: string} -> store object
      * 
@@ -338,29 +391,26 @@ class Store{
      * returns store object to allow method chaining
      */
     addLesson(lesson) {
-        lesson.group || console.assert(false, 'lessons must have group property')
-        lesson.title || console.assert(false, 'lesson must have title property')
-        lesson.url || console.assert(false, 'lesson must have url property')
-        lesson.pages || console.assert(false, 'lesson must have pages property')
+        lesson.group || console.assert(false, "lessons must have group property");
+        lesson.title || console.assert(false, "lesson must have title property");
+        lesson.url || console.assert(false, "lesson must have url property");
+        lesson.pages || console.assert(false, "lesson must have pages property");
 
-        if(this.warehouse.lessonMetaData.lessonTitles.some((x)=> x === lesson.title)) {
-            return this
-        } else {
-            this.warehouse.lessonMetaData.lessonTitles.push(lesson.title)
-            this.warehouse.lessonMetaData.lessons[lesson.title] = lesson
+        if (this.warehouse.lessonMetaData.lessonTitles.some((x) => x === lesson.title)) return this;
+        else {
+            this.warehouse.lessonMetaData.lessonTitles.push(lesson.title);
+            this.warehouse.lessonMetaData.lessons[lesson.title] = lesson;
         }
-        
-        const index = [0]
-        const exists = this.warehouse.navItems.some((x, i) => {
-            const test = x.group === lesson.group
-            if(test) { index[0] = i }; // save the index of group that matches the lesson group
-            return test
-        })
 
-        if (exists) { this.warehouse.navItems[index[0]].lessons.push(lesson) }
-        else { 
-            this.warehouse.navItems.push({group: lesson.group, lessons: []})
-            this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson) 
+        const found = this.warehouse.navItems.find((x) => {
+            const test = x.group === lesson.group;
+            return test;
+        });
+
+        if (found) found.lessons.push(lesson);
+        else {
+            this.warehouse.navItems.push({group: lesson.group, lessons: []});
+            this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson);
         }
 
         // this.cacheLessonHTML()
@@ -382,7 +432,7 @@ class Store{
      * Returns this to allow for method chaining
      */
     parseHTML(title, htmlString) {
-        this.parsedHTML[title] = this.parser.parseFromString(htmlString, 'text/html')
+        this.parsedHTML[title] = this.parser.parseFromString(htmlString, "text/html");
 
         return this;
     }
@@ -399,33 +449,32 @@ class Store{
      * Returns this to allow for method chainings
      */
     renderInnerPage() {
-        if(!this.renderArea) return this;
-        const page = this.checkActivePage()
-        const pageTitle = page.title
+        if (!this.renderArea) return this;
+        const page = this.checkActivePage();
+        const pageTitle = page.title;
 
-        const feedbackName = page.completed? `${page.title}_complete`: `${page.title}_feedback`;
-        if(!this.parsedHTML[pageTitle]) return this;
-        if(this.currentlyRenderedHTML == pageTitle && page.currentPage == this.currentlyRenderedPageNumber) return this;
-        this.renderArea.innerHTML = ''
-        this.renderArea.append(
-            this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`)
-            ) && console.log('append ran')
+        const feedbackName = page.completed ? `${page.title}_complete` : `${page.title}_feedback`;
+        if (!this.parsedHTML[pageTitle]) return this;
+        if (this.currentlyRenderedHTML == pageTitle && page.currentPage == this.currentlyRenderedPageNumber) return this;
+
+        this.renderArea.innerHTML = "";
+        if (
+            this.renderArea.append(this.parsedHTML[pageTitle].querySelector(`.page${page.currentPage}`))
+        ) console.log("append ran");
         this.parseHTML(page.title, this.warehouse.cache[page.title]);
         this.currentlyRenderedHTML = pageTitle;
         this.currentlyRenderedPageNumber = page.currentPage;
-        console.log('the are we are in: ', this.warehouse.cache[feedbackName])
-        console.log(Object.keys(this.warehouse.cache))
-        this.feedbackArea.innerHTML = ''
-        if(this.warehouse.cache[feedbackName]) {
-            this.parseHTML(feedbackName, this.warehouse.cache[feedbackName])
-            console.log(this.parsedHTML[feedbackName].body)
-            // console.log(this.warehouse.cache[feedbackName])
-            this.feedbackArea.append(
-                this.parsedHTML[feedbackName].body
-            )
+
+        console.log("the are we are in: ", this.warehouse.cache[feedbackName]); // What on earth is this?
+        console.log(Object.keys(this.warehouse.cache));
+
+        this.feedbackArea.innerHTML = "";
+
+        if (this.warehouse.cache[feedbackName]) {
+            this.parseHTML(feedbackName, this.warehouse.cache[feedbackName]);
+            console.log(this.parsedHTML[feedbackName].body);
+            this.feedbackArea.append(this.parsedHTML[feedbackName].body);
         }
-
-
 
         return this;
     }
@@ -439,12 +488,12 @@ class Store{
      * Returns this to allow for method chaining
      */
     storeLocally() {
-        localStorage.setItem('item', JSON.stringify(this.item));
+        localStorage.setItem("item", JSON.stringify(this.item));
         localStorage.setItem(this.id, JSON.stringify(this.warehouse));
         return this;
-    };
+    }
 };
 
 
 
-export {Store}
+//export {Store};
