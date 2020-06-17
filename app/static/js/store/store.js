@@ -207,14 +207,6 @@ export class Store {
             let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
             this.warehouse.cache[item.title] = htmlString;
             this.parseHTML(item.title, htmlString);
-                /*
-                NOTE: async/await preferred over .then() to promote clearer code flow.
-                
-                .then(d => d.text())  // promise chains are used due to the asynchronous nature of fetching server data
-                .then(htmlString => {
-                    this.warehouse.cache[item.title] = htmlString;
-                    this.parseHTML(item.title, htmlString);
-                });*/
         });
 
         return this;
