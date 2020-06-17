@@ -47,7 +47,6 @@ function App(props) {
 
 	const store = props.store
 	const format = props.store.format
-	const currentPage = store.checkActivePage();
 
 	// React.useState() creates a state for the React component
 	// 	the state variable is the state while the setNewState variable
@@ -100,14 +99,11 @@ function App(props) {
 
 	}, [rendered])
 
-	// 	store.renderArea || (store.renderArea = document.querySelector('.renderHTML'))
-	// 	console.log('rendered=', rendered)
-	// 	if(store.renderArea) {
-	// 		store.renderArea.innerHTML = ''
-	// 		store.renderArea.append(store.parsedHTML[currentPage.title].querySelector(`.page${currentPageNumber}`))
-	// 	}
-	// console.log('loaded parsed HTML')
 
+	// These are short circuited logic statements
+	// 		if the first item evaluates to a 'truthy' value,
+	//  	|| stops evaluation, && continues evaluation
+	// 		the reverse applies if the first item is evalued to a 'falsey' value
 	state || console.log('app loaded')   // runs before state is initialized
 	state && console.log('app reloaded') // runs after state is initialized
 
@@ -122,6 +118,7 @@ function App(props) {
 				</SiteNavigator>
 			</GoatHeader> 
 
+
 			<main>
 				{/* This is the Side Panel */}
 				<div className={sidePanelClass} style={sidePanelStyle}>
@@ -131,7 +128,7 @@ function App(props) {
 
 				{/* This is Page Contents */}
 				<div className='lesson-area'>
-					<LessonArea>
+					<LessonArea store={store}>
 						<LessonNavToggleButton setToggle={setNewState} warehouse={store.warehouse} />
 						{numPages.map((x, i) => <PageNumButton num={i+1} key={`${x}___${i}`} active={(i+1) === currentPageNumber} store={store}/>)}
 						<ResetLessonButton />

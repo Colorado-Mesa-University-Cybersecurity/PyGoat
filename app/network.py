@@ -45,7 +45,7 @@ def initialize_db(lessons: list, dbname='pygoat.db') -> None:
         # add columns to users database tracking lesson completion. 
         # There is no ADD column IF NOT EXISTS in SQLite, so just catching the error will have to do for now 
         if lesson.completable:
-            colName: str = f'{lesson.name}Completed' # colName: str = "%sCompleted" % lesson.name
+            colName: str = f'{lesson.name}Completed'
             try:
                 c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
             except sqlite3.DatabaseError as e:
@@ -56,7 +56,7 @@ def initialize_db(lessons: list, dbname='pygoat.db') -> None:
 
 
 
-def initialize_lesson_db(lesson, dbname='pygoat.db') -> None:
+def initialize_lesson_db(lesson, dbname='pygoat.db', restart=True) -> None:
     """ 
         initialize the custom database tables defined in the lesson yamls
         lesson = lesson object - a lesson object obtained from reading in a lesson
@@ -66,15 +66,19 @@ def initialize_lesson_db(lesson, dbname='pygoat.db') -> None:
 
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    logging.info('initializing %s' % lesson.name) # print('initializing %s' % lesson.name)
+    logging.info('initializing %s' % lesson.name)
     if lesson.db_tables is not None:
         for table in lesson.db_tables:
             try: 
                 c.execute('''DROP TABLE %s''' % table['name'])
                 conn.commit()
             except sqlite3.DatabaseError as e:
-                print(f'Error: Restart program to access following: {e}')
-                print('    This error always occurs upon first launch, do not worry')
+                if restart == True:
+                    conn.close()
+                    return initialize_lesson_db(lesson, restart=False)
+                else:
+                    print(f'Error: Restart program to access following: {e}')
+                    print('    This error always occurs upon first launch, do not worry')
             sqlString = '''CREATE TABLE %s (''' % table['name']
             conn.commit()
             for column in table['columns']:

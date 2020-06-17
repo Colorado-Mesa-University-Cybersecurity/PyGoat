@@ -36,6 +36,7 @@ from config import env_config
 def checkDebug() -> tuple:
     ''' Function checks arguments for a debug statement and accompanying IP address '''
 
+    # if user runs python run.py debug <ip address> the server spins a debug server at that IP address
     return (argv[2], True) if len(argv) >= 3 and argv[1] == "debug" else ('localhost', False)
 
 
@@ -71,6 +72,8 @@ def start(run_through_python: bool) -> None:
 
 
 
+# if running from flask run command, this evaluates to false and runs start(False)
+# if running from python run.py command, this evaluates to true and runs start(True)
 if __name__ == "__main__":
     start(True)
 else:
