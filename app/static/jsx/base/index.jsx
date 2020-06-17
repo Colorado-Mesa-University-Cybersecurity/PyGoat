@@ -22,7 +22,7 @@ Conventions followed:
 */
 
 
-import {App} from './App.js';
+import {App} from './app.js';
 import {Store} from './store/store.js'
 
 
@@ -63,7 +63,7 @@ class View {
 			</React.StrictMode>,
 			document.getElementById('root')
 		);
-		return this;
+		return this; 
     };
 };
 

@@ -28,7 +28,7 @@ import {LessonNavToggleButton} from './components/sideBarToggle.js'
 import {ResetLessonButton} from './components/resetLesson.js'
 import {PageNumButton} from './components/pageNumNav.js'
 
-
+ 
 'use strict'
 
 

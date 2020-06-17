@@ -31,16 +31,16 @@ import yaml
 
 class lesson:
     def __init__(self, yaml_config):
-        self.name = yaml_config['name'] # for the template
-        self.title = yaml_config['name'] # for client-side rendering
-        self.group = yaml_config['group']
-        self.url = yaml_config['url'] 
-        self.pages = yaml_config['numberOfPages'] 
+        self.name: str = yaml_config['name'] # for the template
+        self.title: str = yaml_config['name'] # for client-side rendering
+        self.group: str = yaml_config['group']
+        self.url: str = yaml_config['url'] 
+        self.pages: int or str = yaml_config['numberOfPages'] 
         self.content = yaml_config['content']
-        self.difficulty = yaml_config['difficulty']
+        self.difficulty: int or str = yaml_config['difficulty']
         self.type = yaml_config['type']
-        self.completable = yaml_config['completable']
-        self.completed = False
+        self.completable: bool = yaml_config['completable']
+        self.completed: bool = False
         
         self.success_condition = None
         self.load_script = None
