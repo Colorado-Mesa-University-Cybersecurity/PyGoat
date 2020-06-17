@@ -1,6 +1,32 @@
-import os, yaml, sqlite3, hashlib, requests
+"""
+File: network.py
+Description: File instantiates the functions that handle processing data to and from the SQLite database
+                Database file is pygoat.db
+
+IMPORTANT!!! 
+    To change configuration go to config.py, there you can set the proxy and security certificate settings
+
+Conventions followed:
+    4-space tabs
+    3 empty lines between classes and functions
+    Lines should be limited to less than 80 characters where possible
+    Avoid Polluting the global scope
+    DocStrings are restrained to a single line where possible:
+       def functionName(paramName: paramType) -> returnType:
+            ''' contents of docstring describing function behaviour '''
+    Multi-line DocStrings follow the convention:
+       def functionName(paramName: paramType) -> returnType:
+             '''
+                  contents of docstring describing function behaviour
+             '''
+    Inline Type Annotations follow the convention:
+        variableName: variableType = variableValue
+    Inline Function/Method Annotations follow the convention:
+        def functionName(paramName1: paramType, paramName2: paramType...) -> returnType:
+"""
+
+import os, yaml, sqlite3, hashlib, requests, logging
 from flask import session, redirect, flash, Response, render_template
-import logging
 from lesson_handler import lesson
 
 
@@ -13,13 +39,11 @@ def load_lessons(lessondir: str, lessons: list) -> None:
     """
     
     for lesson_name in os.listdir(lessondir):
-        lesson_path = f"{lessondir}/{lesson_name}"
-        lesson_yaml = f"{lesson_path}/{lesson_name}.yaml"
+        lesson_path: str = f"{lessondir}/{lesson_name}"
+        lesson_yaml: str = f"{lesson_path}/{lesson_name}.yaml"
         if os.path.isdir(lesson_path) and os.path.exists(lesson_yaml):
             config = open(lesson_yaml, "r")
 
-            # Note: Avoid unecessary nesting (above line does exactly the same thing, without nesting)
-            # with open(lesson_yaml, "r") as config:
             config_list = yaml.safe_load(config)
             current_lesson = lesson(config_list)
 
@@ -49,14 +73,14 @@ def initialize_db(lessons: list, dbname='pygoat.db') -> None:
             try:
                 c.execute('''ALTER TABLE users ADD "%s" integer''' % colName) 
             except sqlite3.DatabaseError as e:
-                logging.info(e)  # print(f'logging:{e}')
+                logging.info(e) 
 
     conn.commit()
     conn.close()
 
 
 
-def initialize_lesson_db(lesson, dbname='pygoat.db') -> None:
+def initialize_lesson_db(lesson: 'lessonClass', dbname='pygoat.db') -> None:
     """ 
         initialize the custom database tables defined in the lesson yamls
         lesson = lesson object - a lesson object obtained from reading in a lesson
@@ -92,7 +116,7 @@ def initialize_lesson_db(lesson, dbname='pygoat.db') -> None:
 
 
 
-def valid_login(username, password, dbname='pygoat.db', testing=False) -> bool:
+def valid_login(username: str, password: str, dbname='pygoat.db', testing=False) -> bool:
     """
         tests a username and password to see if they are in the users table
         username = string - the username
@@ -205,7 +229,7 @@ def send_webrequest(webrequest, request=None, url="http://localhost:5000", testi
 
 
 
-def make_sql_query(query, request=None, dbname='pygoat.db', testing=False) -> None:
+def make_sql_query(query: str, request=None, dbname='pygoat.db', testing=False) -> None:
     """
         make arbitrary sql queries using route actions in the config files
         replace $form and $session primitives with their counterparts in the request
@@ -352,7 +376,7 @@ def make_custom_response(response, request=None, testing=False):
 
 
 
-def lesson_success(lesson, dbname='pygoat.db', testing=False):
+def lesson_success(lesson: 'lessonClass', dbname='pygoat.db', testing=False):
     """
         sets the target lesson as successful in the database
         lesson - a lesson object, obtained by reading in the lesson yamls
@@ -397,7 +421,7 @@ def check_success(lessons: list, dbname='pygoat.db') -> None:
 def start(lessons: list, path: str) -> None:
     ''' Function initializes database after loading lessons '''
     
-    load_lessons(f'{path}/lessons', lessons) # lessondir="%s/lessons" % path
+    load_lessons(f'{path}/lessons', lessons)
     initialize_db(lessons)
     for lesson in lessons:
         initialize_lesson_db(lesson)
