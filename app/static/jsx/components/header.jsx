@@ -14,6 +14,7 @@ IMPORTANT!!! If you are reading this from within a .js file,  EXIT THE FILE!!!  
 Conventions followed:
     4-space tabs
     always place semicolons
+    trailing commas in arrays and objects
     3 empty lines between classes and functions
     2 empty lines between methods
     Class methods always return this unless other return value desired

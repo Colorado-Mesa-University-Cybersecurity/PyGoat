@@ -17,13 +17,14 @@ IMPORTANT!!! If you are reading this from within a .js file,  EXIT THE FILE!!!  
 	of this file inside the static/jsx directory
 
 Conventions followed:
-				4-space tabs
-				always place semicolons
-				3 empty lines between classes and functions
-				2 empty lines between methods
-				Class methods always return this unless other return value desired
-				annotations follow the convention:     
-						function/method  ::  (parameter types) -> (return types)
+    4-space tabs
+    always place semicolons
+    trailing commas in arrays and objects
+    3 empty lines between classes and functions
+    2 empty lines between methods
+    Class methods always return this unless other return value desired
+    annotations follow the convention:     
+            function/method  ::  (parameter types) -> (return types)
 */
 
 import { App } from './app.js';
