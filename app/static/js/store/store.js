@@ -243,21 +243,8 @@ export class Store {
                 this.parseHTML(lesson.title, htmlString);
                 this.warehouse.cache[lesson.title] = htmlString;
                 if (!this.renderArea) this.renderArea = document.querySelector(".renderHTML");
-                //this.renderArea || (this.renderArea = document.querySelector(".renderHTML")) || console.log("cannot grab render area yet");
                 if (!this.feedbackArea) this.feedbackArea = document.querySelector(".renderResultHTML");
-                //this.feedbackArea || (this.feedbackArea = document.querySelector(".renderResultHTML"));
                 this.refresh.innerHTMLReRender(Math.random());
-                    /*
-                    NOTE: async/await preferred over .then() to promote clearer code flow.
-                    
-                    .then(d => d.text())
-                    .then(htmlString => {
-                        this.parseHTML(lesson.title, htmlString);
-                        this.warehouse.cache[lesson.title] = htmlString;
-                        this.renderArea || (this.renderArea = document.querySelector(".renderHTML")) || console.log("cannot grab render area yet");
-                        this.feedbackArea || (this.feedbackArea = document.querySelector(".renderResultHTML"));
-                        this.refresh.innerHTMLReRender(Math.random());
-                    });*/
             });
         });
 
