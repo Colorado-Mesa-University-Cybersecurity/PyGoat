@@ -16,7 +16,7 @@ Conventions followed:
     Annotations follow the convention:     
             function/method  ::  (parameter types) -> (return types)
 */
-
+ 
 
 import {SVGLogo} from './components/logo.js'
 import {GoatHeader} from './components/header.js'
