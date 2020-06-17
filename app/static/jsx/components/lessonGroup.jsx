@@ -3,7 +3,11 @@ File: lessonGroup.jsx
 Description: file exports the LessonGroup React Component which implements a group button 
                 composed of toggleable internal LessonItem buttons
 
-IMPORTANT!!! If you are reading this from within a .js file, it is important to note that you should not 
+IMPORTANT!!! If you are reading this from within a .js file,   EXIT THE FILE!!!   Go to the jsx/components directory 
+    and find lessonGroup.jsx.  React is Transpiled from JSX, unless you are familiar with React, you will not
+    understand anything about the file unless you read the JSX file which is declarative and self documenting 
+
+    it is important to note that you should not 
 	make any changes to that file if you wish to edit the PyGoat client, instead follow the directions on 
 	the README.md contained within the static directory. Make sure any editing is done with the .jsx version
 	of this file inside the static/jsx directory
