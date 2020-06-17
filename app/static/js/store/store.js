@@ -5,6 +5,7 @@ Description: file exports Store class that holds and manages data and state for 
 Conventions followed:
     4-space tabs
     always place semicolons
+    trailing commas in arrays and objects
     3 empty lines between classes and functions
     2 empty lines between methods
     Class methods always return this unless other return value desired
@@ -136,14 +137,14 @@ export class Store {
                         pages: 3,
                         currentPage: 1,
                         completed: false,
-                        completable: false
-                    }
-                ]
-            }
+                        completable: false,
+                    },
+                ],
+            },
         ];
         this.warehouse.lessonMetaData = {
             lessonTitles: [],
-            lessons: {}
+            lessons: {},
         };
         this.warehouse.siteNav = [
             {
@@ -151,36 +152,36 @@ export class Store {
                 active: false,
                 pages: 1,
                 currentPage: 1,
-                url: "logout"
+                url: "logout",
             },
             {
                 title: "Report",
                 active: false,
                 pages: 1,
                 currentPage: 1,
-                url: "report"
+                url: "report",
             },
             {
                 title: "About",
                 active: false,
                 pages: 1,
                 currentPage: 1,
-                url: "about"
+                url: "about",
             },
             /*{
                 title: "Contact Us",
                 active: false,
                 pages: 1,
                 currentPage: 1,
-                url: "contactUs"
+                url: "contactUs",
             }*/
             {
                 title: "Create Lesson",
                 active: false,
                 pages: 1,
                 currentPage: 1,
-                url: "createLesson"
-            }
+                url: "createLesson",
+            },
         ];
 
         this.addLesson = this.addLesson.bind(this);
@@ -188,7 +189,7 @@ export class Store {
         this.cacheSiteNavHTML();
 
         return this;
-    }
+    };
 
 
     /**
@@ -210,7 +211,7 @@ export class Store {
         });
 
         return this;
-    }
+    };
 
 
     /**
@@ -241,7 +242,7 @@ export class Store {
         });
 
         return this;
-    }
+    };
 
     /**
      * checkActivePage  ::  Void  ->  {title: String, group: String, current/active: Boolean, pages: Number, currentPage: Number}
@@ -328,12 +329,13 @@ export class Store {
         return this;
     };
 
+
     getFeedback() {
         // Thoughts on shorter syntax?
         //const feedbackArea = document.getElementById("feedback");
         this.feedback = document.getElementById("feedback").innerHTML;
         return this;
-    }
+    };
 
 
     /**
@@ -351,7 +353,7 @@ export class Store {
         const idArea = document.getElementById("id");
         this.id = idArea.innerText;
         idArea.innerText = "";
-    }
+    };
 
 
     /**
@@ -379,7 +381,7 @@ export class Store {
         else {
             this.warehouse.lessonMetaData.lessonTitles.push(lesson.title);
             this.warehouse.lessonMetaData.lessons[lesson.title] = lesson;
-        }
+        };
 
         const found = this.warehouse.navItems.find((x) => {
             const test = x.group === lesson.group;
@@ -390,12 +392,11 @@ export class Store {
         else {
             this.warehouse.navItems.push({group: lesson.group, lessons: []});
             this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson);
-        }
+        };
 
-        // this.cacheLessonHTML()
 
         return this;
-    }
+    };
 
 
     /**
@@ -414,7 +415,7 @@ export class Store {
         this.parsedHTML[title] = this.parser.parseFromString(htmlString, "text/html");
 
         return this;
-    }
+    };
 
 
     /**
@@ -444,19 +445,16 @@ export class Store {
         this.currentlyRenderedHTML = pageTitle;
         this.currentlyRenderedPageNumber = page.currentPage;
 
-        console.log("the are we are in: ", this.warehouse.cache[feedbackName]); // What on earth is this?
-        console.log(Object.keys(this.warehouse.cache));
-
         this.feedbackArea.innerHTML = "";
 
         if (this.warehouse.cache[feedbackName]) {
             this.parseHTML(feedbackName, this.warehouse.cache[feedbackName]);
             console.log(this.parsedHTML[feedbackName].body);
             this.feedbackArea.append(this.parsedHTML[feedbackName].body);
-        }
+        };
 
         return this;
-    }
+    };
 
 
     /**
@@ -470,7 +468,7 @@ export class Store {
         localStorage.setItem("item", JSON.stringify(this.item));
         localStorage.setItem(this.id, JSON.stringify(this.warehouse));
         return this;
-    }
+    };
 };
 
 
