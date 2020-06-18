@@ -10,7 +10,6 @@
 		<title>PyGoat</title>
 
 		<link rel="stylesheet" href="../static/css/bootstrap.min.css">
-		<!-- Custom CSS -->
 		<link rel="stylesheet" href="../static/css/header-style.css">
 
 	</head>
@@ -63,19 +62,10 @@
 			</div>
 			{% endblock %}
 
-			<!-- jQuery local 
-			<script src="../static/styles/jquery-3.4.1.js"></script>-->
-			<!-- Popper.JS -->
 			<script src="../static/js/libraries/popper.js"></script>
-			<!-- Bootstrap JS local -->
 			<script src="../static/js/libraries/bootstrap.min.js"></script>
 
 			<script type="text/javascript">
-				/*$(document).ready(function () {
-					$('#sidebarCollapse').on('click', function () {
-						$('#sidebar').toggleClass('active');
-					});
-				});*/
 				window.addEventListener("load", (event) => {
 					document.getElementById("sidebarCollapse").addEventListener("click", (ev) => {
 						document.getElementById("sidebar").classList.toggle("active");
