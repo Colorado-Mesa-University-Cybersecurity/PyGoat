@@ -29,10 +29,10 @@ Conventions followed:
 """
 
 import sqlite3, os, pickle, filecmp, urllib, time, sys
-from flask import flash
 from xml.dom.pulldom import parseString, START_ELEMENT
-from xml.sax import make_parser
 from xml.sax.handler import feature_external_ges
+from xml.sax import make_parser
+from flask import flash
 
 
 path = os.path.dirname(os.path.realpath(__file__))
