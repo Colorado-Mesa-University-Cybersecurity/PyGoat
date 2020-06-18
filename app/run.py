@@ -33,10 +33,14 @@ from config import env_config
 
 
 
-def checkDebug() -> tuple:
-    ''' Function checks arguments for a debug statement and accompanying IP address '''
+def checkHost() -> tuple:
+    ''' 
+        Function checks arguments for an IP address as the second argument to python
+        'python run.py <host IP address>'
+        This allows developer to run the app on one computer and display it on another
+    '''
 
-    return (argv[2], True) if len(argv) >= 3 and argv[1] == "debug" else ('localhost', False)
+    return True if len(argv) >= 2 else 'localhost'
 
 
 
@@ -45,7 +49,7 @@ def setEnvironment(config: dict) -> dict:
 
     environ['REQUESTS_CA_BUNDLE'] = config['certificate_path']
     environ['HTTP_PROXY'] = config['http_proxy']
-    (config['host'], config['debug']) = checkDebug()
+    config['host'] = checkHost()
 
     return config
 
@@ -65,7 +69,7 @@ def start(run_through_python: bool) -> None:
     print(f' * Running on http://{session_config["host"]}:5000/')
 
     if run_through_python:  # if running using run.py activates, otherwise if using run.sh or flask run, skips
-        app.run(host=session_config['host'], debug=session_config['debug'])
+        app.run(host=session_config['host'], debug=True)
 
 
 
