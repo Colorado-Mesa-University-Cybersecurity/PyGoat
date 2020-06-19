@@ -50,18 +50,20 @@ Note* This requires an installation of Python 3.7+ in the host environment
 
 ## Note About Proxies
 
+Users can configure PyGoat to work with a Proxy Application like ZAP or BurpSuite. It is recommended that new users on download ZAP or Burp and launch their browser from within the application.
+
 This is only confirmed to work in the Linux Ubuntu Environment. In windows and IOS it is recommended that you launch the browser from ZAP or BurpSuite
 
 Linux environment with Proxy:
 
-* `chmod +x run.sh`
+```bash
+	chmod +x run.sh
 
-* `./run.sh`
+	./run.sh
+```
 
 * If you run using this method without using a proxy, the python requests module will throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
-
-The served web page will be available at http://localhost:5000
 
 * A web proxy like Burp or Zap should work just fine with PyGoat, but if you aren't seeing all the requests, you will have to export the certificate and convert it to a pem file
 
@@ -98,7 +100,7 @@ https://drive.google.com/file/d/1UlHXSOOaUFea-V-wjzmNySFG2dzj4mLW/view?usp=shari
 
 * File architecture and descriptions of individual files can be found in architecture.txt in the base directory
 
-* A Figma design for the PyGoat client detailing the UI specifications can be found in the base directory
+* A Figma design for the PyGoat client called PyGoatUI.fig that details the UI specifications can be found in the base directory
 
 * Read the README.md located within the app/static directory for information on how the React client and it's Component-Based architecture works. Do not edit client js files because changes will be overwritten whenever you start up the babel transpiler, instead any changes should be made to the parent jsx file. details on locations found in the app/static README
 
