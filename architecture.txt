@@ -79,10 +79,16 @@ proxy:
 solutions:
     Holds files that are used to test the api endpoints and describe the lessons
 
-    Holds 3 directories:
-        curl_scripts
-        payloads
-        writeups
+    curl_scripts:
+        holds scripts that test the rest api
+
+    payloads:
+        holds objects that need to delivered to the server by the client through user interaction to 
+            complete lessons
+
+    writeups:
+        holds descriptions of the lessons
+
 
 
 static:
@@ -111,7 +117,7 @@ templates:
 
 tests:
     Holds all tests for the client
-    
+
 
 
 /* documentation directory */
