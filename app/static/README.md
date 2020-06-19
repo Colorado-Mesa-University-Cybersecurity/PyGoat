@@ -33,8 +33,6 @@ This Readme is to help future developers work without confusion
     |   |___ components
     |   
     |___ photos
-    |
-    |___ styles
 ```
 
 ### Directory Contents
@@ -56,8 +54,6 @@ static/jsx/base: contains all of the react JSX versions of the .js files in stat
 static/jsx/components: contains all of the react JSX versions of the components in the static/js/components directory. Edit these components or add new components here while running the transpiler
 
 static/photos: contains all image assets
-
-static/styles: contains legacy files used to by the login and registration screens. needs refactored
 
 static: contains the Figma template used to create the PyGoat Application, package.json for installing and running the transpiler, favicon.ico, the babel.config.json file for the transpiler, and other .json files for npm.
 
