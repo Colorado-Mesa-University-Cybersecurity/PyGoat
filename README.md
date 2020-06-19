@@ -92,7 +92,8 @@ https://drive.google.com/file/d/1UlHXSOOaUFea-V-wjzmNySFG2dzj4mLW/view?usp=shari
 
 * A Figma design for the PyGoat client detailing the UI specifications can be found in the base directory
 
-		
+* Read the README.md located within the app/static directory for information on how the React client and it's Component-Based architecture works. Do not edit client js files because changes will be overwritten whenever you start up the babel transpiler, instead any changes should be made to the parent jsx file. details on locations found in the app/static README
+
 ## Creating Custom Lessons
 
 * PyGoat uses yaml files to define its lessons. See [this wiki page](https://github.com/lawalgren/PyGoat/wiki/How-to-create-new-lessons) for more details.
