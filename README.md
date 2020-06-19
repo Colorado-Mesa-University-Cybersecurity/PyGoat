@@ -65,8 +65,6 @@ Linux environment with Proxy:
 * If you run using this method without using a proxy, the python requests module will throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
 
-The served web page will be available at http://localhost:5000
-
 * A web proxy like Burp or Zap should work just fine with PyGoat, but if you aren't seeing all the requests, you will have to export the certificate and convert it to a pem file
 
 ### Exporting the certificate in burpsuite
