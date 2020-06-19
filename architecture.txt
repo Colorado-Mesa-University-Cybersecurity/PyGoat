@@ -1,46 +1,121 @@
 PyGoat
 |
-|---- Contract
+|___ app
+|    |
+|    |___ lessons
+|    |    |
+|    |    |___<lesson name>
+|    |    
+|    |    
+|    |___ proxy
+|    |
+|    |___ solutions
+|    |    |  
+|    |    |___ curl_scripts
+|    |    |  
+|    |    |___ payloads
+|    |    |  
+|    |    |___ writeups
+|    |      
+|    |      
+|    |___ static
+|    |    |  
+|    |    |___ css
+|    |    |  
+|    |    |  
+|    |    |___ js
+|    |    |    |
+|    |    |    |___ components
+|    |    |    |
+|    |    |    |___ libraries
+|    |    |    |
+|    |    |    |___ store
+|    |    |    |
+|    |    |    |___ tests
+|    |    |  
+|    |    |  
+|    |    |___ jsx
+|    |    |    |
+|    |    |    |___ base
+|    |    |    |
+|    |    |    |___ components
+|    |    |    
+|    |    |    
+|    |    |___ photos
+|    |
+|    |
+|    |___ templates
+|    |
+|    |___ tests
 |
-|---- html
 |
-|---- latex
-|
-|---- lessons
-|
-|---- solutions
-|     |
-|     |---- curl_scripts
-|     |
-|     |---- payloads
-|     |
-|     |---- writeups
-|
-|
-|---- static
-|     |
-|     |---- styles
-|
-|---- templates
-|     |
-|     |---- content
-|
-|---- tests
-|
-|-pygoat.db
-|
-|- run.sh
-|- run_no_proxy.sh
-|- runtests.sh
-|- assert.sh
-|
-|- custom.py
-|- lesson_handler.py
-|- main.py
-|- run.py
+|___ documentation
+     |
+     |___ Contract
+     |
+     |___ html
+     |    |  
+     |    |___ search  
+     |     
+     |     
+     |___ latex
+
+
 
 
 Folders:
+
+/* app directory */
+
+lessons:
+    Holds .yaml and html files that configure each of the various lessons in their own folder
+
+proxy: 
+    holds files related to associating the server with a .pem certificate
+        this is for advanced users and has been placed here to reduce clutter,
+        new users should launch their web browser from a proxy instead of using
+        a certificate
+
+solutions:
+    Holds files that are used to test the api endpoints and describe the lessons
+
+    Holds 3 directories:
+        curl_scripts
+        payloads
+        writeups
+
+
+static:
+    Holds the client assets for the project
+
+    css:
+        holds all of the style sheets used by the project, also has a minified bootstrap file
+
+    js:
+        Holds the transpiled react code for the Front End, do not edit these files
+        any changes are likely to be unknowingly overwritten by the transpiler
+
+    jsx:
+        Holds all of the React Components used to contruct the Front End
+        Read the README.md in the static directory for information on how
+        to set up the transpiler
+
+    photos:
+        Holds all of the visual assets used by the PyGoat Client
+
+templates:
+    Holds the Jinja templates to render in flask before being sent to the client
+        only contains the login/registration page, the main application page, 
+        and the navigation pages. Lesson templates are to be deposited alongside
+        their companion .yaml documents
+
+tests:
+    Holds all tests for the client
+    
+
+
+/* documentation directory */
+
 
 Contracts:
     Holds the contract between Dr. Basnet and the original development templates
@@ -50,29 +125,3 @@ html:
 
 latex:
     Holds LaTeX markup for the DoxyGen documentation system
-
-lessons:
-    Holds .yaml files that configure the various lessons
-
-solutions:
-    Holds files that are used to test if the user succeeded in completing a task
-
-    Holds 3 directories:
-        curl_scripts
-        payloads
-        writeups
-
-static:
-    Holds the digital assets for the project
-
-    Holds 1 directory, styles:
-        Holds the front-end css and javascript libraries
-
-templates:
-    Holds the Jinja templates to render in flask before being sent to the client
-
-    holds 1 direcoty, content:
-        Holds the individual lesson templates for the project
-
-tests:
-    Holds all tests not contained in the base directory
