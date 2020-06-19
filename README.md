@@ -28,12 +28,21 @@ Run the following commands to install the dependancies for Flask
 	pip3 install -r requirements.txt --user
 ```
 
+Users should also have a Man in the Middle proxy like OWASP-ZAP or BurpSuite, though not every lesson will require a proxy to complete
+
 ## Running
 
 To start PyGoat in any Environment run the following command from the app directory:
 
 ```bash
 	python run.py
+```
+
+Then navigate to this address in the browser:
+
+
+```bash
+	http://localhost:5000/
 ```
 
 Note* This requires an installation of Python 3.7+ in the host environment
