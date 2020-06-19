@@ -70,11 +70,13 @@ Folders:
 lessons:
     Holds .yaml and html files that configure each of the various lessons in their own folder
 
+
 proxy: 
     holds files related to associating the server with a .pem certificate
         this is for advanced users and has been placed here to reduce clutter,
         new users should launch their web browser from a proxy instead of using
         a certificate
+
 
 solutions:
     Holds files that are used to test the api endpoints and describe the lessons
@@ -88,7 +90,6 @@ solutions:
 
     writeups:
         holds descriptions of the lessons
-
 
 
 static:
@@ -116,8 +117,10 @@ templates:
         and the navigation pages. Lesson templates are to be deposited alongside
         their companion .yaml documents
 
+
 tests:
     Holds all tests for the client
+
 
 
 
@@ -127,8 +130,10 @@ tests:
 Contracts:
     Holds the contract between Dr. Basnet and the original development templates
 
+
 html:
     Holds web-related assets for the DoxyGen documentation system
+
 
 latex:
     Holds LaTeX markup for the DoxyGen documentation system
