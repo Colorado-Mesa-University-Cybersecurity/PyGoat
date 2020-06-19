@@ -50,6 +50,8 @@ Note* This requires an installation of Python 3.7+ in the host environment
 
 ## Note About Proxies
 
+Users can configure PyGoat to work with a Proxy Application like ZAP or BurpSuite. It is recommended that new users on download ZAP or Burp and launch their browser from within the application.
+
 This is only confirmed to work in the Linux Ubuntu Environment. In windows and IOS it is recommended that you launch the browser from ZAP or BurpSuite
 
 Linux environment with Proxy:
