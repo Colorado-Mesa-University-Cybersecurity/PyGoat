@@ -109,6 +109,7 @@ static:
     photos:
         Holds all of the visual assets used by the PyGoat Client
 
+
 templates:
     Holds the Jinja templates to render in flask before being sent to the client
         only contains the login/registration page, the main application page, 
