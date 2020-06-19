@@ -54,9 +54,11 @@ This is only confirmed to work in the Linux Ubuntu Environment. In windows and I
 
 Linux environment with Proxy:
 
-* `chmod +x run.sh`
+```bash
+	chmod +x run.sh
 
-* `./run.sh`
+	./run.sh
+```
 
 * If you run using this method without using a proxy, the python requests module will throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
