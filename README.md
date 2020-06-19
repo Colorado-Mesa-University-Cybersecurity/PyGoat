@@ -39,21 +39,20 @@ To start PyGoat in any Environment run the following command from the app direct
 Note* This requires an installation of Python 3.7+ in the host environment
 
 
+## Note About Proxies
+
+This is only confirmed to work in the Linux Ubuntu Environment. In windows and IOS it is recommended that you launch the browser from ZAP or BurpSuite
+
 Linux environment with Proxy:
 
 * `chmod +x run.sh`
 
 * `./run.sh`
 
-Linux environment without Proxy:
-
-* If you run without using a proxy, the python requests module could throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
+* If you run using this method without using a proxy, the python requests module will throw some nasty errors. To get around this, if you plan on not running a proxy, use run_no_proxy.sh.
 
 
 The served web page will be available at http://localhost:5000
-
-
-## Note About Proxies
 
 * A web proxy like Burp or Zap should work just fine with PyGoat, but if you aren't seeing all the requests, you will have to export the certificate and convert it to a pem file
 
