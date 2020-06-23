@@ -3,20 +3,6 @@
 
 A Python-based web platform for education in web vulnerabilities. Inspired by WebGoat. https://github.com/WebGoat/WebGoat
 
-Team Members: Lucas Walgren (lawalgren@mavs.coloradomesa.edu), Sean Apsey (ssapsey@mavs.coloradomesa.edu), Taylor Bradshaw (tcbradshaw@mavs.coloradomesa.edu)
-
-Client: Dr. Ram Basnet (rbasnet@coloradomesa.edu)
-
-## Presentation Links
-
-[Showcase Presentation](https://youtu.be/0mHFqdhZoes)
-
-[Showcase PowerPoint Slides](https://docs.google.com/presentation/d/135Wbyiy8HzIIVWsrosy1tvG5uLC9MTfQOtMg5U-h_bY/edit?usp=sharing)
-
-[Addendum Presentation](https://youtu.be/HXRJxJE5eBs)
-
-[Addendum PowerPoint Slides](https://docs.google.com/presentation/d/1_VnXvLU2bU3XCIFi_R8Cf9grZnMgZxvVIuOX-JbrCqI/edit?usp=sharing)
-
 ## Installation
 
 Run the following commands to install the dependancies for Flask
@@ -107,3 +93,16 @@ https://drive.google.com/file/d/1UlHXSOOaUFea-V-wjzmNySFG2dzj4mLW/view?usp=shari
 ## Creating Custom Lessons
 
 * PyGoat uses yaml files to define its lessons. See [this wiki page](https://github.com/lawalgren/PyGoat/wiki/How-to-create-new-lessons) for more details.
+
+## Historical Information
+The first version of PyGoat was created by a team of software enginerring students at Colorado Mesa University supervised by Dr. Ram Banet. Original team Members included Lucas Walgren (lawalgren@mavs.coloradomesa.edu), Sean Apsey (ssapsey@mavs.coloradomesa.edu), and Taylor Bradshaw (tcbradshaw@mavs.coloradomesa.edu)
+
+### Software Engineering Presentation Links
+
+[Showcase Presentation](https://youtu.be/0mHFqdhZoes)
+
+[Showcase PowerPoint Slides](https://docs.google.com/presentation/d/135Wbyiy8HzIIVWsrosy1tvG5uLC9MTfQOtMg5U-h_bY/edit?usp=sharing)
+
+[Addendum Presentation](https://youtu.be/HXRJxJE5eBs)
+
+[Addendum PowerPoint Slides](https://docs.google.com/presentation/d/1_VnXvLU2bU3XCIFi_R8Cf9grZnMgZxvVIuOX-JbrCqI/edit?usp=sharing)
