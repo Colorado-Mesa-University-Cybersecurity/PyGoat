@@ -24,42 +24,42 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 /**
  * LessonArea  ::  Object  ->  JSX
  * 
- * @param {'Object'} props 
+ * @param {"Object"} props 
  * 
  * Component houses all of individual LessonItem components that change the rendered lesson
  *      
  * Returns a JSX component
  */
-const LessonGroup = (props) => {
+export function LessonGroup(props) {
 
-    const groupStyle = { alignItems: 'center' }
+    const groupStyle = {alignItems: "center"};
 
     const arrowStyle = {
-        marginLeft: 'auto',
-        marginRight: 40,
-    }
+        marginLeft: "auto",
+        marginRight: 40
+    };
 
     // This is the code that controls the direction the arrow points 
     //      points down if active, to the side if not
-    const arrowShape = props.active? "M0 0 L20 0 L10 15 Z" : "M0 0 L15 10 L0 20 Z";
+    const arrowShape = props.active ? "M0 0 L20 0 L10 15 Z" : "M0 0 L15 10 L0 20 Z";
 
     // triggers the parent component to toggle the actve LessonGroup buttton
     //      Only one can be active at a time, if the active one is clicked,
     //      none of the LessonGroup components are active
     const clickHandler = (e) => {
-        const newState = props.active? 'none': props.num;
-        props.setActive(newState)
-    }
+        const newState = props.active ? "none" : props.num;
+        props.setActive(newState);
+    };
 
     return (
         <React.Fragment>
-            <div style={groupStyle} className='lesson-group' onClick={clickHandler}>
+            <div style={groupStyle} className="lesson-group" onClick={clickHandler}>
                 <h1>
                     {props.title}
                 </h1>
@@ -67,14 +67,15 @@ const LessonGroup = (props) => {
                 <div style={arrowStyle}>
                     <svg height="20" width="20">
                         <path d={arrowShape} />
-                    </svg> 
+                    </svg>
                 </div>
 
             </div>
             {props.children /* These are individual components that get displayed when the state of the component is active */}
         </React.Fragment>
-    )
+    );
 }
 
 
-export {LessonGroup}
+// Preferred: Use shorthand syntax for export (see above)
+// export { LessonGroup }

@@ -24,40 +24,41 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 
 /**
  * SVGLogo  ::  Object  ->  JSX
  * 
- * @param {'Object'} props 
+ * @param {"Object"} props 
  * 
  * Component instantiates the Logo and App Title in the top left corner of the client's screen
  *      
  * Returns a JSX component
  */
-const SVGLogo = (props)=>{
+export function SVGLogo(props) {
 
     const imgStyle = {
         height: props.height,
         width: props.height,
-        marginTop: '-10px'
-    } 
-    
+        marginTop: "-10px"
+    };
+
     const blockStyle = {
         width: props.width,
         height: props.height,
-        verticalAlign: 'middle',
-    }
+        verticalAlign: "middle"
+    };
 
     return (
         <div className="sidebar-header boxIt themeColor1" style={blockStyle}>
-                <img id="logo-img" src={'../static/photos/logo.svg'} style={imgStyle}/>
-                <h2 className='page-title'>PyGoat</h2> 
+            <img id="logo-img" src={"../static/photos/logo.svg"} style={imgStyle} />
+            <h2 className="page-title">PyGoat</h2>
         </div>
-    )
+    );
 };
 
 
-export {SVGLogo}
+// Preferred: Use shorthand syntax for export (see above)
+// export { SVGLogo }

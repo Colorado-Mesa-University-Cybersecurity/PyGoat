@@ -86,9 +86,12 @@ export class Store {
         //      which contains the applications state
         if (localStorage.getItem(this.id) != null && localStorage.getItem(this.id) != "undefined") {
             this.warehouse = JSON.parse(localStorage.getItem(this.id));
+            for (let item of Object.keys(this.warehouse.cache)) this.parseHTML(item, this.warehouse.cache[item]);
+            /* Preferred: Use for...of for non-destructive iteration over array or object values
+            
             Object.keys(this.warehouse.cache).forEach((x) => {
                 this.parseHTML(x, this.warehouse.cache[x]);
-            });
+            });*/
             this.addLesson = this.addLesson.bind(this);
         };
 
@@ -201,14 +204,23 @@ export class Store {
      * 
      * Returns this to allow for method chaining
      */
-    cacheSiteNavHTML() {
+    async cacheSiteNavHTML() {
+        for (let item of this.warehouse.siteNav) {
+            if (item.title === "Logout") return; // renders no page for logout screen, user will be redirected to login screen
+            const URL = `/nav/${item.url}`;
+            let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
+            this.warehouse.cache[item.title] = htmlString;
+            this.parseHTML(item.title, htmlString);
+        }
+        /* Preferred: Use for...of for non-destructive iteration over array or object values
+        
         this.warehouse.siteNav.forEach(async (item) => {
             if (item.title === "Logout") return; // renders no page for logout screen, user will be redirected to login screen
             const URL = `/nav/${item.url}`;
             let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
             this.warehouse.cache[item.title] = htmlString;
             this.parseHTML(item.title, htmlString);
-        });
+        });*/
 
         return this;
     };
@@ -224,6 +236,22 @@ export class Store {
      * Returns this to allow for method chaining
      */
     cacheLessonHTML() {
+        for (let group of this.warehouse.navItems) for (let lesson of group.lessons) {
+            let URL;
+            if (lesson.title == "Welcome") URL = `/nav/${lesson.url}`;
+            else URL = `/lessons/${lesson.url}`;
+
+            console.log("the store cache", lesson.title);
+
+            let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
+            this.parseHTML(lesson.title, htmlString);
+            this.warehouse.cache[lesson.title] = htmlString;
+            if (!this.renderArea) this.renderArea = document.querySelector(".renderHTML");
+            if (!this.feedbackArea) this.feedbackArea = document.querySelector(".renderResultHTML");
+            this.refresh.innerHTMLReRender(Math.random());
+        }
+        /* Preferred: Use for...of for non-destructive iteration over array or object values
+        
         this.warehouse.navItems.forEach((group, i) => {
             group.lessons.forEach(async (lesson, j) => {
                 let URL;
@@ -239,7 +267,7 @@ export class Store {
                 if (!this.feedbackArea) this.feedbackArea = document.querySelector(".renderResultHTML");
                 this.refresh.innerHTMLReRender(Math.random());
             });
-        });
+        });*/
 
         return this;
     };
@@ -253,10 +281,16 @@ export class Store {
      */
     checkActivePage() {
         let activeItem = {}; // empty object is given so that the inner objects reference can be replace instead of pushing to the array
+        for (let group of this.warehouse.navItems) {
+            const activeLesson = group.lessons.filter((lesson) => lesson.current === true);
+            if (activeLesson[0]) activeItem = activeLesson[0];
+        }
+        /* Preferred: Use for...of for no-destructive iteration over array or object values
+
         this.warehouse.navItems.forEach((group) => {
             const activeLesson = group.lessons.filter((lesson) => lesson.current === true);
             if (activeLesson[0]) activeItem = activeLesson[0];
-        });
+        });*/
 
         const activeSiteNavItem = this.warehouse.siteNav.filter((navItem) => navItem.active === true);
         if (activeSiteNavItem[0]) activeItem = activeSiteNavItem[0];

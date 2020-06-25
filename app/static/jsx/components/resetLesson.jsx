@@ -26,38 +26,39 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 
 /**
  * ResetLessonButton  ::  Object  ->  JSX
  * 
- * @param {'Object'} props 
+ * @param {"Object"} props 
  * 
- * Component reset's the lesson associated with the current page
+ * Component resets the lesson associated with the current page
  *      
  * Returns a JSX component
  */
-const ResetLessonButton = (props) => {
+export function ResetLessonButton(props) {
 
     const resetStyle = {
-        backgroundColor: '#333333',
-        color: 'white',
-        border: '0pt',
-        marginTop: '20px',
-        marginRight: '20px',
-        marginBottom: '10px',
-        borderRadius: '4px',
-    }
+        backgroundColor: "#333333",
+        color: "white",
+        border: "0pt",
+        marginTop: "20px",
+        marginRight: "20px",
+        marginBottom: "10px",
+        borderRadius: "4px"
+    };
 
     const handleClick = (e) => {
-        console.log('clicked reset lesson button')
-    }
+        console.log("clicked reset lesson button")
+    };
 
     return (
         <button style={resetStyle} onClick={handleClick}>Reset Lesson</button>
-    )
+    );
 }
 
-export {ResetLessonButton}
+// Preferred: Use shorthand syntax for export (see above)
+// export { ResetLessonButton }

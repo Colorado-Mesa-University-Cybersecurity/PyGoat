@@ -24,50 +24,48 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 
 /**
  * PageNumButton  ::  Object  ->  JSX
  * 
- * @param {'Object'} props 
+ * @param {"Object"} props 
  * 
  * Component creates page number navigation buttons that render the chosen page index when clicked
  *      
  * Returns a JSX component
  */
-const PageNumButton = (props) => {
+export function PageNumButton(props) {
 
     const pageNumStyle = {
-        backgroundColor: props.active? '#ffd200': '#c4c4c4', 
-        // border: '0pt',
-        // marginTop: '20px',
-        // marginRight: '20px',
-        // marginBottom: '10px',
-        // borderRadius: '4px',
-    }
+        backgroundColor: props.active ? "#ffd200" : "#c4c4c4"
+        // border: "0pt",
+        // marginTop: "20px",
+        // marginRight: "20px",
+        // marginBottom: "10px",
+        // borderRadius: "4px",
+    };
 
     const handleClick = (e) => {
         props.store.refresh.innerHTMLReRender(props.num);
-        if(props.store.checkCurrentPageNumber() != props.num) {
+        if (props.store.checkCurrentPageNumber() != props.num) {
             props.store.changeCurrentPageNumber(props.num);
             props.store.refresh.rootReRender(Math.random());
-        };
-        fetch(
-            '/save', 
-            { 
-                method: 'POST', 
-                'Content-Type': 'application/json',
-                body: JSON.stringify(props.store.warehouse)
-            }
-        );
+        }
+        fetch("/save", {
+            method: "POST",
+            "Content-Type": "application/json",
+            body: JSON.stringify(props.store.warehouse)
+        });
     };
 
     return (
-        <button className='page-num-nav' style={pageNumStyle} onClick={handleClick}>{props.num}</button>
-    )
+        <button className="page-num-nav" style={pageNumStyle} onClick={handleClick}>{props.num}</button>
+    );
 };
 
 
-export {PageNumButton}
+// Preferred: Use shorthand syntax for export (see above)
+// export { PageNumButton }

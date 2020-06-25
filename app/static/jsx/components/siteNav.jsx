@@ -24,28 +24,29 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 
-const SiteNavigator = (props)=>{
+export function SiteNavigator(props) {
 
     const navStyle = {
-        color: 'black',
-        display:'inline-block',
-        verticalAlign: 'middle',
-        backgroundColor: '#ffd200',
+        color: "black",
+        display: "inline-block",
+        verticalAlign: "middle",
+        backgroundColor: "#ffd200",
         height: props.height,
-        marginLeft:'auto',
-        marginRight: '0px',
-        width: '140px'
-    }
+        marginLeft: "auto",
+        marginRight: "0px",
+        width: "140px"
+    };
 
     return (
         <div style={navStyle}>
             {props.children}
         </div>
-    )
+    );
 }
 
-export {SiteNavigator}
+// Preferred: Use shorthand syntax for export (see above)
+// export {SiteNavigator}

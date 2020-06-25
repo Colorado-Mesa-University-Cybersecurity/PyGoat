@@ -45,30 +45,30 @@ import { Store } from './store/store.js';
  * 			renders all of the App components using the data in the store object passed to the method
  */
 class View {
-  constructor() {
-    this.format = {};
-    this.format.header = { height: '120px', width: '100%' };
-    this.format.sidebar = { minHeight: '20rem', width: '300px' };
+    constructor() {
+        this.format = {};
+        this.format.header = { height: '120px', width: '100%' };
+        this.format.sidebar = { minHeight: '20rem', width: '300px' };
 
-    return this;
-  }
+        return this;
+    }
 
-  render(props) {
-    props.format = this.format;
+    render(props) {
+        props.format = this.format;
 
-    ReactDOM.render(
+        ReactDOM.render(
 
-    // This is JSX, JavaScript with XML
-    // This is used to create component based designs in the React and Vue libraries
-    // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
-    React.createElement(
-      React.StrictMode,
-      null,
-      '// This just prevents bugs from the \'this\' object',
-      React.createElement(App, { store: props })
-    ), document.getElementById('root'));
-    return this;
-  }
+            // This is JSX, JavaScript with XML
+            // This is used to create component based designs in the React and Vue libraries
+            // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
+            React.createElement(
+                React.StrictMode,
+                null,
+                '// This just prevents bugs from the \'this\' object',
+                React.createElement(App, { store: props })
+            ), document.getElementById('root'));
+        return this;
+    }
 };
 
 /**
@@ -81,13 +81,13 @@ class View {
  * 		constructor  ::  ( store object, view object )  ->  controller object
  */
 class Controller {
-  constructor(store, view) {
-    this.store = store;
-    this.view = view;
-    this.view.render(this.store);
+    constructor(store, view) {
+        this.store = store;
+        this.view = view;
+        this.view.render(this.store);
 
-    return this;
-  }
+        return this;
+    }
 };
 
 /**
@@ -100,6 +100,6 @@ class Controller {
  * 
  */
 ;(function launch() {
-  const PyGoat = new Controller(new Store(), new View());
-  console.log('index.jsx loaded');
+    const PyGoat = new Controller(new Store(), new View());
+    console.log('index.jsx loaded');
 })();

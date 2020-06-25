@@ -23,41 +23,42 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 /**
  * GoatHeader  ::  Object  ->  JSX
  * 
- * @param {'Object'} props 
+ * @param {"Object"} props 
  * 
  * Component is composed of a logo and a site navigation component that are passed into the props under
  *      the key children. height of the header is derived from the height passed in using the key height 
  *      
  * Returns a JSX component
  */
-const GoatHeader = (props)=>{
+export function GoatHeader(props) {
 
     const blockStyle = {
-        backgroundColor: '#333333', // these are not in main.css because they would be over-written
-        color: 'white', 
-        height: props.height,
-    }
+        backgroundColor: "#333333", // these are not in main.css because they would be over-written
+        color: "white",
+        height: props.height
+    };
 
     return (
-        <header style={blockStyle} className='w100 inBlock'>
-            <div className='boxIt'>
-                <div style={{display: 'inline-block'}}>
+        <header style={blockStyle} className="w100 inBlock">
+            <div className="boxIt">
+                <div style={{display: "inline-block"}}>
                     {props.children[0]  /* The first child should be the Logo and Name of the App */}
 
                 </div>
-                <div className='boxIt header-title-box'>
-                    <h1 className='header-title' >{props.title}</h1>
+                <div className="boxIt header-title-box">
+                    <h1 className="header-title" >{props.title}</h1>
                 </div>
                 {props.children[1]  /* The second child should be the site navigation panel*/}
             </div>
         </header>
-    )
+    );
 }
 
-export {GoatHeader}
+// Preferred: Use shorthand syntax for export (see above)
+// export {GoatHeader}

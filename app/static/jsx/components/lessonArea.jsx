@@ -24,41 +24,42 @@ Conventions followed:
 */
 
 
-'use strict'
+"use strict";
 
 
 /**
  * LessonArea  ::  Object  ->  JSX
  * 
- * @param {'Object'} props 
+ * @param {"Object"} props 
  * 
  * Component is used to house the lesson contents that are rendered upon changing the page or page number
  *      
  * Returns a JSX component
  */
-const LessonArea = (props) => {
+export function LessonArea(props) {
 
     // because I cannot use the ... spread operator in JSX, I need to incorporate the first and 
     // third elements into the array and render that to keep them all in the same line
-    const pageNav = props.children[1].map(x => x)
-        pageNav.unshift(props.children[0])
-        pageNav.push(props.children[2])
+    const pageNav = Array.from(props.children[1]);
+    pageNav.unshift(props.children[0]);
+    pageNav.push(props.children[2]);
 
-    const feedbackColor = props.store.checkActivePage().completed? 'green': 'blue';
-    
+    const feedbackColor = props.store.checkActivePage().completed ? "green" : "blue";
+
 
     return (
-        <div id='inner-lesson-area'>
-            <div className='inBlock w100' id='page-nav'>
-                <div className='flexIt' id='inner-page-nav'>
+        <div id="inner-lesson-area">
+            <div className="inBlock w100" id="page-nav">
+                <div className="flexIt" id="inner-page-nav">
                     {pageNav}
                 </div>
-                <hr/>
+                <hr />
                 <div className="renderHTML w100"></div>
-                <div className="renderResultHTML w75" style={{backgroundColor: feedbackColor, color: 'white'}}></div>
+                <div className="renderResultHTML w75" style={{ backgroundColor: feedbackColor, color: "white" }}></div>
             </div>
         </div>
-    )
+    );
 }
 
-export {LessonArea}
+// Preferred: Use shorthand syntax for export (see above)
+// export { LessonArea }
