@@ -27,8 +27,8 @@ Conventions followed:
             function/method  ::  (parameter types) -> (return types)
 */
 
-import { App } from './app.js';
-import { Store } from './store/store.js';
+import { App } from "./app.js";
+import { Store } from "./store/store.js";
 
 /**
  * Class View
@@ -47,8 +47,8 @@ import { Store } from './store/store.js';
 class View {
     constructor() {
         this.format = {};
-        this.format.header = { height: '120px', width: '100%' };
-        this.format.sidebar = { minHeight: '20rem', width: '300px' };
+        this.format.header = { height: "120px", width: "100%" };
+        this.format.sidebar = { minHeight: "20rem", width: "300px" };
 
         return this;
     }
@@ -58,15 +58,15 @@ class View {
 
         ReactDOM.render(
 
-            // This is JSX, JavaScript with XML
-            // This is used to create component based designs in the React and Vue libraries
-            // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
-            React.createElement(
-                React.StrictMode,
-                null,
-                '// This just prevents bugs from the \'this\' object',
-                React.createElement(App, { store: props })
-            ), document.getElementById('root'));
+        // This is JSX, JavaScript with XML
+        // This is used to create component based designs in the React and Vue libraries
+        // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
+        React.createElement(
+            React.StrictMode,
+            null,
+            "// This just prevents bugs from the \"this\" object",
+            React.createElement(App, { store: props })
+        ), document.getElementById("root"));
         return this;
     }
 };
@@ -100,6 +100,7 @@ class Controller {
  * 
  */
 ;(function launch() {
+    localStorage.clear();
     const PyGoat = new Controller(new Store(), new View());
-    console.log('index.jsx loaded');
+    console.log("index.jsx loaded");
 })();

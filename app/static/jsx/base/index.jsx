@@ -106,6 +106,7 @@ class Controller {
  * 
  */
 ;(function launch() {
+    localStorage.clear()
     const PyGoat = new Controller(new Store, new View);
     console.log("index.jsx loaded");
 })();
