@@ -1,28 +1,5 @@
 """
-File: routes.py
-Description: File creates the router function that handles the Rest Api. All the routes and
-                 the lesson helper functions are stored here
-
-IMPORTANT!!! 
-    To change configuration go to config.py, there you can set the proxy and security certificate settings
-
-Conventions followed:
-    4-space tabs
-    3 empty lines between classes and functions
-    Lines should be limited to less than 80 characters where possible
-    Avoid Polluting the global scope
-    DocStrings are restrained to a single line where possible:
-       def functionName(paramName: paramType) -> returnType:
-            ''' contents of docstring describing function behaviour '''
-    Multi-line DocStrings follow the convention:
-       def functionName(paramName: paramType) -> returnType:
-             '''
-                  contents of docstring describing function behaviour
-             '''
-    Inline Type Annotations follow the convention:
-        variableName: variableType = variableValue
-    Inline Function/Method Annotations follow the convention:
-        def functionName(paramName1: paramType, paramName2: paramType...) -> returnType:
+    All the routes and the lesson helper functions are stored here
 """
 
 import os, sys, yaml, sqlite3, hashlib, custom, requests, json
