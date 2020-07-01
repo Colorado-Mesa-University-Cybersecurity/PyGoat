@@ -8,9 +8,9 @@
 	{% endif %}
 	<div class="login">
 	{% if login %}
-		<form action="/login" method="post">
+		<form action="/login.html" method="post">
 	{% else %}
-		<form action="/register" method="post">
+		<form action="/register.html" method="post">
 	{% endif %}
 		
 		<label for="username">Username:</label><br>
@@ -21,9 +21,9 @@
 		</form>
 	<p>
 	{% if login %}
-		Don't have an account? <span><a href="/register" style="text-decoration: underline;">Register now</a></span>
+		Don't have an account? <span><a href="/register.html" style="text-decoration: underline;">Register now</a></span>
 	{% else %}
-		Account not working? Try <span><a href="/login" style="text-decoration: underline;">logging in</a></span>
+		Account not working? Try <span><a href="/login.html" style="text-decoration: underline;">logging in</a></span>
 	{% endif %}
 	</p>
 	</div>

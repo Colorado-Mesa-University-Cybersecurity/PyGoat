@@ -56,7 +56,7 @@ const LessonItem = props => {
             props.store.changeActivePage(props.title);
             props.store.refresh.rootReRender(Math.random()); // Changes LessonNavigator
         };
-        fetch('/save', {
+        fetch('/save.json', {
             method: 'POST',
             'Content-Type': 'application/json',
             body: JSON.stringify(props.store.warehouse)

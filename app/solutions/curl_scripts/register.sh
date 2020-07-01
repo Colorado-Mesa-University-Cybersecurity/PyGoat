@@ -1,4 +1,4 @@
-curl -i 'http://localhost:5000/register' \
+curl -i 'http://localhost:5000/.html' \
   -v \
   -c 'cookie.txt' \
   -F 'username'='test' \

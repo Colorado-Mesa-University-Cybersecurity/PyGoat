@@ -24,10 +24,10 @@ for i in $(ls *.sh); do
 	fi
 done
 
-curl "http://localhost:5000/lessonstatus" -b "cookie.txt"
+curl "http://localhost:5000/lessonstatus.json" -b "cookie.txt"
 
 curl "http://localhost:5000/lessons/xxe" -b "cookie.txt"
 
-curl "http://localhost:5000/lessonstatus" -b "cookie.txt" > "final.json"
+curl "http://localhost:5000/lessonstatus.json" -b "cookie.txt" > "final.json"
 
 echo "$result"

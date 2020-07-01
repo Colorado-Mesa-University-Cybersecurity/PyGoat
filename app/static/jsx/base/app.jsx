@@ -81,7 +81,7 @@ export function App(props) {
         // if state has been given a non-zero value, fetch doesnt run
         // 	this ensures that it only runs once after initial component rendering
         if (!state) {
-            let result = await (await fetch("/lessonstatus", {method: "GET", "Content-Type": "application/json"})).json();
+            let result = await (await fetch("/lessonstatus.json", {method: "GET"/*, "Content-Type": "application/json"*/})).json(); // "Content-Type" header not required for "GET" requests
             if (result.state) {
                 // console.log("the data is here")
                 props.store.warehouse = JSON.parse(result.state);
@@ -114,7 +114,7 @@ export function App(props) {
             }
 
             // Preferred: Shorter syntax
-            fetch("/save", {
+            fetch("/save.json", {
                 method: "POST",
                 "Content-Type": "application/json",
                 body: JSON.stringify(props.store.warehouse)
@@ -122,40 +122,6 @@ export function App(props) {
             setNewState(1);
             store.cacheLessonHTML();
         }
-        /* Preferred: Use async/await for AJAX operations. Use if/else for block-level logic.
-        
-        state || fetch("/lessonstatus", { method: "GET", "Content-Type": "application/json" }).then(d => d.json()).then(d => {
-            if (d.state) {
-                // console.log("the data is here")
-                props.store.warehouse = JSON.parse(d.state);
-            } else {
-                // console.log("data is ", d)
-                Object.keys(d).forEach((x, i) => {
-                    const lesson = d[x];
-                    // console.log("lesson=", lesson);
-                    lesson.title = x;
-                    lesson.current = false;
-                    lesson.currentPage = 1;
-                    store.addLesson(lesson);
-                });
-            }
-            console.log("feedback: ", props.store.feedback)
-            if (props.store.feedback !== "None") {
-                const page = props.store.checkActivePage()
-                const feedbackType = page.completed ? "complete" : "feedback";
-                props.store.warehouse.cache[`${page.title}_${feedbackType}`] = props.store.feedback
-            }
-            fetch(
-                "/save",
-                {
-                    method: "POST",
-                    "Content-Type": "application/json",
-                    body: JSON.stringify(props.store.warehouse)
-                }
-            )
-            setNewState(1);
-            store.cacheLessonHTML();
-        });*/
     }, [state]);
 
     // triggers a re-render of the contents of LessonArea
@@ -165,10 +131,6 @@ export function App(props) {
     if (state) console.log("app reloaded");
     else console.log("app loaded");
 
-    /* Preferred: Use if/else for all block-level logic
-    
-    state || console.log("app loaded")   // runs before state is initialized
-    state && console.log("app reloaded") // runs after state is initialized*/
 
     // The layout is flat because most transitions outside of the navbar require the entire app to be rerendered 
     return (

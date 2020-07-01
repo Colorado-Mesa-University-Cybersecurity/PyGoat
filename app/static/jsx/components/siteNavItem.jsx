@@ -46,7 +46,7 @@ export function SiteNavItem(props) {
         } else if (props.title == "Logout") {
             window.location.href = "logout";
         }
-        fetch("/save", {
+        fetch("/save.json", {
             method: "POST",
             "Content-Type": "application/json",
             body: JSON.stringify(props.store.warehouse)
