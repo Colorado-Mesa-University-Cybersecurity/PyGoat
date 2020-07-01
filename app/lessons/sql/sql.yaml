@@ -1,8 +1,8 @@
-name: Test SQL Injection
+name: SQL Injection
 url: testsql
 content: sql.html
-group: Demo
-numberOfPages: 1
+group: SQL vulnerabilities
+numberOfPages: 3
 difficulty: 4
 type: Injection
 success-condition: $custom.sqlValidator(user_data)
@@ -30,13 +30,43 @@ db-tables:
                     LAST_NAME: Snow
                     CC_NUMBER: 987654321
                     CC_TYPE: VISA
-                    Login_Count: 0
+                    Login_Count: 14
                   - USERID: 102
                     FIRST_NAME: John
                     LAST_NAME: Smith
                     CC_NUMBER: 4352209902222
                     CC_TYPE: AMEX
-                    Login_Count: 0
+                    Login_Count: 2
+                  - USERID: 103
+                    FIRST_NAME: Abbey
+                    LAST_NAME: Walby
+                    CC_NUMBER: 5234059854223235
+                    CC_TYPE: MC
+                    Login_Count: 12
+                  - USERID: 104
+                    FIRST_NAME: Hello
+                    LAST_NAME: World
+                    CC_NUMBER: 4382052122514841
+                    CC_TYPE: VISA
+                    Login_Count: 23
+                  - USERID: 105
+                    FIRST_NAME: Richard
+                    LAST_NAME: Doolittle
+                    CC_NUMBER: 4352209811422
+                    CC_TYPE: AMEX
+                    Login_Count: 4
+                  - USERID: 106
+                    FIRST_NAME: Curt
+                    LAST_NAME: Brown
+                    CC_NUMBER: 5123058212112345
+                    CC_TYPE: MC
+                    Login_Count: 83
+                  - USERID: 107
+                    FIRST_NAME: Jenny
+                    LAST_NAME: Brown
+                    CC_NUMBER: 5223052411452427
+                    CC_TYPE: MC
+                    Login_Count: 2
 routes:
         - path: /sql
           action: sql-query

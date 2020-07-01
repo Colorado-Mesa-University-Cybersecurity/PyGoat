@@ -21,8 +21,8 @@ Conventions followed:
 						function/method  ::  (parameter types) -> (return types)
 */
 
-import {App} from './App.js';
-import {Store} from './store/store.js';
+import { App } from './App.js';
+import { Store } from './store/store.js';
 
 /**
  * Class View

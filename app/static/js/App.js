@@ -75,10 +75,10 @@ function App(props) {
 				// console.log("the data is here")
 				props.store.warehouse = JSON.parse(d.state);
 			} else {
-				// console.log('data is ', d)
+				console.log('data is ', d);
 				Object.keys(d).forEach((x, i) => {
 					const lesson = d[x];
-					// console.log('lesson=', lesson);
+					console.log('lesson=', lesson);
 					lesson.title = x;
 					lesson.current = false;
 					lesson.currentPage = 1;

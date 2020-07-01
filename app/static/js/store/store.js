@@ -396,6 +396,8 @@ export class Store {
         lesson.url || console.assert(false, "lesson must have url property");
         lesson.pages || console.assert(false, "lesson must have pages property");
 
+        console.log('this is the lesson difficulty', lesson.difficulty || null)
+
         if (this.warehouse.lessonMetaData.lessonTitles.some((x) => x === lesson.title)) return this;
         else {
             this.warehouse.lessonMetaData.lessonTitles.push(lesson.title);
@@ -410,14 +412,24 @@ export class Store {
         if (found) found.lessons.push(lesson);
         else {
             this.warehouse.navItems.push({group: lesson.group, lessons: []});
+
             this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson);
         }
+        
+        console.log('about to run sort')
+        this.warehouse.navItems.forEach((lessonGroup) => {
+            if (lessonGroup.group != 'Introduction') {
+                lessonGroup.lessons.sort((a,  b) => {
 
-        // this.cacheLessonHTML()
+                    console.log('debugging', a, b, a.difficulty, b.difficulty)
+                    return b.difficulty - a.difficulty
+                })
+            }
+        })
+        console.log('ran sort')
 
         return this;
     }
-
 
     /**
      * parseHTML  ::  (String, String)  ->  store object

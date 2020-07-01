@@ -11,7 +11,7 @@ def load_lessons(lessondir: str, lessons: list) -> None:
         lessondir = string - the absolute path of the directory where the lesson 
         yaml configs are stored
     """
-    
+    print('dirs=',len(os.listdir(lessondir)), os.listdir(lessondir))
     for lesson_name in os.listdir(lessondir):
         lesson_path = f"{lessondir}/{lesson_name}"
         lesson_yaml = f"{lesson_path}/{lesson_name}.yaml"
@@ -397,7 +397,8 @@ def check_success(lessons: list, dbname='pygoat.db') -> None:
 def start(lessons: list, path: str) -> None:
     ''' Function initializes database after loading lessons '''
     
-    load_lessons(f'{path}/lessons', lessons) # lessondir="%s/lessons" % path
+    load_lessons(f'{path}/lessons', lessons,) # lessondir="%s/lessons" % path
+    print('lessons=', len(lessons),lessons)
     initialize_db(lessons)
     for lesson in lessons:
         initialize_lesson_db(lesson)
