@@ -55,9 +55,9 @@ const LessonGroup = (props) => {
     return (
         <React.Fragment>
             <div style={groupStyle} className='lesson-group' onClick={clickHandler}>
-                <h1>
+                <h3>
                     {props.title}
-                </h1>
+                </h3>
 
                 <div style={arrowStyle}>
                     <svg height="20" width="20">

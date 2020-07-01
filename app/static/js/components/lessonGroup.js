@@ -57,7 +57,7 @@ const LessonGroup = props => {
             'div',
             { style: groupStyle, className: 'lesson-group', onClick: clickHandler },
             React.createElement(
-                'h1',
+                'h3',
                 null,
                 props.title
             ),

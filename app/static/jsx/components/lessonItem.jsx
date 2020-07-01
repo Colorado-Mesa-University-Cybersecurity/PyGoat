@@ -44,7 +44,7 @@ const LessonItem = (props) => {
         alignItems: 'center',
     }: {};
 
-    console.log('lesson item props: ', props.completed, 'for item: ', props.title)
+    // console.log('lesson item props: ', props.completed, 'for item: ', props.title)
     props.completed? lessonStyle.backgroundColor = 'green': null;
     // props.completed? lessonStyle.backgroundColor = '#556B2F': null;
 
@@ -66,7 +66,7 @@ const LessonItem = (props) => {
 
     return (
         <div className={classNameIs} style={lessonStyle} id='lesson-item-title' onClick={handleClick}>
-            <h2 className={currentLesson}>{props.title}</h2>
+            <h3 className={currentLesson}>{props.title}</h3>
         </div>
     )
 };

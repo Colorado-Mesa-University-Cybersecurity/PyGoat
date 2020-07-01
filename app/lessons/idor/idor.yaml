@@ -1,7 +1,7 @@
 name: Insecure Direct Object Reference
 url: idor
 content: idor.html
-group: Demo
+group: Insecure Direct Object References (IDOR)
 numberOfPages: 1
 difficulty: 9
 type: Broken Access Control

@@ -65,7 +65,7 @@ export class Store {
         // the getID function will fetch the user's 'unique' id to use to store page state
         this.getID();
         if (!this.id) this.id = "None";
-        console.log(localStorage.getItem(this.id));
+        // console.log(localStorage.getItem(this.id));
 
         this.getFeedback();
         if (!this.feedback) this.feedback = "None";
@@ -237,7 +237,7 @@ export class Store {
                 if (lesson.title == "Welcome") URL = `/nav/${lesson.url}`;
                 else URL = `/lessons/${lesson.url}`;
 
-                console.log("the store cache", lesson.title);
+                // console.log("the store cache", lesson.title);
 
                 let htmlString = await (await fetch(URL, {method: "GET", "Content-Type": "text/html"})).text();
                 this.parseHTML(lesson.title, htmlString);
@@ -396,7 +396,7 @@ export class Store {
         lesson.url || console.assert(false, "lesson must have url property");
         lesson.pages || console.assert(false, "lesson must have pages property");
 
-        console.log('this is the lesson difficulty', lesson.difficulty || null)
+        // console.log('this is the lesson difficulty', lesson.difficulty || null)
 
         if (this.warehouse.lessonMetaData.lessonTitles.some((x) => x === lesson.title)) return this;
         else {
@@ -416,17 +416,17 @@ export class Store {
             this.warehouse.navItems[this.warehouse.navItems.length - 1].lessons.push(lesson);
         }
         
-        console.log('about to run sort')
+        // console.log('about to run sort')
         this.warehouse.navItems.forEach((lessonGroup) => {
             if (lessonGroup.group != 'Introduction') {
                 lessonGroup.lessons.sort((a,  b) => {
 
-                    console.log('debugging', a, b, a.difficulty, b.difficulty)
-                    return b.difficulty - a.difficulty
+                    // console.log('debugging', a, b, a.difficulty, b.difficulty)
+                    return a.difficulty - b.difficulty
                 })
             }
         })
-        console.log('ran sort')
+        // console.log('ran sort')
 
         return this;
     }
@@ -477,14 +477,14 @@ export class Store {
         this.currentlyRenderedHTML = pageTitle;
         this.currentlyRenderedPageNumber = page.currentPage;
 
-        console.log("the are we are in: ", this.warehouse.cache[feedbackName]); // What on earth is this?
-        console.log(Object.keys(this.warehouse.cache));
+        // console.log("the are we are in: ", this.warehouse.cache[feedbackName]); // What on earth is this?
+        // console.log(Object.keys(this.warehouse.cache));
 
         this.feedbackArea.innerHTML = "";
 
         if (this.warehouse.cache[feedbackName]) {
             this.parseHTML(feedbackName, this.warehouse.cache[feedbackName]);
-            console.log(this.parsedHTML[feedbackName].body);
+            // console.log(this.parsedHTML[feedbackName].body);
             this.feedbackArea.append(this.parsedHTML[feedbackName].body);
         }
 
