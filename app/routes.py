@@ -122,6 +122,8 @@ def router(lessons: list, network: 'module', path: str, app: 'Flask app') -> tup
                 finalDict[lesson.name]['active'] = lesson.active
                 if hasattr(lesson, 'HTML'):
                     finalDict[lesson.name]['HTML'] = lesson.HTML
+                if hasattr(lesson, 'difficulty'):
+                    finalDict[lesson.name]['difficulty'] = lesson.difficulty
                 if lesson.completable:
                     finalDict[lesson.name]['completed'] = lesson.completed
                 if hasattr(lesson, 'complete_response'):
