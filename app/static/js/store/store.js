@@ -429,6 +429,15 @@ export class Store {
         };
 
 
+        
+        this.warehouse.navItems.forEach((lessonGroup) => {
+            if (lessonGroup.group != 'Introduction') {
+                lessonGroup.lessons.sort((a,  b) => {
+                    return a.difficulty - b.difficulty
+                })
+            }
+        })
+
         return this;
     };
 
