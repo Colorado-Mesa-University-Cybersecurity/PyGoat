@@ -64,7 +64,7 @@ class View {
         React.createElement(
             React.StrictMode,
             null,
-            "// This just prevents bugs from the \"this\" object",
+            "",
             React.createElement(App, { store: props })
         ), document.getElementById("root"));
         return this;

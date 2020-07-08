@@ -46,7 +46,7 @@ html, body {
 }
 
 main {
-    min-height: 55rem;
+    min-height: calc(100vh - 120px);
     display: flex;
     /* align-items: ; */
 }
@@ -149,13 +149,14 @@ main {
 /* Lesson Group Component */
 
 .lesson-group {
-    padding-left: 1.5rem;
     background-color: #eeeeee;
     height: 50px;
     display: flex;
     align-items: 'center';
     width: 100%;
-    font-size: 16pt;
+    font-size: 14pt;
+    padding: .25rem;
+    padding-left: 1.5rem;
 }
 
 .lesson-group:hover { background-color: #ffd200; }
@@ -177,7 +178,7 @@ main {
     /* display: flex;
     align-items: 'center'; */
     width: 100%;
-    font-size: 16pt;
+    font-size: 14pt;
     color: white;
     background-color: #222222;
 }

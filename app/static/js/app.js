@@ -75,7 +75,7 @@ export function App(props) {
 
         // if state has been given a non-zero value, fetch doesnt run
         // 	this ensures that it only runs once after initial component rendering
-        state || fetch('/lessonstatus', { method: 'GET', 'Content-Type': 'application/json' }).then(d => d.json()).then(d => {
+        state || fetch('/lessonstatus.json', { method: 'GET', 'Content-Type': 'application/json' }).then(d => d.json()).then(d => {
             if (d.state) {
                 // console.log("the data is here")
                 props.store.warehouse = JSON.parse(d.state);
@@ -96,7 +96,7 @@ export function App(props) {
                 const feedbackType = page.completed ? 'complete' : 'feedback';
                 props.store.warehouse.cache[`${page.title}_${feedbackType}`] = props.store.feedback;
             }
-            fetch('/save', {
+            fetch('/save.json', {
                 method: 'POST',
                 'Content-Type': 'application/json',
                 body: JSON.stringify(props.store.warehouse)
