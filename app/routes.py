@@ -247,7 +247,7 @@ def router(lessons: list, network: "module", path: str, app: "Flask app") -> tup
             colName = "%sCompleted" % lesson.name
             conn = sqlite3.connect("pygoat.db")
             c = conn.cursor()
-            c.execute("UPDATE users SET "%s" = 0 WHERE username = ?" % colName, [session["username"]])
+            c.execute("UPDATE users SET '%s' = 0 WHERE username = ?" % colName, [session["username"]])
             conn.commit()
             conn.close()
             network.initialize_lesson_db(lesson)
@@ -266,7 +266,7 @@ def router(lessons: list, network: "module", path: str, app: "Flask app") -> tup
                 colName = "%sCompleted" % lesson.name
                 conn = sqlite3.connect("pygoat.db")
                 c = conn.cursor()
-                c.execute("UPDATE users SET "%s" = 0 WHERE username = ?" % colName, [session["username"]])
+                c.execute("UPDATE users SET '%s' = 0 WHERE username = ?" % colName, [session["username"]])
                 conn.commit()
                 conn.close()
                 network.initialize_lesson_db(lesson)
