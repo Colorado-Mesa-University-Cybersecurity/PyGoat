@@ -1,0 +1,9 @@
+name: SQL Introduction
+url: sql_intro
+content: sql_intro.html
+group: SQL vulnerabilities
+numberOfPages: 3
+difficulty: 0
+type: Injection
+completable: False
+
