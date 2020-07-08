@@ -435,10 +435,10 @@ export class Store {
         };
 
 
-        
         this.warehouse.navItems.forEach((lessonGroup) => {
             if (lessonGroup.group != 'Introduction') {
                 lessonGroup.lessons.sort((a,  b) => {
+                    console.log('vals', a, a.difficulty, b ,b.difficulty)
                     return a.difficulty - b.difficulty
                 })
             }
