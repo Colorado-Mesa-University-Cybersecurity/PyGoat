@@ -140,10 +140,10 @@ export class Store {
                         pages: 3,
                         currentPage: 1,
                         completed: false,
-                        completable: false,
-                    },
-                ],
-            },
+                        completable: false
+                    }
+                ]
+            }
         ];
         this.warehouse.lessonMetaData = {
             lessonTitles: [],
@@ -184,7 +184,7 @@ export class Store {
                 pages: 1,
                 currentPage: 1,
                 url: "createLesson",
-            },
+            }
         ];
 
         this.addLesson = this.addLesson.bind(this);
@@ -235,7 +235,7 @@ export class Store {
      * 
      * Returns this to allow for method chaining
      */
-    cacheLessonHTML() {
+    async cacheLessonHTML() {
         for (let group of this.warehouse.navItems) for (let lesson of group.lessons) {
             let URL;
             if (lesson.title == "Welcome") URL = `/nav/${lesson.url}`;
@@ -406,10 +406,16 @@ export class Store {
      * returns store object to allow method chaining
      */
     addLesson(lesson) {
+        if (!lesson.group) console.assert(false, "lessons must have group property");
+        if (!lesson.title) console.assert(false, "lesson must have title property");
+        if (!lesson.url) console.assert(false, "lesson must have url property");
+        if (!lesson.pages) console.assert(false, "lesson must have pages property");
+        /* Preferred: Use if/else for top-level logic
+        
         lesson.group || console.assert(false, "lessons must have group property");
         lesson.title || console.assert(false, "lesson must have title property");
         lesson.url || console.assert(false, "lesson must have url property");
-        lesson.pages || console.assert(false, "lesson must have pages property");
+        lesson.pages || console.assert(false, "lesson must have pages property");*/
 
         if (this.warehouse.lessonMetaData.lessonTitles.some((x) => x === lesson.title)) return this;
         else {

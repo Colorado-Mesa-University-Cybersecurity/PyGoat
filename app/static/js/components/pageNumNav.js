@@ -52,7 +52,7 @@ const PageNumButton = props => {
             props.store.changeCurrentPageNumber(props.num);
             props.store.refresh.rootReRender(Math.random());
         };
-        fetch('/save', {
+        fetch('/save.json', {
             method: 'POST',
             'Content-Type': 'application/json',
             body: JSON.stringify(props.store.warehouse)

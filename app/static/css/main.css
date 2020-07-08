@@ -46,7 +46,7 @@ html, body {
 }
 
 main {
-    min-height: 55rem;
+    min-height: calc(100vh - 120px);
     display: flex;
     /* align-items: ; */
 }

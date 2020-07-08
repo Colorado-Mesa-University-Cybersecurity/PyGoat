@@ -64,8 +64,8 @@ class View {
             // This is JSX, JavaScript with XML
             // This is used to create component based designs in the React and Vue libraries
             // learn more about JSX here  https://reactjs.org/docs/introducing-jsx.html
+            // What? This just prevents bugs from the "this" object
             <React.StrictMode>
-                // This just prevents bugs from the "this" object
                 <App store={props} />
             </React.StrictMode>,
             document.getElementById("root")

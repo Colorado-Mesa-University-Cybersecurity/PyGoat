@@ -93,6 +93,7 @@ https://drive.google.com/file/d/1UlHXSOOaUFea-V-wjzmNySFG2dzj4mLW/view?usp=shari
 ## Creating Custom Lessons
 
 * PyGoat uses yaml files to define its lessons. See [this wiki page](https://github.com/lawalgren/PyGoat/wiki/How-to-create-new-lessons) for more details.
+* Developers making changes to lessons must be sure to delete the pygoat.db file that gets created in the app directory for the lesson changes to take effect.
 
 ## Historical Information
 The first version of PyGoat was created by a team of software enginerring students at Colorado Mesa University supervised by Dr. Ram Banet. Original team Members included Lucas Walgren (lawalgren@mavs.coloradomesa.edu), Sean Apsey (ssapsey@mavs.coloradomesa.edu), and Taylor Bradshaw (tcbradshaw@mavs.coloradomesa.edu)
