@@ -501,6 +501,10 @@ export class Store {
             console.log(this.parsedHTML[feedbackName].body);
             this.feedbackArea.append(this.parsedHTML[feedbackName].body);
         };
+        for (let accordion of document.querySelectorAll(".accordion")) if (accordion.children.length > 1) {
+            accordion.children[1].classList.add("hide-content");
+            accordion.children[0].addEventListener("click", () => accordion.children[1].classList.toggle("hide-content"));
+        }
 
         return this;
     };

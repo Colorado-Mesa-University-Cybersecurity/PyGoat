@@ -288,3 +288,22 @@ main {
     margin-bottom: .5rem;
     text-align: center;
 }
+
+.accordion h2:hover {
+    cursor: pointer;
+    background-color: #ffd200;
+    color: #222222;
+}
+
+/*.accordion {
+    width: min-content;
+    height: min-content;
+}*/
+
+/*.accordion div {
+    display: none;
+}*/
+
+.hide-content {
+    display: none;
+}
