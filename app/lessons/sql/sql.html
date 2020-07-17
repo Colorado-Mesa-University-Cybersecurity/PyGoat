@@ -1,32 +1,88 @@
 <div class="page1">
 
-    <h3 class="lesson-page-heading">
+    <h3 class="lesson-page-title">
         SQL Injection
     </h3>
 
-    <p class="lesson-page-contents">
+    <div class="lesson-page-content-heading">
+        What is SQL Injection?
+    </div>
+
+    <div class="lesson-page-contents">
+        <p>One of the most exploited vulnerabilities of SQL databases is an attack known as SQL Injection</p>
+
+        <p>This technique user inputs that hve not been properly verified before being sent back to the server</p>
+
+        <p>The best way to prevent an application from being vulnerable to SQL Injection is to Sanitize any user inputs, both on the front-end and the back-end</p>
+
+        <p>User's have permission to conduct SQL Injection attacks on this application, but bear in mind that using this technique in the wild is almost always illegal</p>
+
+        <p>SQL Injection attacks are performed by treating User Input as part of an SQL statement</p>
+
+        <p>Users add small bits of SQL code to their inputs while monitoring the results</p>
+
+        <p>Through this simple method, the attacker can learn what implementation of SQL is being used</p>
+
+        <p>The consequences of such an attack can be huge, and attackers can potentially use unsanitized inputs to gain access to sensitive data and potentially to the server the application is running on</p>
+
+        <p>An SQL Injection Attack can be performed by manipulating a SELECT query and making it return True no matter what condition was</p>
+
+        <p>A simple SQL Injection Attack usually takes the following form:</p>
+
+        <p class="lesson-page-example"> SELECT FROM dbTable WHERE key=0 OR 1=1 </p>
+
+        <p>The example above has a condition, WHERE key=0 or 1=1. Since 1=1 is always true, the database will return each row in the table</p>
         
-        SQL Injection is the use of unsanitized user input as a way of retrieving data that would normally be off-limits to the user. Unsanitized user input is input from the user that the server has not been properly configured to remove the possibility of malicious expressions or queries from being executed.
-    </p>
-    <p>Perspiciatis voluptates earum cupiditate, dolor soluta dicta.</p>
-    <p>Provident nemo expedita eos eveniet deleniti quo, harum voluptate consequatur rerum inventore, dolore, quaerat asperiores. </p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-    <p>Provident nemo expedita eos eveniet deleniti quo, harum voluptate consequatur rerum inventore, dolore, quaerat asperiores. </p>
+    </div>
+    
+
+    <!-- <div class="lesson-page-content-heading">
+        What is SQL Injection?
+    </div> -->
+
 
 </div>
 
 <div class="page2">
 
-    <h1>Try It! Numeric SQL injection</h1>
+    <h1 class="lesson-page-title">Numeric SQL injection</h1>
 
-	<p>The query in the code builds a dynamic query as seen in the previous example. The query in the code builds a dynamic query by concatenating a number making it susceptible to Numeric SQL injection:</p>
+    <div class="lesson-page-content-heading">
+        How does it work?
+    </div>
+    
+    <div class="lesson-page-contents">
+        <p>Here we have 2 input fields that are sent to the back-end before being used to construct a SQL query</p>
 
-	<p>"select * from user_data where Login_Count = " + Login_Count + " and USERID = "  + User_ID;</p>
+        <p>The SQL database in this scenario has a table containing sensitive information such as ids and credit card numbers</p>
 
-	<p>Using the two Input Fields below, try to retrieve all the date from the users table.</p>
+        <p>When the form is submitted the following query is created</p>
 
-	<p>Warning: Only one of these fields is susceptible to SQL Injection. You need to find out which, to successfully retrieve all the data.</p>
+        <p class="lesson-page-example">"select * from user_data where Login_Count = " + Login_Count + " and USERID = " + User_ID;</p>
+
+        <p>The Goal of this exercise is to manipulate one of the Queries to acquire all of the sensitive information in the database</p>
+
+        <p>Entering a 1 in both boxes to return the first entry in the table, but that will not fulfill the goal</p>
+
+        <p>To complete the task, the user must input a value that would make the query ALWAYS true</p>
+
+        <p>If you need an example of a query that can ALWAYS return true, please refer to the previous page</p>
+
+    </div>
+
+    <div class="lesson-page-content-heading">
+        Try it out
+    </div>
+
+    <div class="lesson-page-contents">
+        
+        <p>Using the two Input Fields below, try to retrieve all the date from the users table.</p>
+
+        <p>Warning: Only one of these fields is susceptible to SQL Injection. You need to find out which, to successfully retrieve all the data.</p>
+
+    </div>
+
+    <br/>
 
 	<form action="/sql" method="POST">
 		<label for="login">Login_Count</label>
@@ -42,16 +98,19 @@
 
     <h2 class="lesson-page-title">Resources</h2>
 
-    <p class="lesson-page-contents">
-        Below is a list of resources for students who want to learn more about SQL and SQL injection.
-    </p>
-
-    <p class="lesson-page-contents">
-        <ol style="list-style: decimal; color: #222222;">
+    
+    <div class="lesson-page-contents">
+        <p>Below is a list of resources for students who want to learn more about SQL and SQL injection.</p>
+        
+        <ol style="color: #222222;">
             <li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/security/sql-injection?view=sql-server-ver15">Microsoft SQL Injection</a></li>
             <li><a href="https://www.w3schools.com/sql/sql_injection.asp">W3Schools SQL Injection</a></li>
             <li><a href="https://www.cloudflare.com/learning/security/threats/sql-injection/">Cloudflare SQL Injection</a></li>
+            <li><a href="https://www.darkreading.com/vulnerabilities---threats/the-10-most-common-database-vulnerabilities/d/d-id/1134676">The 10 Most Common Database Vulnerabilities</a></li>
+            <li><a href="https://www.darkreading.com/theedge/security-101-sql-injection/b/d-id/1337912?_mc=bib&itc=bib">Security 101: SQL Injection</a></li>
+            <li><a href="https://www.sqlinjection.net/numeric-parameters/">SQL Injection Attacks and Numeric Parameters</a></li>
+            <li><a href="https://seedsecuritylabs.org/Labs_16.04/Web/Web_SQL_Injection/">SQL Injection Attack Lab</a></li>
         </ol>
-    </p>
+    </div>
     
 </div>

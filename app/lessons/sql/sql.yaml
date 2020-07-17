@@ -25,6 +25,18 @@ db-tables:
                   - name: Login_Count
                     type: integer
           rows:
+                  - USERID: 1
+                    FIRST_NAME: Johnny
+                    LAST_NAME: Marks
+                    CC_NUMBER: 98765224321
+                    CC_TYPE: VISA
+                    Login_Count: 1
+                  - USERID: 2
+                    FIRST_NAME: Curt
+                    LAST_NAME: Douglas
+                    CC_NUMBER: 4352209902222
+                    CC_TYPE: AMEX
+                    Login_Count: 1
                   - USERID: 101
                     FIRST_NAME: Joe
                     LAST_NAME: Snow
