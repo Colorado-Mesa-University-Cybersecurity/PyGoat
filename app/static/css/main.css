@@ -230,7 +230,61 @@ main {
     font-size: larger;
 }
 
-.page1 p, .page2 p, .page3 p, .page4 p, .page5 p, .page6 p, .page7 p, .page8 p, .page9 p {
-    padding: 5px;
+
+.lesson-page-title {
+    text-align: center;
+    /* background-color: white; */
+    /* background-color: #333333; */
+    /* color: white; */
+    background-color: #ffd200;
+    /* background-color: #860037; */
+    border: 1pt #222222 solid;
+    border-radius: 2px;
+    font-size: larger;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 1rem;
 }
 
+
+.lesson-page-contents {
+    text-align: left;
+    background-color: white;
+    color: #222222;
+    border: solid 1pt #222222;
+    padding: 1rem
+}
+
+.lesson-page-contents * {
+    padding: .3rem;
+}
+
+.lesson-page-content-heading {
+    background-color: #333333;
+    color: white;
+    padding: .3rem;
+    border-radius: 2px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: .2rem;
+    padding-left: 1rem;
+}
+
+.lesson-page-content-end {
+    margin-bottom: 1rem;
+}
+
+.lesson-page-example {
+    background-color: #c4c4c4;
+    padding: .5rem;
+    margin-left:  10%;
+    margin-right: 10%;
+    border-radius: 2px;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    text-align: center;
+}
