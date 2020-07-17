@@ -1,39 +1,191 @@
 <div class="page1">
 
-    <h2>
+    <h2 class="lesson-page-title">
         SQL Introduction
     </h2>
 
-    <p>
-        SQL is a language for storing and manipulating data in a database. Data is stored in tables, and accessed with regular queries.<br><br>
-        SQL Injection is the use of unsanitized user input as a way of retrieving data that would normally be off-limits to the user. Unsanitized user input is input from the user that the server has not been properly configured to remove the possibility of malicious expressions or queries from being executed.
-    </p>
+    <div class="lesson-page-content-heading">
+        What is SQL?
+    </div>
 
+    <div class="lesson-page-contents">
+        <p>Structured Query Language, or SQL is a domain-specific language language for manipulating data stored in a SQL database. </p>
+        
+        <p>SQL was invented in 1974 based off of a paper by Edgar F. Codd, <a style="font-style: italic;" href="https://dl.acm.org/doi/10.1145/362384.362685">A relational model of data for large shared data banks</a>. </p>
+        
+        <p>In SQL, data is stored in tables, and accessed with regular queries.</p>
+
+        <p>SQL tables consist of intersecting rows and columns that form a 2 dimensional grid with data held in individual cells within this grid.</p>
+
+        <p>Each Column and Row has a label that can be used to query it</p>
+
+        <p>SQL is used on <b style="font-style: italic;">relational</b> databases, and this means that tables can reference other tables. Thanks to this feature, data can be stored in a compact and reusable manner.</p>
+
+    </div>
+
+    
+    <div class="lesson-page-content-heading">
+        Who uses SQL?
+    </div>
+
+    <div class="lesson-page-contents">
+        <p>SQL has been adopted as a standard by the American National Standards Institute, the ANSI, in 1986  and by the International Organization for Standardization, the ISO, in 1987.</p>
+        
+        <p>The language has since grown to be used in millions of applications both on and off the web.</p>
+
+        <p>36% of the participants in a <a href="https://blog.jetbrains.com/datagrip/2015/12/23/how-many-sql-developers-is-out-there-a-jetbrains-report/">Poll</a> on StackOverflow confirmed that they have recently worked with SQL</p>
+
+        <p>In 2015, Evans Data Corporation found that there are approximately <a href="https://blog.jetbrains.com/datagrip/2015/12/23/how-many-sql-developers-is-out-there-a-jetbrains-report/">19 million developers</a> who use SQL in the world</p>
+
+    </div>
+
+    <div class="lesson-page-content-heading">
+        Why learn SQL?
+    </div>
+
+    <div class="lesson-page-contents">
+        <p>Today, SQL has implementations in nearly every popular programming language, and thanks to its easy syntax, it is a great database for beginners who haven't worked with many database systems</p>
+
+        <p>SQL is a standardized Specification, which means that the implementation may vary depending on how the designers of the implementation interpret the specification.</p>
+
+        <p>SQL has been baked into many large public and proprietary systems and as such there will always be a demand for SQL developers to maintain these systems</p>
+
+        <p>SQL Statements are really powerful, but many web applications use form data and other forms of insecure data to construct SQL statements. As problems from this anti-pattern pop up, the market will need cyber security experts who are familiar with and can recognize SQL exploits</p>
+    </div>
+    
 </div>
 
-<!--Note: In-depth explanations covered under given sources *and* in each lesson, determine whether to explain here as well as in lesson, or leave only to linked resources?-->
-<!--div class="page2">
-
-    <p>
-    </p>
-    
-</div-->
-
 <div class="page2">
+    <h2 class="lesson-page-title">
+        SQL: A Brief Crash Course
+    </h2>
 
-    <h2>SQL resources</h2>
+    <div class="lesson-page-content-heading">
+        SQL Syntax
+    </div>
 
-    <p>
-        Below is a list of resources for students who want to learn more about SQL and SQL injection.
+    <div class="lesson-page-contents">
+        <p>SQL operations are Statements that declare what you want from the database and how to change it</p>
+
+        <p>An SQL Statement consists of a command followed by other commands, keywords, or names</p>
+
+        <p>For example the following SQL statement will create a new table inside the database called 'temp'</p>
+
+        <p class="lesson-page-example">CREATE TABLE temp</p>
+
+        <p>The SELECT command is the most common way to query data from a SQL table, with wild-cards and logic to refine the search parameters. For Example:</p>
+
+        <p class="lesson-page-example">SELECT * from temp</p>
+
+        <p>The above command would return every row and column from the temp Table</p>
+    </div>
+
+    <h2 class="lesson-page-content-heading">
+        Data Types 
+    </h2>
+
+    
+    <div class="lesson-page-contents">
+        <p>Integer: Stores  positive and negative whole numbers</p>
+
+        <p>Float: Stores numbers that contain a decimal point</p>
+
+        <p>Datetime: Stores the time and data in the format YYY-MM-DD HH:MM:SS</p>
+        
+        <p>Varchar: Stores a limited number of single characters</p>
+
+        <p >Blob: Stores Binary Data</p>
+    </div>
+
+    <h2 class="lesson-page-content-heading">
+        Important Keywords 
+    </h2>
+
+    <div class="lesson-page-contents">
+        <p>ADD: Adds a column in an existing table</p>
+
+        <p>DELETE: Deletes data from a database</p>
+
+        <p>DROP: Similar to DELETE</p>
+
+        <p>FROM: Specifies which table to select or delete data from</p>
+
+        <p>JOIN: Joins tables</p>
+
+        <p>SELECT: Extracts data from a database</p>
+
+        <p >UPDATE: Updates data in a database</p>
+    </div>
+
+    
+    <h2 class="lesson-page-content-heading">
+        Common Keywords 
+    </h2>
+
+
+    <div class="lesson-page-contents">
+        <p>ALL: Returns true if all the subcondition's values are true</p>
+
+        <p>AND: Only include rows where both conditions are true</p>
+        
+        <p>ANY: Returns true if any of the subcondition's values are true</p>
+
+        <p>AS: Renames a column or table with an alias</p>
+
+        <p>IN: Allows you to specify multiple values in a WHERE clause</p>
+
+        <p>NOT: Only includes rows where a condition is not true</p>
+
+        <p>OR: Includes rows where either condition is true</p>
+
+        <p >WHERE: Filters a result set to include only records that fulfill a specified condition</p>
+    </div>
+
+    <h2 class="lesson-page-content-heading">
+        Other Keywords 
+    </h2>
+
+    <div class="lesson-page-contents">
+        <p >INSERT INTO: Insert new data into a database</p>
+
+        <p>CREATE DATABASE: Create a new database</p>
+
+        <p>ALTER DATABASE: Modify a database</p>
+
+        <p>CREATE TABLE: Create a new table</p>
+
+        <p>ALTER TABLE: Modify a table</p>
+
+        <p>DROP TABLE: Delete a table</p>
+
+        <p>CREATE INDEX: Create an index</p>
+
+        <p >DROP INDEX: Delete an index</p>
+    </div>
+    
+</div>
+
+<div class="page3">
+
+    <h2 class="lesson-page-title">Resources</h2>
+
+    <p class="lesson-page-contents">
+        Below is a list of resources for students who want to learn more about SQL.
     </p>
 
-    <p>
-        <ol style="list-style: decimal; color: #222222;">
+    <p ></p>
+
+    <p class="lesson-page-contents">
+        <ol style="color: #222222;">
+            <li><a href="https://blog.jetbrains.com/datagrip/2015/12/23/how-many-sql-developers-is-out-there-a-jetbrains-report/">How Many SQL Developers Is Out There: A JetBrains Report</a></li>
+
             <li><a href="https://www.w3schools.com/sql/default.asp">W3Schools SQL tutorial</a></li>
+
+            <li><a href="https://www.thoughtco.com/understanding-how-sql-databases-work-2693878">Understanding How SQL Databases work</a></li>
+            
             <li><a href="https://docs.microsoft.com/en-us/sql/?view=sql-server-ver15">Microsoft SQL documentation</a></li> <!--Note: This source has much more depth of information that the others, but it is the only direct link to documentation-->
-            <li><a href="https://www.w3schools.com/sql/sql_injection.asp">W3Schools SQL Injection</a></li>
-            <li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/security/sql-injection?view=sql-server-ver15">Microsoft SQL Injection</a></li>
-            <li><a href="https://www.cloudflare.com/learning/security/threats/sql-injection/">Cloudflare SQL Injection</a></li>
+
+            <li><a href="https://www.ntchosting.com/encyclopedia/databases/structured-query-language/">SQL (Structured Query Language)</a></li>
         </ol>
     </p>
     
